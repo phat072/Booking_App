@@ -1,0 +1,5 @@
+# Node.js dependencies
+node_modules/
+
+# Local development env files
+configs/
