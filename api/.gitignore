@@ -4,4 +4,4 @@ node_modules/
 # Local development env files
 configs/.env
 
-./.vscode/
+.vscode/
