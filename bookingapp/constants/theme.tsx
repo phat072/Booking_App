@@ -2,7 +2,7 @@ import { Dimensions } from 'react-native';
 
 const { height, width } = Dimensions.get('window');
 
-type ColorTypes = {
+interface Colors {
   primary: string;
   primary1: string;
   secondary: string;
@@ -18,9 +18,27 @@ type ColorTypes = {
   red: string;
   green: string;
   lightWhite: string;
+}
+
+const COLORS: Colors = {
+  primary: "red",
+  primary1: "#00fff53c",
+  secondary: "#ffa44f",
+  secondary1: "#ffe5db",
+  tertiary: "#0078a6",
+  gray: "#83829A",
+  gray2: "#C1C0C8",
+  lightGray: "#ccc",
+  white: "#ffffff",
+  offwhite: "#FFFFFF",
+  error: "red",
+  black: "#000000",
+  red: "#e81e4d",
+  green: "#00C135",
+  lightWhite: "#FFFFFF",
 };
 
-type SizeTypes = {
+interface Sizes {
   xSmall: number;
   small: number;
   medium: number;
@@ -29,9 +47,20 @@ type SizeTypes = {
   xxLarge: number;
   height: number;
   width: number;
+}
+
+const SIZES: Sizes = {
+  xSmall: 10,
+  small: 12,
+  medium: 16,
+  large: 20,
+  xLarge: 24,
+  xxLarge: 44,
+  height,
+  width,
 };
 
-type ShadowTypes = {
+interface Shadows {
   small: {
     shadowColor: string;
     shadowOffset: {
@@ -52,38 +81,9 @@ type ShadowTypes = {
     shadowRadius: number;
     elevation: number;
   };
-};
+}
 
-const COLORS: ColorTypes = {
-  primary: "red",
-  primary1: "#00fff53c",
-  secondary: "#ffa44f",
-  secondary1: "#ffe5db",
-  tertiary: "#0078a6",
-  gray: "#83829A",
-  gray2: "#C1C0C8",
-  lightGray: "#ccc",
-  white: "#FFFFFF",
-  offwhite: "#FFFFFF",
-  error: "red",
-  black: "#000000",
-  red: "#e81e4d",
-  green: "#00C135",
-  lightWhite: "#FFFFFF",
-};
-
-const SIZES: SizeTypes = {
-  xSmall: 10,
-  small: 12,
-  medium: 16,
-  large: 20,
-  xLarge: 24,
-  xxLarge: 44,
-  height,
-  width
-};
-
-const SHADOWS: ShadowTypes = {
+const SHADOWS: Shadows = {
   small: {
     shadowColor: "#000",
     shadowOffset: {
