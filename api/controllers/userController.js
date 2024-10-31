@@ -1,6 +1,6 @@
 require('dotenv').config({ path: './configs/.env' });
 
-const User = require('../model/user');
+const User = require('../models/user');
 const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 const nodemailer = require('nodemailer');
@@ -124,32 +124,6 @@ module.exports = {
         } catch (error) {
             console.error('Failed to update address', error);
             res.status(500).json({ message: 'Failed to update address' });
-        }
-    },
-
-    // Get user by id
-    getUserById: async (req, res) => {
-        try {
-            const userId = req.params.userId;
-            const user = await User.findById(userId);
-            if (!user) {
-                return res.status(404).json({ message: 'User not found' });
-            }
-            res.status(200).json(user);
-        } catch (error) {
-            console.error('Failed to get user by id', error);
-            res.status(500).json({ message: 'Failed to get user by id' });
-        }
-    },
-
-    // Get all users
-    getAllUsers: async (req, res) => {
-        try {
-            const users = await User.find();
-            res.status(200).json(users);
-        } catch (error) {
-            console.error('Failed to get all users', error);
-            res.status(500).json({ message: 'Failed to get all users' });
         }
     },
 
