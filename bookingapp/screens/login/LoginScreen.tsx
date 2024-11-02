@@ -14,7 +14,7 @@ import LottieView from "lottie-react-native";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { decode as base64Decode } from "base-64";
-import { COLORS, SIZES } from "../../constants/theme";
+import { COLORS, SIZES } from "../../constants/Theme";
 import styles from "../../constants/LoginStyle";
 import Button from "../../components/button/Button";
 import { API_URL } from "@env";

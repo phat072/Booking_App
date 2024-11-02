@@ -7,6 +7,7 @@ import {
   } from "react-native";
 import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
+import RegisterScreen from "../screens/register/RegisterScreen";
 // import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import LoginScreen from "../screens/login/LoginScreen";
@@ -28,6 +29,11 @@ const StackNavigator = () => {
                 <Stack.Screen
                     name="Login"
                     component={LoginScreen}
+                    options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                    name="Register"
+                    component={RegisterScreen}
                     options={{ headerShown: false }}
                 />
             </Stack.Navigator>

@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native";
-import { COLORS, SIZES } from "./theme";
+import { COLORS, SIZES } from "./Theme";
 
 const styles = StyleSheet.create({
   cover: {
