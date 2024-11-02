@@ -4,6 +4,7 @@ const router = express.Router();
 
 const userController = require('../controllers/userController');
 const adminController = require('../controllers/adminController');
+const orderController = require('../controllers/orderController');
 
 // User routes
 router.post("/register", userController.register);
@@ -25,9 +26,9 @@ router.post('/remove-favorite/:userId', userController.removeFromFavoriteRestaur
 router.get('/:userId/favoriteRestaurants',userController.getFavoriteRestaurants);
 
 // Order routes
-router.post("/order", userController.placeOrder);
-router.get("/order/:userId", userController.getOrderByUser);
-router.get("/orders", adminController.getAllOrders);
-router.put("/order/:orderId", adminController.updateOrderStatus);
+router.post("/order", orderController.placeOrder);
+router.get("/order/:userId", orderController.getOrderByUser);
+router.get("/orders", orderController.getAllOrders);
+router.put("/order/:orderId", orderController.updateOrderStatus);
 
 module.exports = router;
