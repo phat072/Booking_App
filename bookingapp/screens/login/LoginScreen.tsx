@@ -49,29 +49,28 @@ const LoginPage: React.FC<LoginPageProps> = ({ navigation }) => {
   const handleLogin = async (values: { email: string; password: string }) => {
     setLoader(true);
     try {
-      const user = { email: values.email, password: values.password };
-      const response = await axios.post<{ token: string; }>(`${API_URL}/login`, user);
-      if (response.status === 200) {
-        const token = response.data.token;
-        const payloadBase64 = token.split(".")[1];
-        const payload = JSON.parse(base64Decode(payloadBase64));
-        const isAdmin = payload.admin;
+        const user = { email: values.email, password: values.password };
+        const response = await axios.post<{ token: string; }>(`${API_URL}/login`, user);
+        
+        if (response.status === 200) {
+            const token = response.data.token;
+            const payloadBase64 = token.split(".")[1];
+            const payload = JSON.parse(base64Decode(payloadBase64));
+            const isAdmin = payload.admin;
 
-        await AsyncStorage.setItem("authToken", response.data.token);
+            await AsyncStorage.setItem("authToken", token);
+            setUserId(payload.userId);
+            updateUser(payload);
 
-        setUserId(payload.userId);
-        updateUser(payload);
-
-        if (isAdmin) {
-          navigation.replace("Admin");
-        } else {
-          navigation.replace("Main");
+            navigation.replace(isAdmin ? "Admin" : "Main");
         }
-      }
+    } catch (error) {
+        Alert.alert("Error", "Failed to login. Please check your credentials and try again.");
     } finally {
-      setLoader(false);
+        setLoader(false);
     }
   };
+
 
   return (
     <ScrollView style={{ backgroundColor: COLORS.white }}>
@@ -81,7 +80,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ navigation }) => {
             autoPlay
             ref={animation}
             style={{ width: "100%", height: SIZES.height / 3.2 }}
-            source={require("../assets/lottie/login.json")}
+            source={require("../../assets/lottie/login.json")}
           />
         </View>
         <Text style={styles.titleLogin}>BOOKING APP</Text>
