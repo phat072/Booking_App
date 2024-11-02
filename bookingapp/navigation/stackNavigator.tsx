@@ -7,17 +7,17 @@ import {
   } from "react-native";
 import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+// import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import LoginScreen from "../screens/login/LoginScreen";
 
 
 const StackNavigator = () => {
     const Stack = createNativeStackNavigator();
-    const Tab = createBottomTabNavigator();
+    // const Tab = createBottomTabNavigator();
 
     return (
-        <NavigationContainer>
+        <NavigationContainer independent={true}>
             <Stack.Navigator>
                 {/* Uncomment this if you want to use OnboardingScreen */}
                 {/* <Stack.Screen
