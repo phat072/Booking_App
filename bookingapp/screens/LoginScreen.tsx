@@ -7,7 +7,7 @@ import {
   Alert,
 } from "react-native";
 import React, { useState, useRef } from "react";
-import Button from "../components/Button";
+import Button from "../components/button/Button";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
@@ -19,7 +19,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { API_URL } from '@env';
 import { decode as base64Decode } from "base-64";
 import { StackNavigationProp } from "@react-navigation/stack";
-import { RootStackParamList } from "../types";
+import { RootStackParamList } from "../app/types";
 
 type LoginPageProps = {
   navigation: StackNavigationProp<RootStackParamList, "Login">;

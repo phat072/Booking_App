@@ -6,7 +6,7 @@ import {
     ActivityIndicator,
   } from "react-native";
   import React from "react";
-  import { COLORS } from "../constants/theme";
+  import { COLORS } from "../../constants/theme";
   
   interface ButtonProps {
     title: string;
