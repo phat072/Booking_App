@@ -12,7 +12,7 @@ import RegisterScreen from "../screens/register/RegisterScreen";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import LoginScreen from "../screens/login/LoginScreen";
 import OnboardingScreen from "../screens/onboarding/OnboardingScreen";
-import BottomTabNavigator from "./bottomTabNavigator";
+import BottomTabNavigator from "./BottomTabNavigator";
 
 const StackNavigator = () => {
     const Stack = createNativeStackNavigator();
@@ -21,7 +21,6 @@ const StackNavigator = () => {
     return (
         <NavigationContainer independent={true}>
             <Stack.Navigator>
-                {/* Uncomment this if you want to use OnboardingScreen */}
                 <Stack.Screen
                     name="Onboarding"
                     component={OnboardingScreen}

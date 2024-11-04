@@ -2,7 +2,7 @@ import "react-native-gesture-handler";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import React, { useState, useCallback, useEffect } from "react";
 import { StyleSheet } from "react-native";
-import StackNavigator from "../navigation/stackNavigator";
+import StackNavigator from "../navigation/StackNavigator";
 import { useFonts } from "expo-font";
 import { UserProvider } from "../userContext";
 import { SplashScreen } from "expo-router";

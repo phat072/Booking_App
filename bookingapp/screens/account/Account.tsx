@@ -27,7 +27,7 @@ type AddressType = {
 };
 
 const AccountScreen: React.FC = () => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<any>();
   const { userId, setUserId, user, updateUser } = useContext(UserType);
   const [address, setAddress] = useState<AddressType>({});
 
