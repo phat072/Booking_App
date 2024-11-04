@@ -60,21 +60,22 @@ const OnboardingScreen: React.FC<OnboardingScreenProps> = ({ navigation }) => {
       await sound.unloadAsync();
     }
 
-    const token = await AsyncStorage.getItem("authToken");
+    // const token = await AsyncStorage.getItem("authToken");
 
-    if (!token) {
-      navigation.navigate("Login");
-      return;
-    }
+    // if (!token) {
+    //   navigation.navigate("Login");
+    //   return;
+    // }
 
-    const payloadBase64 = token.split(".")[1];
-    const payload = JSON.parse(base64Decode(payloadBase64));
+    // const payloadBase64 = token.split(".")[1];
+    // const payload = JSON.parse(base64Decode(payloadBase64));
 
-    if (payload.admin) {
-      navigation.navigate("Admin");
-    } else {
-      navigation.navigate("Main");
-    }
+    // if (payload.admin) {
+    //   navigation.navigate("Admin");
+    // } else {
+    //   navigation.navigate("Main");
+    // }
+    navigation.navigate("Login");
   };
 
   return (
