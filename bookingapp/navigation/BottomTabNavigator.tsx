@@ -178,7 +178,7 @@ const BottomTabNavigator: React.FC = () => {
               <Entypo name="map" size={24} color="#7E7E80" />
             ),
         }}
-      />
+      />*/}
       <Tab.Screen
         name="AccountTab"
         component={AccountStack}
@@ -196,7 +196,7 @@ const BottomTabNavigator: React.FC = () => {
               <MaterialCommunityIcons name="account" size={24} color="#7E7E80" />
             ),
         }}
-      /> */}
+      /> 
     </Tab.Navigator>
   );
 };
