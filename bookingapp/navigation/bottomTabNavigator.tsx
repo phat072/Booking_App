@@ -2,7 +2,7 @@ import React from "react";
 import { View, TextInput, TouchableOpacity, TextInputProps, ViewStyle, TextStyle } from "react-native";
 import HomeScreen from "../screens/home/HomeScreen";
 // import SearchScreen from "../screens/SearchScreen";
-// import AccountScreen from "../screens/Account";
+import AccountScreen from "../screens/account/Account";
 // import MapCenter from "../screens/MapCenter";
 // import ResultScreen from "../screens/ResultScreen";
 // import RestaurantDetail from "../screens/RestaurantDetail";
@@ -60,27 +60,20 @@ const HomeStack: React.FC = () => (
   </Stack.Navigator>
 );
 
-// const AccountStack: React.FC = () => (
-//   <Stack.Navigator>
-//     <Stack.Screen
-//       name="AccountScreen"
-//       component={AccountScreen}
-//       options={{
-//         title: "Tài khoản",
-//         headerStyle: { backgroundColor: "red" },
-//         headerTintColor: "#fff",
-//         headerTitleAlign: "center",
-//         tabBarLabelStyle: { color: "#008E97" } as TextStyle,
-//         headerShown: true,
-//         tabBarIcon: ({ focused }: { focused: boolean }) =>
-//           focused ? (
-//             <MaterialCommunityIcons name="account" size={24} color="#D71537" />
-//           ) : (
-//             <MaterialCommunityIcons name="account" size={24} color="#7E7E80" />
-//           ),
-//       }}
-//     />
-//     <Stack.Screen
+const AccountStack: React.FC = () => (
+  <Stack.Navigator>
+   <Stack.Screen
+       name="AccountScreen"
+      component={AccountScreen}
+       options={{
+        title: "Tài khoản",
+        headerStyle: { backgroundColor: "red" },
+        headerTintColor: "#fff",
+        headerTitleAlign: "center",
+        headerShown: true,
+      }}
+    />
+     {/* <Stack.Screen
 //       name="Chat"
 //       component={ChatScreen}
 //       options={{
@@ -91,9 +84,9 @@ const HomeStack: React.FC = () => (
 //         headerTitleAlign: "center",
 //         headerTitleStyle: { fontWeight: "bold" } as TextStyle,
 //       }}
-//     />
-//   </Stack.Navigator>
-// );
+//     /> */}
+   </Stack.Navigator>
+ );
 
 const BottomTabNavigator: React.FC = () => {
   return (
