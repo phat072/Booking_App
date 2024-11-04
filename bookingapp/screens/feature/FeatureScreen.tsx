@@ -16,9 +16,9 @@ import Animated, {
   useScrollViewOffset,
 } from "react-native-reanimated";
 import Colors from "../../constants/Colors";
-import { defaultStyles } from "../constants/Styles";
+// import { defaultStyles } from "../../constants/Styles";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import RestaurantCard from "../components/restaurantCard";
+import RestaurantCard from "../../components/restaurant/RestaurantCard";
 
 const { width } = Dimensions.get("window");
 const IMG_HEIGHT = 200;
@@ -46,7 +46,7 @@ const FeatureScreen: React.FC = () => {
   
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerTitle: "",
+    //   headerTitle: "",
       headerBackVisible: false,
       headerTransparent: true,
       headerBackground: () => (
@@ -156,10 +156,11 @@ const FeatureScreen: React.FC = () => {
           </View>
           <Text style={styles.sortButton}>Sắp xếp gần nhất</Text>
           <ScrollView>
-            {restaurants.map((item, index) => (
-              <RestaurantCard key={item.id || index} restaurant={item} />
-            ))}
+                {restaurants.map((item, index) => (
+                    <RestaurantCard key={item.id || index} item={{ ...item, image: item.image || '' }} layout={2} />
+                ))}
           </ScrollView>
+
         </View>
       </Animated.ScrollView>
     </View>

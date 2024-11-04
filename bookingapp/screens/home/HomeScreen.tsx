@@ -280,9 +280,9 @@ export default function HomeScreen({ navigation, route }: { navigation: any; rou
           key={index}
           title={featured.title}
           restaurants={featured.restaurants}
-          subTitle={featured.subTitle}
-          layout={featured.layout}
-          navigation={navigation}
+          subTitle={featured.subTitle || ""}
+          layout={featured.layout ? parseInt(featured.layout) : 0}
+          // navigation={navigation}
         />
       ))
     )}
