@@ -6,6 +6,12 @@ import StackNavigator from "../navigation/stackNavigator";
 import { useFonts } from "expo-font";
 import { UserProvider } from "../userContext";
 import { SplashScreen } from "expo-router";
+import { API_URL } from "@env";
+import { MD3LightTheme as DefaultTheme, PaperProvider } from 'react-native-paper';
+
+// Log loading of .env and API_URL
+console.log("env: load .env");
+console.log("env: export API_URL =", API_URL);
 
 
 export default function App() {
@@ -28,11 +34,26 @@ export default function App() {
   if (!fontsLoaded) {
     return;
   }
+  const theme = {
+    ...DefaultTheme,
+    colors: {
+      ...DefaultTheme.colors,
+      primary: 'blue',
+      primaryContainer:'red',
+      secondary: 'yellow',
+      placeholder: 'yellow',
+      outlineVariant:"red"
+    },
+  };
+
+
   return (
     <>
       <GestureHandlerRootView style={{ flex: 1 }}>
-        <UserProvider>
-          <StackNavigator />
+      <UserProvider>
+        <PaperProvider theme={theme}>
+            <StackNavigator />
+          </PaperProvider>
         </UserProvider>
       </GestureHandlerRootView>
     </>

@@ -67,33 +67,43 @@ const RegisterScreen: React.FC = () => {
     }
   };
 
-  const handleRegister = async () => {
+  const handleRegister = () => {
+    console.log("Register button clicked");
+    setLoader(true);
     const isPasswordValid = validatePassword(password);
-
+    console.log("Password valid:", isPasswordValid);
+  
     if (isPasswordValid) {
-      const user = {
-        name: name,
-        email: email,
-        password: password,
-      };
-
-      try {
-        // Sending POST request to register the user
-        const response = await axios.post(`${API_URL}/register`, user);
-        Alert.alert("Thành công", "Chúc mừng bạn đã đăng ký thành công");
-        setName("");
-        setEmail("");
-        setPassword("");
-        navigation.navigate("Login" as never);
-      } catch (error) {
-        Alert.alert(
-          "Thất bại",
-          "Vui lòng nhập đầy đủ và chính xác thông tin để đăng ký."
-        );
-        console.log("Đăng ký thất bại", error);
-      }
+        const user = { name, email, password };
+        axios
+            .post(
+              `${API_URL}/register`, 
+              user, 
+              { 
+                headers: { 'Content-Type': 'application/json' },
+                timeout: 5000 
+              }
+            )
+            .then((response) => {
+                console.log("API response:", response);
+                Alert.alert("Thành công", "Chúc mừng bạn đã đăng ký thành công");
+                setName("");
+                setEmail("");
+                setPassword("");
+                navigation.navigate("Login" as never);
+            })
+            .catch((error) => {
+                Alert.alert("Thất bại", "Vui lòng nhập đầy đủ và chính xác thông tin để đăng ký.");
+                console.error("Đăng ký thất bại", error);
+            })
+            .finally(() => {
+                setLoader(false);
+            });
+    } else {
+        setLoader(false);
+        console.log("Password validation failed", passwordError);
     }
-  };
+  };  
 
   return (
     <ScrollView style={{ backgroundColor: "white" }}>
@@ -191,7 +201,10 @@ const RegisterScreen: React.FC = () => {
               )}
             </View>
 
-            <Button title={"ĐĂNG KÝ"} onPress={handleRegister} loader={loader} isValid={false} />
+            <Button
+              title={"ĐĂNG KÝ"}
+              onPress={handleRegister}
+              loader={loader} isValid={true}            />
           </View>
         </KeyboardAvoidingView>
       </View>

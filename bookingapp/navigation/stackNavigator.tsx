@@ -11,7 +11,8 @@ import RegisterScreen from "../screens/register/RegisterScreen";
 // import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import LoginScreen from "../screens/login/LoginScreen";
-
+import OnboardingScreen from "../screens/onboarding/OnboardingScreen";
+import BottomTabNavigator from "./bottomTabNavigator";
 
 const StackNavigator = () => {
     const Stack = createNativeStackNavigator();
@@ -21,11 +22,11 @@ const StackNavigator = () => {
         <NavigationContainer independent={true}>
             <Stack.Navigator>
                 {/* Uncomment this if you want to use OnboardingScreen */}
-                {/* <Stack.Screen
+                <Stack.Screen
                     name="Onboarding"
                     component={OnboardingScreen}
                     options={{ headerShown: false }}
-                /> */}
+                />
                 <Stack.Screen
                     name="Login"
                     component={LoginScreen}
@@ -34,6 +35,11 @@ const StackNavigator = () => {
                 <Stack.Screen
                     name="Register"
                     component={RegisterScreen}
+                    options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                    name="Main"
+                    component={BottomTabNavigator}
                     options={{ headerShown: false }}
                 />
             </Stack.Navigator>

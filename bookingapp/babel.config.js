@@ -3,10 +3,10 @@ module.exports = function (api) {
   return {
     presets: [
       'babel-preset-expo',
-      '@babel/preset-typescript', // Thêm preset cho TypeScript
+      '@babel/preset-typescript', 
     ],
     plugins: [
-      'react-native-reanimated/plugin', // Đảm bảo plugin này được đặt ở cuối
+      'react-native-reanimated/plugin', 
       ['module:react-native-dotenv', {
         moduleName: '@env',
         path: '.env',

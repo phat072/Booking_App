@@ -46,28 +46,49 @@ const LoginPage: React.FC<LoginPageProps> = ({ navigation }) => {
     ]);
   };
 
-  const handleLogin = async (values: { email: string; password: string }) => {
+  const handleLogin = async (values: { email: any; password: any; }) => {
     setLoader(true);
+
     try {
-        const user = { email: values.email, password: values.password };
-        const response = await axios.post<{ token: string; }>(`${API_URL}/login`, user);
-        
-        if (response.status === 200) {
-            const token = response.data.token;
-            const payloadBase64 = token.split(".")[1];
-            const payload = JSON.parse(base64Decode(payloadBase64));
-            const isAdmin = payload.admin;
+      const user = {
+        email: values.email,
+        password: values.password,
+      };
 
-            await AsyncStorage.setItem("authToken", token);
-            setUserId(payload.userId);
-            updateUser(payload);
-
-            navigation.replace(isAdmin ? "Admin" : "Main");
+      const response = await axios.post(
+        `${API_URL}/login`, 
+        user, 
+        { 
+          headers: { 'Content-Type': 'application/json' },
+          timeout: 5000 
         }
+      )
+
+      if (response.status === 200) {
+        const token = response.data.token;
+
+        // Decode Payload từ token sử dụng base-64
+        const payloadBase64 = token.split('.')[1];
+        const payload = JSON.parse(base64Decode(payloadBase64));
+        const isAdmin = payload.admin;
+
+        await AsyncStorage.setItem("authToken", response.data.token);
+
+        if (isAdmin) {
+          // If admin, navigate to the admin screen
+          navigation.replace("Admin");
+        } else {
+          // If not admin, navigate to the main screen
+          navigation.replace("Main");
+        }
+      } else {
+        Alert.alert("Lỗi", "Hãy kiểm tra lại thông tin");
+      }
     } catch (error) {
-        Alert.alert("Error", "Failed to login. Please check your credentials and try again.");
+      console.error("Error during login:", error);
+      Alert.alert("Lỗi", "Hãy kiểm tra lại thông tin");
     } finally {
-        setLoader(false);
+      setLoader(false);
     }
   };
 
