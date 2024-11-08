@@ -8,7 +8,7 @@ import AccountScreen from "../screens/account/Account";
 // import RestaurantDetail from "../screens/RestaurantDetail";
 // import ChatScreen from "../screens/ChatScreen";
 // import FeatureScreen from "../screens/FeatureScreen";
-
+import MapScreen from '../screens/map/Map'
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Entypo, AntDesign, Ionicons, FontAwesome, MaterialCommunityIcons } from "@expo/vector-icons";
@@ -103,6 +103,21 @@ const BottomTabNavigator: React.FC = () => {
               <Entypo name="home" size={24} color="#D71537" />
             ) : (
               <AntDesign name="home" size={24} color="#7E7E80" />
+            ),
+        }}
+      />
+            <Tab.Screen
+        name="MapScreen"
+        component={MapScreen} // Thêm màn hình MapScreen
+        options={{
+          tabBarLabel: "Map",
+          tabBarLabelStyle: { color: "#008E97" } as TextStyle,
+          headerShown: false,
+          tabBarIcon: ({ focused }) =>
+            focused ? (
+              <Entypo name="map" size={24} color="#D71537" />
+            ) : (
+              <Entypo name="map" size={24} color="#7E7E80" />
             ),
         }}
       />
