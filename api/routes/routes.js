@@ -1,7 +1,7 @@
 // routes.js
 const express = require('express');
 const router = express.Router();
-
+const authenticate = require('../middleware/authenticate');
 const userController = require('../controllers/userController');
 const adminController = require('../controllers/adminController');
 const orderController = require('../controllers/orderController');
@@ -10,6 +10,7 @@ const orderController = require('../controllers/orderController');
 router.post("/register", userController.register);
 router.get("/verify/:token", userController.verifyEmail);
 router.post("/login", userController.login);
+router.post("/logout", authenticate, userController.logout);
 router.put("/address/:userId", userController.updateAddress);
 router.get("/address/:userId", userController.getUserAddress);
 router.put("/change-password/:userId", userController.changePassword);

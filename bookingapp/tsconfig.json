@@ -18,5 +18,5 @@
     ".expo/types/**/*.ts",
     "expo-env.d.ts",
     "nativewind-env.d.ts"
-  ]
+, "components/result/ResHorUI.jsx", "components/menu/Menu.jsx", "screens/admin/HomeAdmin.jsx", "screens/result/ResultScreen.jsx", "screens/restaurant/RestaurantDetail.js"  ]
 }

@@ -4,10 +4,10 @@ import HomeScreen from "../screens/home/HomeScreen";
 // import SearchScreen from "../screens/SearchScreen";
 import AccountScreen from "../screens/account/Account";
 // import MapCenter from "../screens/MapCenter";
-// import ResultScreen from "../screens/ResultScreen";
-// import RestaurantDetail from "../screens/RestaurantDetail";
+import ResultScreen from "../screens/result/ResultScreen";
+import RestaurantDetail from "../screens/restaurant/RestaurantDetail";
 // import ChatScreen from "../screens/ChatScreen";
-// import FeatureScreen from "../screens/FeatureScreen";
+import FeatureScreen from "../screens/feature/FeatureScreen";
 
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -24,7 +24,7 @@ const HomeStack: React.FC = () => (
       component={HomeScreen}
       options={{ headerShown: false }}
     />
-    {/* <Stack.Screen
+    <Stack.Screen
       name="Result"
       component={ResultScreen}
       options={{
@@ -32,7 +32,7 @@ const HomeStack: React.FC = () => (
         headerStyle: { backgroundColor: "red" },
         headerTintColor: "#fff",
         headerTitleAlign: "center",
-        headerTitleStyle: { fontWeight: "bold" } as TextStyle,
+        headerTitleStyle: { fontWeight: "bold" },
       }}
     />
     <Stack.Screen
@@ -42,7 +42,7 @@ const HomeStack: React.FC = () => (
         headerShown: true,
         headerTitleAlign: "center",
         headerTintColor: "white",
-        headerTitleStyle: { fontWeight: "bold" } as TextStyle,
+        headerTitleStyle: { fontWeight: "bold"},
         headerTransparent: true,
       }}
     />
@@ -53,10 +53,10 @@ const HomeStack: React.FC = () => (
         headerShown: true,
         headerTitleAlign: "center",
         headerTintColor: "white",
-        headerTitleStyle: { fontWeight: "bold" } as TextStyle,
+        headerTitleStyle: { fontWeight: "bold" },
         headerTransparent: true,
       }}
-    /> */}
+    /> 
   </Stack.Navigator>
 );
 

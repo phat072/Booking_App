@@ -4,6 +4,7 @@ const User = require('../models/user');
 const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 const nodemailer = require('nodemailer');
+const tokenBlacklist = new Set();
 
 const sendVerificationEmail = async (email, verificationToken) => {
     // Create a transporter object using the default SMTP transport
@@ -76,7 +77,7 @@ module.exports = {
         }
     },
 
-    // Login user9  
+    // Login user
     login: async (req, res) => {
         try {
             const { email, password } = req.body;
@@ -98,6 +99,24 @@ module.exports = {
             res.status(500).json({ message: 'Failed to login user' });
         }
     },
+
+    // Logout user
+    logout: async (req, res) => {
+        try {
+            const authHeader = req.header('Authorization');
+            if (!authHeader || !authHeader.startsWith('Bearer ')) {
+                return res.status(401).json({ message: 'Authorization token required' });
+            }
+
+            const token = authHeader.replace('Bearer ', '');
+            tokenBlacklist.add(token); 
+            res.status(200).json({ message: 'User logged out successfully' });
+        } catch (error) {
+            console.error('Failed to logout user', error);
+            res.status(500).json({ message: 'Failed to logout user' });
+        }
+    },
+
 
     // Update Address
     updateAddress: async (req, res) => {
@@ -224,4 +243,5 @@ module.exports = {
             res.status(500).json({ message: 'Failed to change password' });
         }
     },
+
 }
