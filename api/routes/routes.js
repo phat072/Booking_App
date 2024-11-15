@@ -5,6 +5,12 @@ const authenticate = require('../middleware/authenticate');
 const userController = require('../controllers/userController');
 const adminController = require('../controllers/adminController');
 const orderController = require('../controllers/orderController');
+const RestaurantController = require('../controllers/restaurantController');
+const FeatureController = require('../controllers/featureController');
+const CategoryController = require('../controllers/categoryController');
+const GeospatialController = require('../controllers/geospatialController');
+const ChatController = require('../controllers/chatController');
+
 
 // User routes
 router.post("/register", userController.register);
@@ -58,15 +64,10 @@ router.get("/intersect-restaurants", GeospatialController.getIntersectbyRestaura
 router.get('/restaurants-in-city', GeospatialController.getRestaurantsByPolygon);
 router.get('/restaurants-in-circle', GeospatialController.getRestaurantsInCircle);
 
-// Favorite 
-router.post('/addToFavorites', UserController.addToFavorites);
-router.post('/removeFromFavorites', UserController.removeFromFavorites);
-router.get('/:userId/favoriteRestaurants', UserController.getFavoriteRestaurants);
-
-// admin routes
-router.get("/admin", AdminController.getAllUsers);
-router.delete("/admin/:userId", AdminController.deleteUser);
-router.put('/admin/:userId', AdminController.editUser); // Route cho editUser
+// // admin routes
+// router.get("/admin", AdminController.getAllUsers);
+// router.delete("/admin/:userId", AdminController.deleteUser);
+// router.put('/admin/:userId', AdminController.editUser); // Route cho editUser
 
 
 // chat routes 
