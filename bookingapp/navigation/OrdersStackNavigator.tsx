@@ -6,14 +6,10 @@ import { Text, TouchableOpacity, View, StyleSheet } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { AdminStackParamList } from "@/screens//type";
+import { createStackNavigator } from "@react-navigation/stack";
 
-type AdminStackParamList = {
-  Orders: undefined;
-  DetailOrders: undefined;
-  Dashboard: undefined;
-};
-
-const Stack = createNativeStackNavigator<AdminStackParamList>();
+const Stack = createStackNavigator<AdminStackParamList>();
 
 const OrdersStackNavigator: React.FC = () => {
   const navigation = useNavigation<NativeStackNavigationProp<AdminStackParamList>>();

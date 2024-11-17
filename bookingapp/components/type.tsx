@@ -34,3 +34,8 @@ type RestaurantRootStackParamList= {
 };
 
 export type RestaurantDetailRouteProp = RouteProp<RestaurantRootStackParamList, "RestaurantDetail">;
+
+export interface SearchBarProps {
+  searchPhrase: string;
+  setSearchPhrase: (phrase: string) => void;
+}

@@ -39,8 +39,13 @@ interface RouteProps {
   handlePresentModalPress?: () => void;
 }
 
+
+import { StackNavigationProp } from "@react-navigation/stack";
+import { AdminStackParamList } from "@/screens/type";
+type MenutabNavigationProp = StackNavigationProp<AdminStackParamList, "Order">;
+
 const FirstRoute: React.FC<RouteProps> = ({ item }) => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<MenutabNavigationProp>();
   const handleItemSelect = (selectedItem: any) => {
     navigation.navigate("Order", { restaurant: item, selectedItem });
   };

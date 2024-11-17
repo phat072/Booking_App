@@ -1,76 +1,60 @@
+import React, { useContext, useEffect, useLayoutEffect, useState } from "react";
 import {
   View,
   Text,
-  StatusBar,
-  ScrollView,
-  Image,
-  TouchableOpacity,
-  StyleSheet,
-  Dimensions,
   Alert,
+  StyleSheet,
+  TouchableOpacity,
+  Dimensions,
   Modal,
+  Pressable,
 } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
-import React, { useContext, useEffect, useLayoutEffect, useState } from "react";
+import { Ionicons, FontAwesome5, AntDesign } from "@expo/vector-icons";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import MenuTab from "./Menutab";
-import NetworkImage from "../../components/networkImage/networkImage";
-import { SIZES } from "../../constants/Theme";
-import PopUp from "../../components/menu/Popup";
-import { FontAwesome5 } from "@expo/vector-icons";
-import { AntDesign } from "@expo/vector-icons";
-import Colors from "../../constants/Colors";
-import { UserType } from "../../userContext";
 import axios from "axios";
+import MenuTab from "./Menutab";
+import NetworkImage from "@/components/networkImage/NetworkImage";
+import PopUp from "@/components/menu/Popup";
+import Colors from "@/constants/Colors";
+import { UserType } from "@/userContext";
 import { API_URL } from "@env";
 
-interface MenuItem {
-  id: string;
-  name: string;
-  address: string;
-  image: any; // Specify the type based on your image source
-  rating: number;
-  _id: string;
-}
+const { width, height } = Dimensions.get("window");
+
+import { StackNavigationProp } from "@react-navigation/stack";
+import { AdminStackParamList } from "@/screens/type";
+type RestaurantDetailNavigationProp = StackNavigationProp<AdminStackParamList, "Order">;
 
 
-export default function RestaurantDetail() {
+
+const RestaurantDetail: React.FC = () => {
   const { params } = useRoute();
-  const navigation = useNavigation();
-  const item: MenuItem = params as MenuItem;
+  const navigation = useNavigation<RestaurantDetailNavigationProp>();
+  const item = params as any; // Replace `any` with your specific type for `params`
   const { name, _id } = item;
   const { user, updateUser } = useContext(UserType);
 
   const [isFavorite, setIsFavorite] = useState(false);
-  const [modalVisible, setModalVisible] = useState(false);
+  const [isModalVisible, setIsModalVisible] = useState(false);
   const restaurantId = item._id;
   const userId = user?._id;
 
   if (!item || !_id) {
     console.error("Item or _id is undefined in RestaurantDetail");
-    return <Text>Error: Item not found</Text>;
+    return <Text style={styles.errorText}>Error: Item not found</Text>;
   }
 
   useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: () => (
-        <Text
-          numberOfLines={1}
-          ellipsizeMode="tail"
-          style={{ fontWeight: "bold", fontSize: 18, color: "white" }}
-        >
-          {name}
-        </Text>
+        <Text style={styles.headerTitle}>{name}</Text>
       ),
       headerRight: () => (
-        <View style={styles.bar}>
+        <View style={styles.headerRight}>
           <TouchableOpacity style={styles.roundButton}>
             <Ionicons name="share-outline" size={22} color={"#000"} />
           </TouchableOpacity>
-          <TouchableOpacity
-            onPress={handleFavoritePress}
-            style={styles.roundButton}
-          >
+          <TouchableOpacity onPress={handleFavoritePress} style={styles.roundButton}>
             <Ionicons
               name={isFavorite ? "heart" : "heart-outline"}
               size={24}
@@ -104,7 +88,7 @@ export default function RestaurantDetail() {
           Alert.alert("Thông báo", "Nhà hàng đã có trong danh sách yêu thích");
         } else {
           setIsFavorite(true);
-          updateUser((prevUser: { favoriteRestaurants: any; }) => ({
+          updateUser((prevUser: any) => ({
             ...prevUser,
             favoriteRestaurants: [
               ...prevUser.favoriteRestaurants,
@@ -120,101 +104,93 @@ export default function RestaurantDetail() {
     }
   };
 
+  const toggleModal = () => {
+    setIsModalVisible(!isModalVisible);
+  };
+
   return (
-    <View style={{ flex: 1 }}>
-      <View style={{ backgroundColor: "#ffffff" }}>
+    <View style={styles.container}>
+      <View>
         <NetworkImage
           source={item.image}
-          height={SIZES.height / 5.5}
-          width={SIZES.width}
+          height={height / 5.5}
+          width={width}
           border={30} radius={0}        />
         <View style={styles.popupContainer}>
-          <Text className="text-center font-bold text-lg">{item.name}</Text>
-          <Text className="text-center text-gray-500">{item.address}</Text>
-          <View className="flex-column mt-2">
-            <View className="flex-row justify-between">
-              <View className="flex-row items-center">
+          <Text style={styles.restaurantName}>{item.name}</Text>
+          <Text style={styles.restaurantAddress}>{item.address}</Text>
+          <View style={styles.detailsContainer}>
+            <View style={styles.row}>
+              <View style={styles.row}>
                 <FontAwesome5 name="door-open" size={24} color="#A0C69D" />
-                <Text className="ml-2">Đang mở cửa</Text>
+                <Text style={styles.detailText}>Đang mở cửa</Text>
               </View>
-              <Text
-                numberOfLines={1}
-                ellipsizeMode="tail"
-                style={styles.truncateText}
-              >
+              <Text style={styles.truncateText}>
                 Gọi món Việt, Buffet nướng hàn quốc
               </Text>
             </View>
-            <View className="flex-row justify-between mt-1">
-              <View className="flex-row items-center">
+            <View style={styles.row}>
+              <View style={styles.row}>
                 <AntDesign name="star" size={24} color="gold" />
-                <Text className="ml-4">{item.rating}</Text>
+                <Text style={styles.ratingText}>{item.rating}</Text>
               </View>
-              <View className="flex-row mr-16">
+              <View style={styles.row}>
                 <Ionicons name="location-sharp" size={24} color="red" />
-                <Text className="">4.5 km</Text>
+                <Text style={styles.detailText}>4.5 km</Text>
               </View>
             </View>
           </View>
         </View>
       </View>
-
-      <View style={{ flex: 1 }}>
-        <MenuTab
-          item={item}
-          handlePresentModalPress={() => setModalVisible(true)}
-        />
+      <View style={styles.menuContainer}>
+        <MenuTab item={item} />
       </View>
-
-      <View
-        style={{
-          position: "absolute",
-          bottom: 5,
-          right: 0,
-          left: 0,
-        }}
-      >
+      <View style={styles.footer}>
         <PopUp
           buttonText="Book"
-          onPress={() => {
-            navigation.navigate("Order", { restaurant: item });
-          }}
+          onPress={() => navigation.navigate("Order", { restaurant: item })}
         />
       </View>
 
-      {/* Modal for additional details */}
+      {/* Custom Modal */}
       <Modal
         animationType="slide"
         transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => setModalVisible(false)}
+        visible={isModalVisible}
+        onRequestClose={toggleModal}
       >
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
-            <Text>Awesome 🎉</Text>
-            <TouchableOpacity
-              style={styles.closeButton}
-              onPress={() => setModalVisible(false)}
-            >
-              <Text style={styles.closeButtonText}>Close</Text>
-            </TouchableOpacity>
+            <Text style={styles.modalText}>Awesome 🎉</Text>
+            <Pressable style={styles.modalCloseButton} onPress={toggleModal}>
+              <Text style={styles.modalCloseButtonText}>Close</Text>
+            </Pressable>
           </View>
         </View>
       </Modal>
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
     backgroundColor: "#ffffff",
   },
-  truncateText: {
-    maxWidth: 150,
-    overflow: "hidden",
+  errorText: {
+    color: "red",
+    textAlign: "center",
+    marginTop: 20,
+  },
+  headerTitle: {
+    fontWeight: "bold",
+    fontSize: 18,
+    color: "white",
+  },
+  headerRight: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
   },
   roundButton: {
     width: 40,
@@ -223,26 +199,7 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     alignItems: "center",
     justifyContent: "center",
-    color: Colors.primary,
-  },
-  bar: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    gap: 10,
-  },
-  applyButton: {
-    backgroundColor: "red",
-    width: "90%",
-    marginTop: 20,
-    padding: 17,
-    borderRadius: 5,
-  },
-  applyButtonText: {
-    textAlign: "center",
-    color: "#fff",
-    fontSize: 17,
-    fontWeight: "bold",
+    marginHorizontal: 5,
   },
   popupContainer: {
     position: "absolute",
@@ -256,28 +213,53 @@ const styles = StyleSheet.create({
     height: 145,
     borderRadius: 5,
     shadowRadius: 2,
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
+    shadowOffset: { width: 0, height: 2 },
     shadowColor: "#000000",
     elevation: 4,
   },
-  closeButton: {
-    marginTop: 20,
-    backgroundColor: Colors.primary,
-    padding: 10,
-    borderRadius: 5,
-  },
-  closeButtonText: {
-    color: "#fff",
+  restaurantName: {
+    fontWeight: "bold",
+    fontSize: 18,
     textAlign: "center",
+  },
+  restaurantAddress: {
+    textAlign: "center",
+    color: "#666",
+  },
+  detailsContainer: {
+    marginTop: 10,
+  },
+  row: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginVertical: 5,
+  },
+  truncateText: {
+    maxWidth: 150,
+    overflow: "hidden",
+  },
+  ratingText: {
+    marginLeft: 5,
+  },
+  detailText: {
+    marginLeft: 10,
+  },
+  menuContainer: {
+    flex: 1,
+    marginTop: 80,
+  },
+  footer: {
+    position: "absolute",
+    bottom: 5,
+    left: 0,
+    right: 0,
   },
   modalContainer: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "rgba(0, 0, 0, 0.5)", // Semi-transparent background
+    backgroundColor: "rgba(0,0,0,0.5)",
   },
   modalContent: {
     width: "80%",
@@ -286,5 +268,20 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     alignItems: "center",
   },
+  modalText: {
+    fontSize: 18,
+    fontWeight: "bold",
+  },
+  modalCloseButton: {
+    marginTop: 20,
+    padding: 10,
+    backgroundColor: Colors.primary,
+    borderRadius: 5,
+  },
+  modalCloseButtonText: {
+    color: "white",
+    fontSize: 16,
+  },
 });
 
+export default RestaurantDetail;

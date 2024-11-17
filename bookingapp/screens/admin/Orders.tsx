@@ -1,73 +1,94 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, ScrollView, Image, StyleSheet } from "react-native";
 import { API_URL } from "@env";
-import SearchBar from "../../components/SearchBar";
+import SearchBar from "@/components/search/SearchBar";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
+// Type Definitions
 interface Order {
   _id: string;
-  date: string;
-  status: string;
-  restaurant: string;
   user: string;
+  restaurant: string;
+  status: string;
   note: string;
+  date: string;
+  adults: number;
+  children: number;
+  selectedHour: string;
+}
+
+interface Restaurant {
+  id: string;
+  name: string;
+  address: string;
+  image: string;
+  suggestions: {
+    items: {
+      title: string;
+      originalPrice: string;
+    }[];
+  }[];
 }
 
 interface User {
   name: string;
+  mobileNo: string;
+  email: string;
 }
 
-interface Restaurant {
-  name: string;
-  image: string;
-}
 
-interface RootStackParamList {
-  DetailOrders: { order: Order; users: Record<string, User>; restaurants: Record<string, Restaurant> };
-}
+import { StackNavigationProp } from '@react-navigation/stack';
+import { AdminStackParamList } from "@/screens/type";
+type OrdersScreenNavigationProp = StackNavigationProp<
+AdminStackParamList,
+  'Orders'
+>;
 
-const Orders: React.FC = () => {
+const Orders = () => {
+  const navigation = useNavigation<OrdersScreenNavigationProp>();
   const [orders, setOrders] = useState<Order[]>([]);
-  const [restaurants, setRestaurants] = useState<Record<string, Restaurant>>({});
-  const [users, setUsers] = useState<Record<string, User>>({});
-  const [searchPhrase, setSearchPhrase] = useState<string>("");
-  const [loading, setLoading] = useState<boolean>(true);
+  const [restaurants, setRestaurants] = useState<{ [key: string]: Restaurant }>({});
+  const [users, setUsers] = useState<{ [key: string]: User }>({});
+  const [searchPhrase, setSearchPhrase] = useState("");
+  const [loading, setLoading] = useState(true); 
 
-  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const route = useRoute();
 
   const fetchOrders = async () => {
     try {
       const response = await fetch(`${API_URL}/api/orders`);
       const data = await response.json();
-
+  
       if (response.ok) {
         setOrders(data.orders);
-
-        const restaurantIds = Array.from(new Set(data.orders.map((order: Order) => order.restaurant)));
-
+  
+        const restaurantIds = Array.from(
+          new Set(data.orders.map((order: { restaurant: any; }) => order.restaurant))
+        );
+  
         const restaurantPromises = restaurantIds.map(async (restaurantId) => {
           try {
-            const restaurantResponse = await fetch(`${API_URL}/restaurants/${restaurantId}`);
+            const restaurantResponse = await fetch(
+              `${API_URL}/restaurants/${restaurantId}`
+            );
             const restaurantData = await restaurantResponse.json();
-
+  
             if (restaurantResponse.ok) {
               setRestaurants((prevRestaurants) => ({
                 ...prevRestaurants,
-                [restaurantId]: restaurantData.restaurant,
+                [String(restaurantId)]: restaurantData.restaurant,
               }));
             }
           } catch (error) {
-            // Ignore error
+            // Bỏ qua lỗi, không cần báo lỗi
           }
         });
-
-        const userPromises = data.orders.map(async (order: Order) => {
+  
+        const userPromises = data.orders.map(async (order: { user: any; }) => {
           try {
             const userResponse = await fetch(`${API_URL}/address/${order.user}`);
             const userData = await userResponse.json();
-
+  
             if (userResponse.ok) {
               setUsers((prevUsers) => ({
                 ...prevUsers,
@@ -75,15 +96,17 @@ const Orders: React.FC = () => {
               }));
             }
           } catch (error) {
-            // Ignore error
+            // Bỏ qua lỗi, không cần báo lỗi
           }
         });
-
+  
         await Promise.all(userPromises);
         await Promise.all(restaurantPromises);
+      } else {
+        // Bỏ qua lỗi, không cần báo lỗi
       }
     } catch (error) {
-      // Ignore error
+      // Bỏ qua lỗi, không cần báo lỗi
     }
   };
 
@@ -96,19 +119,18 @@ const Orders: React.FC = () => {
   }, [navigation]);
 
   const formatDate = (dateString: string) => {
-    const options = {
+    const options: Intl.DateTimeFormatOptions = {
       day: "2-digit",
       month: "2-digit",
       year: "numeric",
     };
-
     return new Date(dateString).toLocaleDateString("vi-VN", options);
   };
 
   const filteredOrders = orders.filter((order) => {
     const orderStatus = order.status.toLowerCase();
-    const customerName = users[order.user]?.name.toLowerCase() || "";
-    const restaurantName = restaurants[order.restaurant]?.name.toLowerCase() || "";
+    const customerName = users[order.user]?.name.toLowerCase();
+    const restaurantName = restaurants[order.restaurant]?.name.toLowerCase();
     const searchTerm = searchPhrase.toLowerCase();
 
     return (
@@ -124,90 +146,60 @@ const Orders: React.FC = () => {
         searchPhrase={searchPhrase}
         setSearchPhrase={setSearchPhrase}
       />
-      <View style={{ marginTop: 10 }}>
-        {filteredOrders.map((order) => (
-          <View
-            key={order._id}
-            style={{
-              backgroundColor: "#FFFFFF",
-              padding: 10,
-              borderWidth: 1,
-              borderColor: "#DEDEDE",
-              borderRadius: 5,
-              marginTop: 5,
-              marginRight: 5,
-              marginLeft: 5,
-            }}
-          >
-            <View
-              style={{
-                borderBottomWidth: 1,
-                borderBottomColor: "#ccc",
-                paddingBottom: 10,
-              }}
-            >
-              <View style={{ marginRight: 10 }}>
+      <View className="mt-2">
+        {filteredOrders.map((order: Order) => (
+          <View key={order._id} style={styles.orderCard}>
+            <View style={styles.orderHeader}>
+              <View className="mr-3">
                 {restaurants[order.restaurant] && (
                   <Image
                     source={{
                       uri: restaurants[order.restaurant].image,
                     }}
-                    style={{
-                      width: 85,
-                      height: 85,
-                      borderRadius: 5,
-                      objectFit: "cover",
-                    }}
+                    style={styles.restaurantImage}
                   />
                 )}
               </View>
-              <View style={{ flexDirection: "column" }}>
-                <View style={{ flexDirection: "row", justifyContent: "space-between", width: "75%" }}>
+              <View className="flex-column">
+                <View className="flex-row justify-between w-3/4">
                   <Text style={{ color: "#A1A1A1" }}>
-                    ID: {order._id.substring(0, 11)}
+                    ID : {order._id.substring(0, 11)}
                   </Text>
                   <Text style={{ color: "#A1A1A1" }}>
                     {formatDate(order.date)}
                   </Text>
                 </View>
-                <Text
-                  style={{
-                    color: "#262626",
-                    fontSize: 17,
-                    fontWeight: "bold",
-                    marginBottom: 7,
-                    marginTop: 7,
-                  }}
-                >
-                  {restaurants[order.restaurant]?.name || "Unknown Restaurant"}
+                <Text style={styles.restaurantName}>
+                  {restaurants[order.restaurant]?.name || "khong co nha hang"}
                 </Text>
                 <Text style={{ color: "#4A4A4A" }}>
                   {users[order.user]?.name}
                 </Text>
-                <Text style={{ color: "#FF8C00", fontWeight: "bold", marginTop: 5 }}>
-                  {order.note}
-                </Text>
+                <Text style={styles.noteText}>{order.note}</Text>
               </View>
             </View>
-            <View style={{ flexDirection: "row", justifyContent: "space-between", marginTop: 10 }}>
-              <Text style={{ fontSize: 16 }}>{order.status}</Text>
+            <View className="flex-row justify-between mt-2">
+              <Text className="text-base">{order.status}</Text>
               <Text
-                style={{
-                  backgroundColor: "green",
-                  color: "white",
-                  padding: 5,
-                  width: 70,
-                  borderRadius: 3,
-                  textAlign: "center",
-                  fontSize: 15,
-                }}
+                style={styles.detailsButton}
                 onPress={() =>
                   navigation.navigate("DetailOrders", {
-                    order,
+                    order: {
+                      _id: order._id,
+                      status: order.status,
+                      restaurant: order.restaurant,
+                      adults: order.adults,
+                      children: order.children,
+                      date: order.date,
+                      selectedHour: order.selectedHour,
+                      note: order.note,
+                      user: order.user,
+                    },
                     users,
                     restaurants,
                   })
                 }
+                
               >
                 Details
               </Text>
@@ -224,12 +216,39 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-  title: {
-    width: "100%",
-    marginTop: 20,
-    fontSize: 25,
+  orderCard: {
+    backgroundColor: "#FFFFFF",
+    padding: 10,
+    borderWidth: 1,
+    borderColor: "#DEDEDE",
+    borderRadius: 5,
+    marginTop: 5,
+    marginRight: 5,
+    marginLeft: 5,
+  },
+  orderHeader: {
+    borderBottomWidth: 1,
+    borderBottomColor: "#ccc",
+    paddingBottom: 10,
+  },
+  restaurantImage: {
+    width: 85,
+    height: 85,
+    borderRadius: 5,
+    objectFit: "cover",
+  },
+  restaurantName: {
+    color: "#262626",
+    fontSize: 17,
     fontWeight: "bold",
-    marginLeft: "10%",
+  },
+  noteText: {
+    color: "#999",
+    fontSize: 14,
+  },
+  detailsButton: {
+    color: "#00A4F1",
+    fontWeight: "bold",
   },
 });
 
