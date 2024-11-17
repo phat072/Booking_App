@@ -13,6 +13,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import LoginScreen from "../screens/login/LoginScreen";
 import OnboardingScreen from "../screens/onboarding/OnboardingScreen";
 import BottomTabNavigator from "./BottomTabNavigator";
+import Privacy from "../screens/privacy/Privacy";
 
 const StackNavigator = () => {
     const Stack = createNativeStackNavigator();
@@ -39,6 +40,11 @@ const StackNavigator = () => {
                 <Stack.Screen
                     name="Main"
                     component={BottomTabNavigator}
+                    options={{ headerShown: false }}
+                />
+                 <Stack.Screen
+                    name="Privacy"
+                    component={Privacy}
                     options={{ headerShown: false }}
                 />
             </Stack.Navigator>
