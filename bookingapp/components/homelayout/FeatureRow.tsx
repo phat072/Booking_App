@@ -10,7 +10,7 @@ import { useNavigation } from "@react-navigation/native";
 import { themeColors } from "../../theme";
 import RestaurantCard from "../restaurant/RestaurantCard";
 import RestaurantGridLayout from "../restaurant/RestaurantGridLayout";
-import { FeatureScreenNavigationProp } from "./FeatureScreenNavigationProp";
+import { FeatureScreenNavigationProp } from "../type";
 
 // Define the types for the props
 interface FeatureRowProps {

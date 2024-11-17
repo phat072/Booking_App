@@ -16,7 +16,7 @@ import jwt_decode from "jwt-decode";
 import { COLORS, SIZES } from "../../constants/Theme";
 import { MaterialIcons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
-import NetworkImage from "../../components/networkImage/networkImage";
+import NetworkImage from "../../components/networkImage/NetworkImage";
 import ProfileTile from "../../components/profileTitle/profileTitle";
 import { API_URL } from "@env";
 
