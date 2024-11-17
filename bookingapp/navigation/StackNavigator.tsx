@@ -48,7 +48,7 @@ const StackNavigator = () => {
                     component={Privacy}
                     options={{ headerShown: false }}
                 />
-                        <Stack.Screen
+                <Stack.Screen
                     name="HistoryOrder"
                     component={HistoryOrder}
                     options={{
@@ -60,6 +60,19 @@ const StackNavigator = () => {
                         fontWeight: "bold",
                         },
                     }}
+                />
+                 <Stack.Screen
+                        name="Favourite"
+                        component={FavouriteScreen}
+                        options={{
+                            title: "Yêu thích",
+                            headerTitleAlign: "center",
+                            headerStyle: { backgroundColor: "red" },
+                            headerTintColor: "#fff",
+                            headerTitleStyle: {
+                            fontWeight: "bold",
+                            },
+                        }}
                 />
             </Stack.Navigator>
         </NavigationContainer>
