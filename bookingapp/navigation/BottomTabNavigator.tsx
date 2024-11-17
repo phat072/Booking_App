@@ -7,6 +7,7 @@ import AccountScreen from "../screens/account/Account";
 import ResultScreen from "../screens/result/ResultScreen";
 import RestaurantDetail from "../screens/restaurant/RestaurantDetail";
 // import ChatScreen from "../screens/ChatScreen";
+import MapScreen from '../screens/map/Map'
 import FeatureScreen from "../screens/feature/FeatureScreen";
 
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -103,6 +104,21 @@ const BottomTabNavigator: React.FC = () => {
               <Entypo name="home" size={24} color="#D71537" />
             ) : (
               <AntDesign name="home" size={24} color="#7E7E80" />
+            ),
+        }}
+      />
+            <Tab.Screen
+        name="MapScreen"
+        component={MapScreen} // Thêm màn hình MapScreen
+        options={{
+          tabBarLabel: "Map",
+          tabBarLabelStyle: { color: "#008E97" } as TextStyle,
+          headerShown: false,
+          tabBarIcon: ({ focused }) =>
+            focused ? (
+              <Entypo name="map" size={24} color="#D71537" />
+            ) : (
+              <Entypo name="map" size={24} color="#7E7E80" />
             ),
         }}
       />
