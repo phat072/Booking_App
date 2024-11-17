@@ -14,6 +14,7 @@ import LoginScreen from "../screens/login/LoginScreen";
 import OnboardingScreen from "../screens/onboarding/OnboardingScreen";
 import BottomTabNavigator from "./BottomTabNavigator";
 import Privacy from "../screens/privacy/Privacy";
+import HistoryOrder from "../screens/ordrefood/HistoryOrder";
 
 const StackNavigator = () => {
     const Stack = createNativeStackNavigator();
@@ -46,6 +47,19 @@ const StackNavigator = () => {
                     name="Privacy"
                     component={Privacy}
                     options={{ headerShown: false }}
+                />
+                        <Stack.Screen
+                    name="HistoryOrder"
+                    component={HistoryOrder}
+                    options={{
+                        title: "Lịch sử giao dịch",
+                        headerTitleAlign: "center",
+                        headerStyle: { backgroundColor: "red" },
+                        headerTintColor: "#fff",
+                        headerTitleStyle: {
+                        fontWeight: "bold",
+                        },
+                    }}
                 />
             </Stack.Navigator>
         </NavigationContainer>
