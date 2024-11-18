@@ -18,6 +18,7 @@ import HistoryOrder from "../screens/ordrefood/HistoryOrder";
 import EditAccount from "../screens/account/EditAccount";
 import CityScreen from "../screens/city/CityScreen";
 import { StackStackParamList } from "../screens/type";
+import BottomSheetTest from "../screens/sheet/BottomSheetTest";
 const Stack = createNativeStackNavigator<StackStackParamList>();
 
 const StackNavigator: React.FC = () => {
@@ -60,6 +61,19 @@ const StackNavigator: React.FC = () => {
             headerTitleStyle: {
               fontWeight: "bold",
             },
+          }}
+        />
+        <Stack.Screen
+          name="BottomSheet"
+          component={BottomSheetTest}
+          options={{
+            title: "",
+            // headerTitleAlign: "center",
+            // headerStyle: { backgroundColor: "red" },
+            // headerTintColor: "#fff",
+            // headerTitleStyle: {
+            //   fontWeight: "bold",
+            // },
           }}
         />
         <Stack.Screen

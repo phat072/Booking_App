@@ -84,5 +84,6 @@ export type OrdersStackParamList = {
       // setSelectedCity: (city: string | null) => void;
     };
     HomeScreen: { selectedCity: string | null };
+    BottomSheet: undefined;
   };
   
