@@ -23,6 +23,10 @@ import FilterScreen from "../screens/filter/FilterScreen";
 import Success from "../screens/ordrefood/Success";
 import BookingHours from "../screens/booking/BookingHours";
 import ChangePassword from "../screens/account/ChangePassword";
+import NotificationScreen from "../screens/nofication/NotificationScreen";
+import FoodDetail from "../screens/ordrefood/FoodDetail";
+import ListMenuRes from "../screens/menu/ListMenuRes";
+import OrderScreen from "../screens/restaurant/OrderScreen";
 const Stack = createNativeStackNavigator<StackStackParamList>();
 
 const StackNavigator: React.FC = () => {
@@ -93,6 +97,19 @@ const StackNavigator: React.FC = () => {
           }}
         />
         <Stack.Screen
+          name="Notification"
+          component={NotificationScreen}
+          options={{
+            title: "Ưu đãi",
+            headerStyle: { backgroundColor: "red" },
+            headerTintColor: "#fff",
+            headerTitleAlign: "center",
+            headerTitleStyle: {
+              fontWeight: "bold",
+            },
+          }}
+        />
+        <Stack.Screen
           name="ChangePassword"
           component={ChangePassword}
           options={{
@@ -120,6 +137,19 @@ const StackNavigator: React.FC = () => {
           }}
         />
         <Stack.Screen
+          name="FoodDetail"
+          component={FoodDetail}
+          options={{
+            title: "food details",
+            headerStyle: { backgroundColor: "transparent" },
+            headerTintColor: "#000000",
+            headerTitleAlign: "center",
+            headerTitleStyle: {
+              fontWeight: "bold",
+            },
+          }}
+        />
+        <Stack.Screen
           name="OrderSuccess"
           component={Success}
           options={{
@@ -131,6 +161,32 @@ const StackNavigator: React.FC = () => {
               fontWeight: "bold",
             },
             headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="Order"
+          component={OrderScreen}
+          options={{
+            title: "Thông tin giao dịch",
+            headerStyle: { backgroundColor: "red" },
+            headerTintColor: "#fff",
+            headerTitleAlign: "center",
+            headerTitleStyle: {
+              fontWeight: "bold",
+            },
+          }}
+        />
+        <Stack.Screen
+          name="ListMenuRes"
+          component={ListMenuRes}
+          options={{
+            title: "Danh mục các sản phẩm",
+            headerStyle: { backgroundColor: "#FFFFFF" },
+            headerTintColor: "#000000",
+            headerTitleAlign: "center",
+            headerTitleStyle: {
+              fontWeight: "bold",
+            },
           }}
         />
         <Stack.Screen

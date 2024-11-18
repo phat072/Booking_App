@@ -89,5 +89,22 @@ export type OrdersStackParamList = {
     OrderSuccess : undefined;
     BookingHours : undefined;
     ChangePassword : undefined;
+    Notification : undefined;
+    FoodDetail: {
+      item: {
+        title: string;
+        subTitle: string;
+        image: string;
+        originalPrice: string;
+        discountedPrice: string;
+        discountPercentage: string;
+        highLight: string;
+      };
+      restaurant: {
+        name: string;
+      };
+    };
+    ListMenuRes : undefined;
+    Order : undefined;
   };
   

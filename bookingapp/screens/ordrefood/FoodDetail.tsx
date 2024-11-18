@@ -1,78 +1,53 @@
-import React, { useCallback, useLayoutEffect, useRef } from "react";
+import React, { useLayoutEffect } from "react";
 import {
   View,
   Text,
   StyleSheet,
-  Image,
   Dimensions,
   TouchableOpacity,
-  Share,
 } from "react-native";
-import { Feather } from "@expo/vector-icons";
-import { Ionicons } from "@expo/vector-icons";
+import { useNavigation, RouteProp } from "@react-navigation/native";
 import Animated, {
-  SlideInDown,
   interpolate,
-  useAnimatedReaction,
   useAnimatedRef,
   useAnimatedScrollHandler,
   useAnimatedStyle,
   useScrollViewOffset,
   useSharedValue,
 } from "react-native-reanimated";
-import Colors from "../../constants/Colors";
-// import { defaultStyles } from "../../constants/Styles";
-import { useNavigation } from "@react-navigation/native";
-import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
-// import SectionList from "react-native-tabs-section-list";
+import { FontAwesome6, Ionicons } from "@expo/vector-icons";
+import { StackStackParamList } from "../type";
 
 const { width } = Dimensions.get("window");
 const IMG_HEIGHT = 250;
 
-// Define the types for the route parameters
+type FoodDetailRouteProp = RouteProp<StackStackParamList, "FoodDetail">;
+
 interface FoodDetailProps {
-  route: {
-    params: {
-      item: {
-        image: string;
-        title: string;
-        subTitle: string;
-        originalPrice: string;
-        discountedPrice: string;
-        discountPercentage: string;
-        highLight: string;
-      };
-      restaurant: {
-        name: string;
-      };
-    };
-  };
+  route: FoodDetailRouteProp;
 }
 
 const FoodDetail: React.FC<FoodDetailProps> = ({ route }) => {
-  const listRef = useRef();
+  const { item, restaurant } = route.params;
   const navigation = useNavigation();
   const scrollRef = useAnimatedRef<Animated.ScrollView>();
   const scrollOffset = useScrollViewOffset(scrollRef);
   const translateY = useSharedValue(0);
-  const { item, restaurant } = route.params;
 
   useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: "",
       headerTransparent: true,
       headerBackground: () => (
-        <Animated.View
-          style={[headerAnimatedStyle, styles.header]}
-        />
+        <Animated.View style={[headerAnimatedStyle, styles.header]} />
       ),
       headerRight: () => (
         <View style={styles.bar}>
           <TouchableOpacity style={styles.roundButton}>
-            <Ionicons name="share-outline" size={22} color={"#ffffff"} />
+            <Ionicons name="share-outline" size={22} color="#ffffff" />
           </TouchableOpacity>
           <TouchableOpacity style={styles.roundButton}>
-            <Ionicons name="heart-outline" size={22} color={"#ffffff"} />
+            <Ionicons name="heart-outline" size={22} color="#ffffff" />
           </TouchableOpacity>
         </View>
       ),
@@ -81,64 +56,34 @@ const FoodDetail: React.FC<FoodDetailProps> = ({ route }) => {
           style={styles.roundButton}
           onPress={() => navigation.goBack()}
         >
-          <Ionicons name="chevron-back" size={24} color={"#ffffff"} />
+          <Ionicons name="chevron-back" size={24} color="#ffffff" />
         </TouchableOpacity>
       ),
     });
   }, [navigation]);
 
-  useAnimatedReaction(
-    () => scrollOffset.value,
-    (offset) => {
-      translateY.value = offset > IMG_HEIGHT ? IMG_HEIGHT : offset;
-    }
-  );
+  const imageAnimatedStyle = useAnimatedStyle(() => ({
+    transform: [
+      {
+        translateY: interpolate(
+          scrollOffset.value,
+          [-IMG_HEIGHT, 0, IMG_HEIGHT, IMG_HEIGHT],
+          [-IMG_HEIGHT / 2, 0, IMG_HEIGHT * 0.75]
+        ),
+      },
+      {
+        scale: interpolate(
+          scrollOffset.value,
+          [-IMG_HEIGHT, 0, IMG_HEIGHT],
+          [2, 1, 1]
+        ),
+      },
+    ],
+  }));
 
-  const imageAnimatedStyle = useAnimatedStyle(() => {
-    return {
-      transform: [
-        {
-          translateY: interpolate(
-            scrollOffset.value,
-            [-IMG_HEIGHT, 0, IMG_HEIGHT, IMG_HEIGHT],
-            [-IMG_HEIGHT / 2, 0, IMG_HEIGHT * 0.75]
-          ),
-        },
-        {
-          scale: interpolate(
-            scrollOffset.value,
-            [-IMG_HEIGHT, 0, IMG_HEIGHT],
-            [2, 1, 1]
-          ),
-        },
-      ],
-    };
-  });
-
-  const headerAnimatedStyle = useAnimatedStyle(() => {
-    return {
-      opacity: interpolate(scrollOffset.value, [0, IMG_HEIGHT / 1.5], [0, 1]),
-    };
-  }, []);
-
-  const headerTitleAnimatedStyle = useAnimatedStyle(() => {
-    return {
-      opacity: interpolate(
-        scrollOffset.value,
-        [IMG_HEIGHT / 2, IMG_HEIGHT],
-        [0, 1]
-      ),
-      transform: [
-        {
-          translateY: interpolate(
-            scrollOffset.value,
-            [IMG_HEIGHT / 2, IMG_HEIGHT],
-            [20, 0]
-          ),
-        },
-      ],
-    };
-  }, []);
+  const headerAnimatedStyle = useAnimatedStyle(() => ({
+    opacity: interpolate(scrollOffset.value, [0, IMG_HEIGHT / 1.5], [0, 1]),
+  }));
 
   return (
     <View style={styles.container}>
@@ -146,12 +91,6 @@ const FoodDetail: React.FC<FoodDetailProps> = ({ route }) => {
         contentContainerStyle={{ paddingBottom: 100 }}
         ref={scrollRef}
         scrollEventThrottle={16}
-        onScroll={useAnimatedScrollHandler({
-          onScroll: (event) => {
-            scrollOffset.value = event.contentOffset.y;
-            translateY.value = Math.min(event.contentOffset.y, IMG_HEIGHT);
-          },
-        })}
       >
         <Animated.Image
           source={{ uri: item.image }}
@@ -257,6 +196,8 @@ const FoodDetail: React.FC<FoodDetailProps> = ({ route }) => {
   );
 };
 
+export default FoodDetail;
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -269,69 +210,98 @@ const styles = StyleSheet.create({
   infoContainer: {
     backgroundColor: "#fff",
   },
-  name: {
-    fontSize: 18,
+  contentPadding: {
+    padding: 16,
+  },
+  title: {
+    fontSize: 20,
     fontWeight: "bold",
   },
-  priceText: {
+  exclusiveText: {
+    fontSize: 16,
+    color: "#E84C3F",
+  },
+  subTitle: {
+    fontSize: 16,
+    color: "#333",
+  },
+  price: {
+    fontSize: 16,
     fontWeight: "bold",
-    marginTop: 2,
-  },
-  originalPrice: {
-    textDecorationLine: "line-through",
-    color: "#ccc",
-    fontWeight: "normal",
-  },
-  highLight: {
-    color: "#ED1C24",
-    marginTop: 2,
-  },
-  restaurantName: {
-    color: "#337ab7",
-    textDecorationLine: "underline",
-    marginTop: 2,
-  },
-  locationContainer: {
-    flexDirection: "row",
-    alignItems: "center",
     marginTop: 8,
   },
-  button: {
-    backgroundColor: "#F44236",
-    padding: 12,
-    marginTop: 12,
-    borderRadius: 5,
+  lineThrough: {
+    textDecorationLine: "line-through",
+    color: "#ccc",
   },
-  buttonText: {
-    color: "white",
-    textAlign: "center",
-    fontWeight: "bold",
+  discountText: {
+    color: "#E84C3F",
+  },
+  highlightText: {
+    color: "#ED1C24",
+    fontSize: 16,
+    marginTop: 8,
+  },
+  linkText: {
+    color: "#337ab7",
+    textDecorationLine: "underline",
+    marginTop: 8,
   },
   divider: {
     height: 2,
     backgroundColor: "#E0E0E0",
+    marginVertical: 16,
   },
-  roundButton: {
+  row: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+  },
+  boldText: {
+    fontWeight: "bold",
+    fontSize: 16,
+  },
+  description: {
+    fontSize: 16,
+    color: "#333",
+  },
+  button: {
     backgroundColor: "#F44236",
-    padding: 10,
-    borderRadius: 25,
-    marginHorizontal: 5,
+    padding: 12,
+    borderRadius: 8,
+    marginTop: 16,
+  },
+  buttonText: {
+    color: "#fff",
+    textAlign: "center",
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+  redText: {
+    color: "#B20606",
+    fontWeight: "bold",
   },
   bar: {
     flexDirection: "row",
     alignItems: "center",
+    gap: 10,
   },
-  conditionTitle: {
-    fontSize: 16,
-    fontWeight: "bold",
-    marginBottom: 8,
+  roundButton: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: "#000",
+    opacity: 0.7,
+    justifyContent: "center",
+    alignItems: "center",
   },
   header: {
     backgroundColor: "red",
     height: 100,
-    borderBottomWidth: StyleSheet.hairlineWidth,
-    borderColor: Colors.grey,
+  },
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
+    marginBottom: 8,
   },
 });
-
-export default FoodDetail;

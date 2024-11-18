@@ -13,7 +13,7 @@ const Success: React.FC = () => {
     <View style={styles.container}>
       <LottieView
         style={styles.lottie}
-        source={require("../assets/lottie/orders1.json")}
+        source={require("@/assets/lottie/orders1.json")}
         autoPlay
         loop
       />
