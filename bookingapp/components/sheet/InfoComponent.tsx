@@ -4,7 +4,6 @@ import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 
 const InfoComponent = () => {
   return (
-    // Fix 
     <View style={styles.infoContainer}>
       <View style={styles.section}>
         <Text style={styles.name}>Bò Tơ Quán Mộc - Trần Văn Giàu</Text>

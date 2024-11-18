@@ -19,6 +19,10 @@ import EditAccount from "../screens/account/EditAccount";
 import CityScreen from "../screens/city/CityScreen";
 import { StackStackParamList } from "../screens/type";
 import BottomSheetTest from "../screens/sheet/BottomSheetTest";
+import FilterScreen from "../screens/filter/FilterScreen";
+import Success from "../screens/ordrefood/Success";
+import BookingHours from "../screens/booking/BookingHours";
+import ChangePassword from "../screens/account/ChangePassword";
 const Stack = createNativeStackNavigator<StackStackParamList>();
 
 const StackNavigator: React.FC = () => {
@@ -86,6 +90,61 @@ const StackNavigator: React.FC = () => {
             headerTitleStyle: {
               fontWeight: "bold",
             },
+          }}
+        />
+        <Stack.Screen
+          name="ChangePassword"
+          component={ChangePassword}
+          options={{
+            title: "Change password",
+            headerStyle: { backgroundColor: "red" },
+            headerTintColor: "#fff",
+            headerTitleAlign: "center",
+            headerTitleStyle: {
+              fontWeight: "bold",
+            },
+          }}
+        />
+        <Stack.Screen
+          name="BookingHours"
+          component={BookingHours}
+          options={{
+            title: "Thông tin giao dịch",
+            headerStyle: { backgroundColor: "red" },
+            headerTintColor: "#fff",
+            headerTitleAlign: "center",
+            headerTitleStyle: {
+              fontWeight: "bold",
+            },
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="OrderSuccess"
+          component={Success}
+          options={{
+            title: "order tình trạng",
+            headerStyle: { backgroundColor: "red" },
+            headerTintColor: "#fff",
+            headerTitleAlign: "center",
+            headerTitleStyle: {
+              fontWeight: "bold",
+            },
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="Filter"
+          component={FilterScreen}
+          options={{
+            title: "Lọc",
+            headerStyle: { backgroundColor: "red" },
+            headerTintColor: "#fff",
+            headerTitleAlign: "center",
+            headerTitleStyle: {
+              fontWeight: "bold",
+            },
+            headerShown: true,
           }}
         />
         <Stack.Screen

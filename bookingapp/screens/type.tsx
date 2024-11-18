@@ -85,5 +85,9 @@ export type OrdersStackParamList = {
     };
     HomeScreen: { selectedCity: string | null };
     BottomSheet: undefined;
+    Filter: undefined;
+    OrderSuccess : undefined;
+    BookingHours : undefined;
+    ChangePassword : undefined;
   };
   
