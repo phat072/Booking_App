@@ -290,6 +290,7 @@ const styles = StyleSheet.create({
     padding: 15,
     borderRadius: 8,
     width: "60%",
+    marginTop: 60,
   },
   logoutButtonText: {
     color: "#D02B39",

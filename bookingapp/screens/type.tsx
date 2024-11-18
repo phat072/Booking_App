@@ -61,3 +61,28 @@ export type OrdersStackParamList = {
     Privacy : undefined;
     Login : undefined;
   }
+
+
+  export type CityStackParamList = {
+    City: {
+      selectedCity: string | null;
+      // setSelectedCity: (city: string | null) => void;r
+    };
+    HomeScreen: { selectedCity: string | null };
+  };
+  
+  export type StackStackParamList = {
+    Onboarding: undefined;
+    Login: undefined;
+    Register: undefined;
+    Main: undefined;
+    Privacy: undefined;
+    HistoryOrder: undefined;
+    EditAccount: undefined;
+    City: {
+      selectedCity: string | null;
+      // setSelectedCity: (city: string | null) => void;
+    };
+    HomeScreen: { selectedCity: string | null };
+  };
+  

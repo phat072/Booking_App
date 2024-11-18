@@ -47,9 +47,13 @@ export default function HomeScreen({ navigation, route }: { navigation: any; rou
   const { userId, setUserId, user, updateUser } = useContext(UserType);
   const [address, setAddress] = useState<any[]>([]); // Adjust type based on your address object structure
   const [categories, setCategories] = useState<any[]>([]); // Adjust type based on your category object structure
-  const [selectedCity, setSelectedCity] = useState<string>(
-    route.params?.selectedCity || "TPHCM"
-  );
+  const [selectedCity, setSelectedCity] = useState<string>("TPHCM");
+
+  useEffect(() => {
+    if (route.params?.selectedCity) {
+      setSelectedCity(route.params.selectedCity);
+    }
+  }, [route.params?.selectedCity]);
   const [featuredData, setFeaturedData] = useState<FeaturedData[]>([]);
 
   const bannerImages: string[] = [
