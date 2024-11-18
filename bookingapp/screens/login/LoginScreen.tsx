@@ -19,7 +19,6 @@ import styles from "../../constants/LoginStyle";
 import Button from "../../components/button/Button";
 import { API_URL } from "@env";
 import { UserType } from "../../userContext";
-import jwtDecode from "jwt-decode";
 
 interface LoginPageProps {
   navigation: any;
@@ -49,47 +48,34 @@ const LoginPage: React.FC<LoginPageProps> = ({ navigation }) => {
 
   const handleLogin = async (values: { email: any; password: any; }) => {
     setLoader(true);
-  
     try {
       const user = {
         email: values.email,
         password: values.password,
       };
-  
-      const response = await axios.post(
-        `${API_URL}/login`,
-        user,
-        {
-          headers: { 'Content-Type': 'application/json' },
-          timeout: 5000,
-        }
-      );
-  
+      const response = await axios.post(`${API_URL}/login`, user);
       if (response.status === 200) {
         const token = response.data.token;
-  
-        // Decode Payload from token using jwt-decode
-        const payload = jwtDecode(token); // Decodes the JWT payload
+        const payloadBase64 = token.split(".")[1];
+        const payload = JSON.parse(base64Decode(payloadBase64));
         const isAdmin = payload.admin;
-  
-        await AsyncStorage.setItem("authToken", token);
-  
+
+        await AsyncStorage.setItem("authToken", response.data.token);
+
+        // Set user data in context
+        setUserId(payload.userId);
+        updateUser(payload);
+
         if (isAdmin) {
           navigation.replace("Admin");
         } else {
           navigation.replace("Main");
         }
-      } else {
-        Alert.alert("Lỗi", "Hãy kiểm tra lại thông tin");
       }
-    } catch (error) {
-      console.error("Error during login:", error);
-      Alert.alert("Lỗi", "Hãy kiểm tra lại thông tin");
     } finally {
       setLoader(false);
     }
   };
-  
 
   return (
     <ScrollView style={{ backgroundColor: COLORS.white }}>

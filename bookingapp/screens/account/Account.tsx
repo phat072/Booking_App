@@ -12,7 +12,7 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
 import { UserType } from "@/userContext";
-import jwtDecode from "jwt-decode";
+import  jwt_decode  from "jwt-decode";
 import { COLORS, SIZES } from "@/constants/Theme";
 import { MaterialIcons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
@@ -23,19 +23,24 @@ import { AccountStackParamList } from "../type";
 import { StackNavigationProp } from "@react-navigation/stack";
 
 interface Address {
-  avatar: string;
-  [key: string]: any;
+  avatar?: string;
 }
 
-interface JwtPayload {
-  userId: string;
-  exp: number;
+interface User {
+  name?: string;
+  mobileNo?: string;
+  avatar?: string;
 }
+
+interface DecodedToken {
+  userId: string;
+}
+
 
 const AccountScreen: React.FC = () => {
   const navigation = useNavigation<StackNavigationProp<AccountStackParamList>>();
   const { userId, setUserId, user, updateUser } = useContext(UserType);
-  const [address, setAddress] = useState<Address>({ avatar: "" });
+  const [address, setAddress] = useState<Address>({});
 
   const handleAvatarPress = async () => {
     try {
@@ -62,27 +67,22 @@ const AccountScreen: React.FC = () => {
 
         // Upload image to Cloudinary
         const formData = new FormData();
-        const fetchResponse = await fetch(imageUri);
-        const blob = await fetchResponse.blob();
-        formData.append("file", blob, "avatar.jpg");
-        formData.append(
-          "upload_preset",
-          process.env.CLOUDINARY_UPLOAD_PRESET as string
-        );
+        formData.append("file", {
+          uri: imageUri,
+          type: "image/jpeg",
+          name: "avatar.jpg",
+        } as any); // Explicitly cast to `any` to avoid type issues
+        formData.append("upload_preset", process.env.CLOUDINARY_UPLOAD_PRESET!);
 
-        const uploadResponse = await axios.post(
-          process.env.CLOUDINARY_UPLOAD_URL as string,
-          formData,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-          }
-        );
+        const response = await axios.post(process.env.CLOUDINARY_UPLOAD_URL!, formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
 
-        const avatarUrl = uploadResponse.data.secure_url;
+        const avatarUrl = response.data.secure_url;
 
-        setAddress({ ...address, avatar: avatarUrl });
+        setAddress({ ...address, avatar: imageUri });
         await updateAddressData({ ...address, avatar: avatarUrl });
       }
     } catch (error) {
@@ -93,18 +93,20 @@ const AccountScreen: React.FC = () => {
   const updateAddressData = async (updatedData: Address) => {
     try {
       const token = await AsyncStorage.getItem("authToken");
-      if (!token) throw new Error("Token not found");
+      if (!token) return;
 
-      const decodedToken: JwtPayload = jwtDecode(token);
+      const decodedToken = jwt_decode(token) as DecodedToken;
+      
+      const userId = decodedToken.userId;
 
-      await axios.put(`${API_URL}/address/${decodedToken.userId}`, updatedData, {
+      await axios.put(`${API_URL}/address/${userId}`, updatedData, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
       });
 
-      await fetchAddressData(decodedToken.userId);
+      await fetchAddressData(userId);
     } catch (error) {
       console.error("Error updating address data", error);
     }
@@ -113,10 +115,7 @@ const AccountScreen: React.FC = () => {
   const handleLogout = async () => {
     try {
       await AsyncStorage.removeItem("authToken");
-      navigation.reset({
-        index: 0,
-        routes: [{ name: "Login" }],
-      });
+      navigation.replace("Login");
     } catch (error) {
       console.error("Error logging out:", error);
       Alert.alert("Logout Error", "An error occurred while logging out.");
@@ -126,30 +125,16 @@ const AccountScreen: React.FC = () => {
   const fetchAddress = async () => {
     try {
       const token = await AsyncStorage.getItem("authToken");
-      if (!token) throw new Error("Token not found");
-  
-      const decodedToken: JwtPayload = jwtDecode(token); // Use jwtDecode instead of jwt_decode
-  
-      if (!decodedToken.userId) {
-        throw new Error("Invalid token structure: userId missing");
-      }
-  
-      setUserId(decodedToken.userId); // Assuming setUserId is a function from context
-      await fetchAddressData(decodedToken.userId);
+      if (!token) return;
+
+      const decodedToken = jwt_decode(token) as DecodedToken;
+      const userId = decodedToken.userId;
+      setUserId(userId);
+      await fetchAddressData(userId);
     } catch (error) {
-      if (error instanceof Error) {
-        console.error("Error fetching address", error.message);
-      } else {
-        console.error("Error fetching address", error);
-      }
-      Alert.alert("Error", "Unable to fetch address. Please try again.");
+      console.error("Error fetching address", error);
     }
   };
-  
-
-  useEffect(() => {
-    fetchAddress();
-  }, []);
 
   const fetchAddressData = async (userId: string) => {
     try {
@@ -161,6 +146,9 @@ const AccountScreen: React.FC = () => {
     }
   };
 
+  useEffect(() => {
+    fetchAddress();
+  }, []);
 
   return (
     <View>
