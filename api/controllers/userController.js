@@ -80,25 +80,33 @@ module.exports = {
     // Login user
     login: async (req, res) => {
         try {
-            const { email, password } = req.body;
-            const user = await User.findOne({ email });
-            if (!user) {
-                return res.status(404).json({ message: 'User not found' });
-            }
-            if (!user.verified) {
-                return res.status(400).json({ message: 'Email not verified' });
-            }
-            if (user.password !== password) {
-                return res.status(400).json({ message: 'Invalid password' });
-            }
-
-            const token = jwt.sign({ userId: user._id, admin: user.admin }, secretKey);
-            res.status(200).json({ token });
+          const { email, password } = req.body;
+    
+          //check if the user exists
+          const user = await User.findOne({ email });
+          if (!user) {
+            return res.status(401).json({ message: "Invalid email or password" });
+          }
+    
+          //check if the password is correct
+          if (user.password !== password) {
+            return res.status(401).json({ message: "Invalid password" });
+          }
+    
+          const token = jwt.sign(
+            { userId: user._id, admin: user.admin },
+            secretKey
+          );
+    
+          res.status(200).json({ token });
+          // Generate a token with role information
+          // const token = jwt.sign({ userId: user._id, admin: user.admin }, secretKey);
+    
+          // res.status(200).json({ token, admin });
         } catch (error) {
-            console.error('Failed to login user', error);
-            res.status(500).json({ message: 'Failed to login user' });
+          res.status(500).json({ message: "Login Failed" });
         }
-    },
+      },
 
     // Logout user
     logout: async (req, res) => {

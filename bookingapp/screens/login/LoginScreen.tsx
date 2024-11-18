@@ -19,6 +19,7 @@ import styles from "../../constants/LoginStyle";
 import Button from "../../components/button/Button";
 import { API_URL } from "@env";
 import { UserType } from "../../userContext";
+import jwtDecode from "jwt-decode";
 
 interface LoginPageProps {
   navigation: any;
@@ -48,37 +49,34 @@ const LoginPage: React.FC<LoginPageProps> = ({ navigation }) => {
 
   const handleLogin = async (values: { email: any; password: any; }) => {
     setLoader(true);
-
+  
     try {
       const user = {
         email: values.email,
         password: values.password,
       };
-
+  
       const response = await axios.post(
-        `${API_URL}/login`, 
-        user, 
-        { 
+        `${API_URL}/login`,
+        user,
+        {
           headers: { 'Content-Type': 'application/json' },
-          timeout: 5000 
+          timeout: 5000,
         }
-      )
-
+      );
+  
       if (response.status === 200) {
         const token = response.data.token;
-
-        // Decode Payload từ token sử dụng base-64
-        const payloadBase64 = token.split('.')[1];
-        const payload = JSON.parse(base64Decode(payloadBase64));
+  
+        // Decode Payload from token using jwt-decode
+        const payload = jwtDecode(token); // Decodes the JWT payload
         const isAdmin = payload.admin;
-
-        await AsyncStorage.setItem("authToken", response.data.token);
-
+  
+        await AsyncStorage.setItem("authToken", token);
+  
         if (isAdmin) {
-          // If admin, navigate to the admin screen
           navigation.replace("Admin");
         } else {
-          // If not admin, navigate to the main screen
           navigation.replace("Main");
         }
       } else {
@@ -91,7 +89,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ navigation }) => {
       setLoader(false);
     }
   };
-
+  
 
   return (
     <ScrollView style={{ backgroundColor: COLORS.white }}>

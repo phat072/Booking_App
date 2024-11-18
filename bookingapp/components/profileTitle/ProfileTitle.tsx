@@ -1,5 +1,13 @@
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React from "react";
+import {
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  StyleProp,
+  TextStyle,
+  ViewStyle,
+} from "react-native";
 import {
   AntDesign,
   Ionicons,
@@ -7,30 +15,39 @@ import {
   Feather,
   MaterialCommunityIcons,
 } from "@expo/vector-icons";
-import { COLORS, SIZES } from "../../constants/Theme";
+import { COLORS, SIZES } from "@/constants/Theme";
+
+type FontType = 1 | 2 | 3 | 4 | 5;
 
 interface ProfileTileProps {
   onPress?: () => void;
   title: string;
-  icon: string; // Chỉ nhận tên biểu tượng
-  font?: number; // Loại font biểu tượng
-  temp?: string;
+  icon: string;
+  font: FontType;
+  temp?: string | number;
 }
 
-const ProfileTile: React.FC<ProfileTileProps> = ({ onPress, title, icon, font, temp }) => {
-  console.log('ProfileTile props:', { title, icon, font, onPress });
+const ProfileTile: React.FC<ProfileTileProps> = ({
+  onPress,
+  title,
+  icon,
+  font = 1, // Default value for font
+  temp,
+}) => {
   const renderIcon = () => {
     switch (font) {
       case 1:
-        return <Ionicons name={icon as any} size={24} color={COLORS.gray} />;
+        return <Ionicons name={icon as keyof typeof Ionicons.glyphMap} size={24} color={COLORS.gray} />;
       case 2:
-        return <SimpleLineIcons name={icon as any} size={20} color={COLORS.gray} />;
+        return <SimpleLineIcons name={icon as keyof typeof SimpleLineIcons.glyphMap} size={20} color={COLORS.gray} />;
       case 3:
-        return <Feather name={icon as any} size={20} color={COLORS.gray} />;
+        return <Feather name={icon as keyof typeof Feather.glyphMap} size={20} color={COLORS.gray} />;
       case 4:
-        return <MaterialCommunityIcons name={icon as any} size={20} color={COLORS.gray} />;
+        return <MaterialCommunityIcons name={icon as keyof typeof MaterialCommunityIcons.glyphMap} size={20} color={COLORS.gray} />;
+      case 5:
+        return <AntDesign name={icon as keyof typeof AntDesign.glyphMap} size={22} color={COLORS.gray} />;
       default:
-        return <AntDesign name={icon as any} size={22} color={COLORS.gray} />;
+        return null;
     }
   };
 
@@ -72,30 +89,31 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-  },
+  } as ViewStyle,
   inner: {
     flexDirection: "row",
     marginHorizontal: 20,
     alignItems: "center",
     marginVertical: 6,
-  },
+  } as ViewStyle,
+  row: {
+    flexDirection: "row",
+    alignItems: "center",
+  } as ViewStyle,
   text: {
     marginLeft: 10,
     fontFamily: "regular",
     fontSize: 17,
     color: "black",
-  },
+  } as TextStyle,
   text1: {
     marginLeft: 10,
     fontFamily: "regular",
     fontSize: 17,
     color: COLORS.gray,
-  },
-  row: {
-    flexDirection: "row",
-  },
+  } as TextStyle,
   iconRight: {
     bottom: -3,
     marginRight: 10,
-  },
+  } as ViewStyle,
 });

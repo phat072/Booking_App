@@ -38,9 +38,9 @@ interface User {
 
 
 import { StackNavigationProp } from '@react-navigation/stack';
-import { AdminStackParamList } from "@/screens/type";
+import { OrdersStackParamList } from "@/screens/type";
 type OrdersScreenNavigationProp = StackNavigationProp<
-AdminStackParamList,
+OrdersStackParamList,
   'Orders'
 >;
 

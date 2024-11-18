@@ -22,8 +22,8 @@ import { API_URL } from "@env";
 const { width, height } = Dimensions.get("window");
 
 import { StackNavigationProp } from "@react-navigation/stack";
-import { AdminStackParamList } from "@/screens/type";
-type RestaurantDetailNavigationProp = StackNavigationProp<AdminStackParamList, "Order">;
+import { OrdersStackParamList } from "@/screens/type";
+type RestaurantDetailNavigationProp = StackNavigationProp<OrdersStackParamList, "Order">;
 
 
 

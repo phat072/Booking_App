@@ -18,10 +18,10 @@ import {
   import { Foundation } from "@expo/vector-icons";
   import { Entypo } from "@expo/vector-icons";
   import { API_URL } from "@env";
-  import { AdminStackParamList } from "@/screens/type";
+  import { OrdersStackParamList } from "@/screens/type";
   import { RouteProp, useRoute } from "@react-navigation/native";
 
-  type DetailOrdersRouteProp = RouteProp<AdminStackParamList, "DetailOrders">;
+  type DetailOrdersRouteProp = RouteProp<OrdersStackParamList, "DetailOrders">;
 
   const DetailOrders = () => {
     const route = useRoute<DetailOrdersRouteProp>();

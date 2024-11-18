@@ -15,6 +15,7 @@ import OnboardingScreen from "../screens/onboarding/OnboardingScreen";
 import BottomTabNavigator from "./BottomTabNavigator";
 import Privacy from "../screens/privacy/Privacy";
 import HistoryOrder from "../screens/ordrefood/HistoryOrder";
+import EditAccount from "../screens/account/EditAccount";
 
 const StackNavigator = () => {
     const Stack = createNativeStackNavigator();
@@ -61,7 +62,7 @@ const StackNavigator = () => {
                         },
                     }}
                 />
-                 <Stack.Screen
+                 {/* <Stack.Screen
                         name="Favourite"
                         component={FavouriteScreen}
                         options={{
@@ -73,6 +74,20 @@ const StackNavigator = () => {
                             fontWeight: "bold",
                             },
                         }}
+                /> */} 
+                <Stack.Screen
+                    name="EditAccount"
+                    component={EditAccount}
+                    options={{
+                        title: "Thông tin người dùng",
+                        headerStyle: { backgroundColor: "red" },
+                        headerTintColor: "#fff",
+                        headerTitleAlign: "center",
+                        headerTitleStyle: {
+                        fontWeight: "bold",
+                        },
+                        headerShown: true,
+                    }}
                 />
             </Stack.Navigator>
         </NavigationContainer>

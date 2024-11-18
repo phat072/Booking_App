@@ -7,7 +7,7 @@ export type HomeAdminRootStackParamList = {
 
 export type HomeAdminNavigationProp = StackNavigationProp<HomeAdminRootStackParamList, "HomeAdmin">;
 
-export type AdminStackParamList = {
+export type OrdersStackParamList = {
     Home: undefined;
     Orders: undefined;
     Dashboard: undefined;
@@ -49,4 +49,15 @@ export type AdminStackParamList = {
       selectedItem?: any;
     };
   };
-  
+
+  export type AccountStackParamList ={
+    Account: undefined;
+    EditAccount: undefined;
+    ChangePassword : undefined;
+    HistoryOrder : undefined;
+    Favourite : undefined;
+    Chat : undefined;
+    BottomSheet : undefined;
+    Privacy : undefined;
+    Login : undefined;
+  }

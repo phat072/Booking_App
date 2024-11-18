@@ -41,8 +41,8 @@ interface RouteProps {
 
 
 import { StackNavigationProp } from "@react-navigation/stack";
-import { AdminStackParamList } from "@/screens/type";
-type MenutabNavigationProp = StackNavigationProp<AdminStackParamList, "Order">;
+import { OrdersStackParamList } from "@/screens/type";
+type MenutabNavigationProp = StackNavigationProp<OrdersStackParamList, "Order">;
 
 const FirstRoute: React.FC<RouteProps> = ({ item }) => {
   const navigation = useNavigation<MenutabNavigationProp>();
