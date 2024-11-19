@@ -8,7 +8,7 @@ type Restaurant = {
   _id: string;
   name: string;
   address: string;
-  image?: string;
+  image: string;
   rating: number;
 };
 

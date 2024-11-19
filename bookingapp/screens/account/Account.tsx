@@ -187,7 +187,7 @@ const AccountScreen: React.FC = () => {
               </TouchableOpacity>
             </View>
             <View style={styles.section}>
-              <ProfileTile title="Id khách hàng" icon="user" font={3} />
+              <ProfileTile title="ID khách hàng" icon="user" font={3} />
               <ProfileTile title="Tình trạng" icon="bar-chart" font={3} />
               <ProfileTile
                 title="Thay đổi mật khẩu"
