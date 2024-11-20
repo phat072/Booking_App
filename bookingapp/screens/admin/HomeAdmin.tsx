@@ -30,7 +30,6 @@ import axios from "axios";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import Calendar from "../../components/admin/Calendar";
 import AntDesign from "@expo/vector-icons/AntDesign";
-import { StackNavigationProp } from "@react-navigation/stack";
 import { HomeAdminNavigationProp } from "../type";
 
 interface AddressData {
@@ -227,7 +226,33 @@ return (
             data2={lineData2}
             height={300}
             width={320}
-            // Chart configuration...
+            thickness={1}
+              hideRules={true}
+              spacing={47}
+              color="#42a5f5"
+              color2="#ff0000"
+              showScrollIndicator={true}
+              areaChart={false}
+              startFillColor="transparent"
+              endFillColor="transparent"
+              noOfSections={5}
+              maxValue={150}
+              yAxisThickness={0}
+              xAxisThickness={0}
+              yAxisTextStyle={{ color: "grey", fontSize: 12 }}
+              xAxisLabelTexts={[
+                "Mon",
+                "Tue",
+                "Wed",
+                "Thu",
+                "Fri",
+                "Sat",
+                "Sun",
+              ]}
+              onPress={(item: { value: any }, index: number) => {
+                alert(`Value: ${item.value}`);
+              }}
+              initialSpacing={20}
             />
         </View>
         <View style={styles.cardsWrapper}>
@@ -238,7 +263,36 @@ return (
             bgColor="#FEF7DC"
             onPress={() => navigation.navigate("OrderTab")}
             />
-            {/* Add other cards similarly */}
+            <HomeAdminCard
+              title="Restaurants"
+              iconUri="https://res.cloudinary.com/dc5xcbmvp/image/upload/v1704173088/icons8-restaurant-100_i1evvu.png"
+              borderColor="#6FB168"
+              bgColor="#E4F0E3"
+              onPress={() => navigation.navigate("Restaurants")}
+            />
+            <HomeAdminCard
+              title="Customers"
+              iconUri="https://res.cloudinary.com/dc5xcbmvp/image/upload/v1704173087/icons8-country-house-100_vjk4fr.png"
+              borderColor="#FF8D09"
+              bgColor="#FFE9CF"
+              onPress={() => navigation.navigate("Customers")}
+            />
+            <HomeAdminCard
+              title="Category"
+              iconUri="https://res.cloudinary.com/dc5xcbmvp/image/upload/v1719304124/icons8-restaurant-menu-100_c30g2b.png"
+              borderColor="#7277FC"
+              bgColor="#E1E2FE"
+              onPress={() => navigation.navigate("Category")}
+            />
+
+             <HomeAdminCard
+              title="Orders"
+              iconUri="https://res.cloudinary.com/dc5xcbmvp/image/upload/v1704173088/icons8-purchase-order-100_pligj9.png"
+              borderColor="#E091D7"
+              bgColor="#F9EAF7"
+              onPress={() => navigation.navigate("OrderTab")}
+            />
+            
         </View>
         </LinearGradient>
     </View>

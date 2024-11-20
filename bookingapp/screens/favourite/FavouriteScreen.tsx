@@ -14,6 +14,9 @@ import { API_URL } from "@env";
 import axios from "axios";
 import Swipeable from "react-native-gesture-handler/Swipeable";
 
+import { AdminStackParamList } from "../type"; // Update with your file path
+import { StackNavigationProp } from "@react-navigation/stack";
+
 interface Restaurant {
   _id: string;
   name: string;
@@ -23,12 +26,17 @@ interface Restaurant {
   distance: number;
 }
 
+type FavouriteScreenNavigationProp = StackNavigationProp<
+   AdminStackParamList,
+  "Restaurants"
+>;
+
 const FavouriteScreen: React.FC = () => {
   const { user } = useContext(UserType);
   const [favoriteRestaurants, setFavoriteRestaurants] = useState<Restaurant[]>(
     []
   );
-  const navigation = useNavigation();
+  const navigation = useNavigation<FavouriteScreenNavigationProp>();
 
   useEffect(() => {
     axios
@@ -77,7 +85,7 @@ const FavouriteScreen: React.FC = () => {
         >
           <TouchableOpacity
             onPress={() =>
-              navigation.navigate("Restaurant", { ...restaurant })
+              navigation.navigate("Restaurants", { ...restaurant })
             }
           >
             <View style={styles.cardContainer}>

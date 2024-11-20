@@ -28,6 +28,7 @@ import FoodDetail from "../screens/ordrefood/FoodDetail";
 import ListMenuRes from "../screens/menu/ListMenuRes";
 import OrderScreen from "../screens/restaurant/OrderScreen";
 import AdminTabNavigator from "../navigation/AdminTabNavigator"
+import FavouriteScreen from "../screens/favourite/FavouriteScreen";
 const Stack = createNativeStackNavigator<StackStackParamList>();
 
 const StackNavigator: React.FC = () => {
@@ -64,6 +65,20 @@ const StackNavigator: React.FC = () => {
           component={HistoryOrder}
           options={{
             title: "Lịch sử giao dịch",
+            headerTitleAlign: "center",
+            headerStyle: { backgroundColor: "red" },
+            headerTintColor: "#fff",
+            headerTitleStyle: {
+              fontWeight: "bold",
+            },
+          }}
+        />
+        <Stack.Screen
+          name="Favourite"
+          // component={BottomSheetTest}
+          component={FavouriteScreen}
+          options={{
+            title: "Yêu thích",
             headerTitleAlign: "center",
             headerStyle: { backgroundColor: "red" },
             headerTintColor: "#fff",

@@ -3,6 +3,9 @@ import { StackNavigationProp } from "@react-navigation/stack";
 export type HomeAdminRootStackParamList = {
     HomeAdmin: undefined;
     OrderTab: undefined;
+    Restaurants : undefined;
+    Customers : undefined;
+    Category : undefined;
 };
 
 export type HomeAdminNavigationProp = StackNavigationProp<HomeAdminRootStackParamList, "HomeAdmin">;
@@ -107,5 +110,18 @@ export type OrdersStackParamList = {
     };
     ListMenuRes : undefined;
     Order : undefined;
+    Favourite : undefined;
+  };
+
+export type AdminStackParamList = {
+    Restaurants: {
+      _id: string;
+      name: string;
+      address: string;
+      image: string;
+      rating: number;
+      distance: number;
+    };
+    // Add other screens here if necessary
   };
   
