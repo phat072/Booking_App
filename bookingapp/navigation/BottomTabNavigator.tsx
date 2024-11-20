@@ -7,7 +7,7 @@ import AccountScreen from "../screens/account/Account";
 import ResultScreen from "../screens/result/ResultScreen";
 import RestaurantDetail from "../screens/restaurant/RestaurantDetail";
 // import ChatScreen from "../screens/ChatScreen";
-import MapScreen from '../screens/map/Map'
+import MapScreen from '../screens/map/MapScreen'
 import FeatureScreen from "../screens/feature/FeatureScreen";
 import ChatScreen from "../screens/account/ChatScreen";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";

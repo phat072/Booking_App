@@ -71,7 +71,7 @@ const OnboardingScreen: React.FC<OnboardingScreenProps> = ({ navigation }) => {
     const payload = JSON.parse(base64Decode(payloadBase64));
 
     if (payload.admin) {
-      navigation.navigate("Admin");
+      navigation.navigate("Main");
     } else {
       navigation.navigate("Main");
     }
