@@ -13,7 +13,6 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { decode as base64Decode } from "base-64";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 
-
 interface OnboardingScreenProps {
   navigation: any; 
 }
@@ -71,11 +70,10 @@ const OnboardingScreen: React.FC<OnboardingScreenProps> = ({ navigation }) => {
     const payload = JSON.parse(base64Decode(payloadBase64));
 
     if (payload.admin) {
-      navigation.navigate("Main");
+      navigation.navigate("Admin");
     } else {
       navigation.navigate("Main");
     }
-    // navigation.navigate("Login");
   };
 
   return (

@@ -15,17 +15,20 @@ import Customers from "../screens/admin/Customers";
 import OrdersStackNavigator from "./OrdersStackNavigator";
 import ResAdminStackNavigator from "./resAdminStackNavigator";
 import Category from "../screens/admin/Category";
-
+import { AccountStackParamList } from "@/screens/type";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { useNavigation } from "expo-router";
 const SCREEN_WIDTH = Dimensions.get("window").width;
+
 
 const AdminTabNavigator: React.FC = () => {
   const [activeScreen, setActiveScreen] = useState<string>("Dashboard");
-
+  const navigation = useNavigation<StackNavigationProp<AccountStackParamList>>();
   const handleLogout = async () => {
     try {
       await AsyncStorage.removeItem("authToken");
       Alert.alert("Logged out", "You have been logged out successfully.");
-      setActiveScreen("Login"); // Replace navigation logic here if needed.
+      navigation.replace("Login");
     } catch (error) {
       console.error("Error logging out:", error);
       Alert.alert("Logout Error", "An error occurred while logging out.");
