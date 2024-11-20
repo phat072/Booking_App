@@ -79,6 +79,7 @@ export type OrdersStackParamList = {
     Privacy: undefined;
     HistoryOrder: undefined;
     EditAccount: undefined;
+    Admin:undefined;
     City: {
       selectedCity: string | null;
       // setSelectedCity: (city: string | null) => void;

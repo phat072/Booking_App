@@ -13,7 +13,7 @@ import { AntDesign, Ionicons, MaterialCommunityIcons, MaterialIcons } from "@exp
 import HomeAdmin from "../screens/admin/HomeAdmin";
 import Customers from "../screens/admin/Customers";
 import OrdersStackNavigator from "./OrdersStackNavigator";
-import ResAdminStackNavigator from "./ResAdminStackNavigator";
+import ResAdminStackNavigator from "./resAdminStackNavigator";
 import Category from "../screens/admin/Category";
 
 const SCREEN_WIDTH = Dimensions.get("window").width;

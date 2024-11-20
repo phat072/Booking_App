@@ -27,6 +27,7 @@ import NotificationScreen from "../screens/nofication/NotificationScreen";
 import FoodDetail from "../screens/ordrefood/FoodDetail";
 import ListMenuRes from "../screens/menu/ListMenuRes";
 import OrderScreen from "../screens/restaurant/OrderScreen";
+import AdminTabNavigator from "../navigation/AdminTabNavigator"
 const Stack = createNativeStackNavigator<StackStackParamList>();
 
 const StackNavigator: React.FC = () => {
@@ -202,6 +203,11 @@ const StackNavigator: React.FC = () => {
             },
             headerShown: true,
           }}
+        />
+        <Stack.Screen
+          name="Admin"
+          component={AdminTabNavigator}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="EditAccount"
