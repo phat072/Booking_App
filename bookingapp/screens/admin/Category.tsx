@@ -77,12 +77,7 @@ const Category: React.FC = () => {
   const renderCategoryItem = (item: CategoryItem) => (
     <TouchableOpacity key={item._id}>
       <View
-        style={[
-          selectedCategory === item._id && isDeleteMode
-            ? styles.selected
-            : null,
-        ]}
-        className="w-[120] h-[140] bg-white items-center justify-center border border-[#DDDDDD] rounded-lg mt-2"
+        style={[selectedCategory === item._id && isDeleteMode ? styles.selected : null]}
       >
         <Avatar
           avatarStyle={{ objectFit: "cover" }}
@@ -97,58 +92,31 @@ const Category: React.FC = () => {
 
   return (
     <View style={{ flex: 1 }}>
-      <View
-        className={`flex flex-row justify-around ${
-          !isDeleteMode ? "hidden" : ""
-        }`}
-      >
+      <View style={styles.buttonContainer}>
         <Button
-          title="Select to delete"
-          loading={false}
-          loadingProps={{ size: "small", color: "white" }}
-          buttonStyle={{
-            backgroundColor: "rgba(214, 61, 57, 1)",
-            borderRadius: 5,
-          }}
-          containerStyle={{
-            height: 50,
-            width: 150,
-            marginTop: 20,
-          }}
+          title="Select"
+          onPress={toggleDeleteMode}
+          buttonStyle={styles.selectButton}
+          containerStyle={styles.selectButtonContainer}
         />
         <Button
           title="Delete all"
-          loading={false}
-          loadingProps={{ size: "small", color: "white" }}
-          buttonStyle={{
-            backgroundColor: "rgba(214, 61, 57, 1)",
-            borderRadius: 5,
-          }}
-          containerStyle={{
-            marginTop: 20,
-            height: 50,
-            width: 150,
-          }}
+          onPress={toggleDeleteMode}
+          buttonStyle={styles.selectButton}
+          containerStyle={styles.selectButtonContainer}
         />
         <Button
-          title="cancel"
-          loading={false}
-          loadingProps={{ size: "small", color: "white" }}
-          buttonStyle={{
-            backgroundColor: "rgba(214, 61, 57, 1)",
-            borderRadius: 5,
-          }}
-          containerStyle={{
-            marginTop: 20,
-            height: 50,
-            width: 70,
-          }}
+          title="Cancel"
           onPress={() => setIsDeleteMode(!isDeleteMode)}
+          buttonStyle={styles.cancelButton}
+          containerStyle={styles.selectButtonContainer}
         />
       </View>
-      <View className="flex flex-row flex-wrap justify-around h-screen">
+
+      <View style={styles.categoryList}>
         {categories.map((item) => renderCategoryItem(item))}
       </View>
+
       <Overlay
         isVisible={visible}
         onBackdropPress={toggleOverlay}
@@ -166,10 +134,7 @@ const Category: React.FC = () => {
         />
         <Button
           title="Save"
-          onPress={() => {
-            // Handle save category
-            toggleOverlay();
-          }}
+          onPress={toggleOverlay}
           buttonStyle={styles.button}
         />
         <Button
@@ -179,20 +144,19 @@ const Category: React.FC = () => {
           type="outline"
         />
       </Overlay>
+
       <SpeedDial
         isOpen={open}
         icon={{ name: "edit", color: "#fff" }}
         openIcon={{ name: "close", color: "#fff" }}
         onOpen={() => setOpen(!open)}
         onClose={() => setOpen(!open)}
-        buttonStyle={{
-          backgroundColor: "rgba(111, 202, 186, 1)",
-        }}
+        buttonStyle={styles.speedDialButton}
       >
         <SpeedDial.Action
           icon={{ name: "add", color: "#fff" }}
           title="Add"
-          buttonStyle={{ backgroundColor: "rgba(127, 220, 103, 1)" }}
+          buttonStyle={styles.actionButtonAdd}
           onPress={() => {
             setOpen(false);
             toggleOverlay();
@@ -200,7 +164,7 @@ const Category: React.FC = () => {
         />
         <SpeedDial.Action
           icon={{ name: "delete", color: "#fff" }}
-          buttonStyle={{ backgroundColor: "rgba(214, 61, 57, 1)" }}
+          buttonStyle={styles.actionButtonDelete}
           title="Delete"
           onPress={() => {
             toggleDeleteMode();
@@ -209,7 +173,7 @@ const Category: React.FC = () => {
         />
         <SpeedDial.Action
           icon={{ name: "edit", color: "#fff" }}
-          buttonStyle={{ backgroundColor: "rgba(255, 193, 7, 1)" }}
+          buttonStyle={styles.actionButtonEdit}
           title="Edit"
           onPress={() => console.log("Edit Something")}
         />
@@ -270,5 +234,39 @@ const styles = StyleSheet.create({
   cancelButton: {
     borderColor: '#3498db',
     color: '#3498db',
+    borderRadius: 5,
+  },
+  buttonContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    paddingHorizontal: 20,
+    marginTop: 20,
+  },
+  selectButton: {
+    backgroundColor: "rgba(214, 61, 57, 1)",
+    borderRadius: 5,
+  },
+  selectButtonContainer: {
+    height: 40,
+    width: 120,
+    marginTop: 20,
+  },
+  categoryList: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "space-around",
+    marginTop: 20,
+  },
+  speedDialButton: {
+    backgroundColor: "rgba(111, 202, 186, 1)",
+  },
+  actionButtonAdd: {
+    backgroundColor: "rgba(127, 220, 103, 1)",
+  },
+  actionButtonDelete: {
+    backgroundColor: "rgba(214, 61, 57, 1)",
+  },
+  actionButtonEdit: {
+    backgroundColor: "rgba(255, 193, 7, 1)",
   },
 });

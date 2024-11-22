@@ -1,13 +1,14 @@
 import React, { useState, useEffect, useRef } from "react";
-import { View, Image, Text, TouchableOpacity, StyleSheet, Alert } from "react-native";
+import { View, Image, Text, Alert, StyleSheet } from "react-native";
 import MapView, { Marker, Callout } from "react-native-maps";
 import * as Location from "expo-location";
 import axios from "axios";
 import { API_URL } from "@env";
+import ZoomControls from "../../components/zoom/Zoom"; // Import component ZoomControls
 
 const haversineDistance = (coords1: any, coords2: any) => {
   const toRad = (value: number) => (value * Math.PI) / 180;
-  const R = 6371; // Bán kính Trái Đất (km)
+  const R = 6371;
 
   const dLat = toRad(coords2.latitude - coords1.latitude);
   const dLon = toRad(coords2.longitude - coords1.longitude);
@@ -20,8 +21,7 @@ const haversineDistance = (coords1: any, coords2: any) => {
     Math.sin(dLon / 2) * Math.sin(dLon / 2) * Math.cos(lat1) * Math.cos(lat2);
 
   const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-
-  return R * c; // Khoảng cách tính bằng km
+  return R * c;
 };
 
 const MapScreen: React.FC = () => {
@@ -37,12 +37,10 @@ const MapScreen: React.FC = () => {
           Alert.alert("Permission Denied", "Cannot access location services.");
           return;
         }
-
         const location = await Location.getCurrentPositionAsync({});
         setUserLocation(location.coords);
       } catch (error) {
         Alert.alert("Error", "Could not fetch location.");
-        console.error(error);
       }
     };
 
@@ -55,7 +53,6 @@ const MapScreen: React.FC = () => {
         const response = await axios.get(`${API_URL}/restaurants`);
         setRestaurants(response.data);
       } catch (error) {
-        console.error("Error fetching restaurants:", error);
         Alert.alert("Error", "Could not fetch restaurant data.");
       }
     };
@@ -103,8 +100,8 @@ const MapScreen: React.FC = () => {
         {restaurants.map((restaurant) => {
           const distance = userLocation
             ? haversineDistance(userLocation, {
-                latitude: restaurant.location.coordinates[1],  // latitude first
-                longitude: restaurant.location.coordinates[0], // longitude second
+                latitude: restaurant.location.coordinates[1],
+                longitude: restaurant.location.coordinates[0],
               }).toFixed(2)
             : 0;
 
@@ -121,11 +118,12 @@ const MapScreen: React.FC = () => {
                 source={{ uri: restaurant.image }}
                 style={{ width: 40, height: 40 }}
               />
-              <Callout>
-                <View style={styles.calloutContainer}>
+              <Callout >
+                <View style={styles.calloutmapContainer}>
                   <Text style={styles.calloutTitle}>{restaurant.name}</Text>
                   <Text style={styles.calloutText}>Distance: {distance} km</Text>
                   <Text style={styles.calloutText}>Address: {restaurant.address}</Text>
+                  <Text style={styles.calloutText}>Opening: {restaurant.openingHours}</Text>
                 </View>
               </Callout>
             </Marker>
@@ -133,51 +131,25 @@ const MapScreen: React.FC = () => {
         })}
       </MapView>
 
-      {/* Zoom buttons */}
-      <View style={styles.zoomContainer}>
-        <TouchableOpacity onPress={zoomIn} style={styles.zoomButton}>
-          <Text style={styles.zoomText}>+</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={zoomOut} style={styles.zoomButton}>
-          <Text style={styles.zoomText}>-</Text>
-        </TouchableOpacity>
-      </View>
+      {/* Tích hợp component ZoomControls */}
+      <ZoomControls onZoomIn={zoomIn} onZoomOut={zoomOut} />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  calloutContainer: {
+  calloutmapContainer: {
     width: 200,
-    padding: 10,
+    padding: 10
   },
   calloutTitle: {
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: "bold",
     color: "#008E97",
   },
   calloutText: {
-    fontSize: 14,
+    fontSize: 13,
     color: "#333",
-  },
-  zoomContainer: {
-    position: "absolute",
-    bottom: 20,
-    left: 20,
-    flexDirection: "row",
-    backgroundColor: "rgba(255, 255, 255, 0.8)",
-    borderRadius: 8,
-    padding: 8,
-  },
-  zoomButton: {
-    alignItems: "center",
-    justifyContent: "center",
-    padding: 5,
-  },
-  zoomText: {
-    fontSize: 16,
-    fontWeight: "bold",
-    color: "#008E97",
   },
 });
 
