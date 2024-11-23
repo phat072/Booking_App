@@ -258,28 +258,28 @@ return (
         <View style={styles.cardsWrapper}>
             <HomeAdminCard
             title="Analytics"
-            iconUri="https://res.cloudinary.com/dc5xcbmvp/image/upload/v1719304124/icons8-chart-100_bptvcu.png"
+            iconUri="https://cdn-icons-png.flaticon.com/512/5145/5145848.png"
             borderColor="#F9D860"
             bgColor="#FEF7DC"
             onPress={() => navigation.navigate("OrderTab")}
             />
             <HomeAdminCard
               title="Restaurants"
-              iconUri="https://res.cloudinary.com/dc5xcbmvp/image/upload/v1704173088/icons8-restaurant-100_i1evvu.png"
+              iconUri="https://cdn-icons-png.flaticon.com/512/9638/9638472.png"
               borderColor="#6FB168"
               bgColor="#E4F0E3"
               onPress={() => navigation.navigate("Restaurants")}
             />
             <HomeAdminCard
               title="Customers"
-              iconUri="https://res.cloudinary.com/dc5xcbmvp/image/upload/v1704173087/icons8-country-house-100_vjk4fr.png"
+              iconUri="https://cdn2.iconfinder.com/data/icons/user-23/512/User_Customers.png"
               borderColor="#FF8D09"
               bgColor="#FFE9CF"
               onPress={() => navigation.navigate("Customers")}
             />
             <HomeAdminCard
               title="Category"
-              iconUri="https://res.cloudinary.com/dc5xcbmvp/image/upload/v1719304124/icons8-restaurant-menu-100_c30g2b.png"
+              iconUri="https://cdn-icons-png.freepik.com/256/9710/9710991.png?semt=ais_hybrid"
               borderColor="#7277FC"
               bgColor="#E1E2FE"
               onPress={() => navigation.navigate("Category")}
@@ -287,7 +287,7 @@ return (
 
              <HomeAdminCard
               title="Orders"
-              iconUri="https://res.cloudinary.com/dc5xcbmvp/image/upload/v1704173088/icons8-purchase-order-100_pligj9.png"
+              iconUri="https://cdn-icons-png.freepik.com/256/3045/3045670.png?semt=ais_hybrid"
               borderColor="#E091D7"
               bgColor="#F9EAF7"
               onPress={() => navigation.navigate("OrderTab")}

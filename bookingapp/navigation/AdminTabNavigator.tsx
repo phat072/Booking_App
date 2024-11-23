@@ -20,10 +20,10 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { useNavigation } from "expo-router";
 const SCREEN_WIDTH = Dimensions.get("window").width;
 
-
 const AdminTabNavigator: React.FC = () => {
   const [activeScreen, setActiveScreen] = useState<string>("Dashboard");
   const navigation = useNavigation<StackNavigationProp<AccountStackParamList>>();
+
   const handleLogout = async () => {
     try {
       await AsyncStorage.removeItem("authToken");
@@ -93,28 +93,29 @@ const AdminTabNavigator: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      {/* Drawer Menu */}
-      <View style={styles.drawerContainer}>
+      {/* Active Screen */}
+      <View style={styles.screenContainer}>{renderActiveScreen()}</View>
+
+      {/* Bottom Tab Menu */}
+      <View style={styles.tabContainer}>
         <FlatList
           data={drawerItems}
+          horizontal
           keyExtractor={(item) => item.label}
           renderItem={({ item }) => (
             <TouchableOpacity
               style={[
-                styles.drawerItem,
-                activeScreen === item.label && styles.activeDrawerItem,
+                styles.tabItem,
+                activeScreen === item.label && styles.activeTabItem,
               ]}
               onPress={item.action}
             >
               {item.icon}
-              <Text style={styles.drawerLabel}>{item.label}</Text>
+              <Text style={styles.tabLabel}>{item.label}</Text>
             </TouchableOpacity>
           )}
         />
       </View>
-
-      {/* Active Screen */}
-      <View style={styles.screenContainer}>{renderActiveScreen()}</View>
     </View>
   );
 };
@@ -124,31 +125,32 @@ export default AdminTabNavigator;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection: "row",
-  },
-  drawerContainer: {
-    width: SCREEN_WIDTH * 0.3, // Drawer width is 30% of the screen
-    backgroundColor: "#f8f8f8",
-    borderRightWidth: 1,
-    borderRightColor: "#ccc",
-    paddingVertical: 10,
-  },
-  drawerItem: {
-    flexDirection: "row",
-    alignItems: "center",
-    padding: 10,
-    marginVertical: 5,
-  },
-  activeDrawerItem: {
-    backgroundColor: "#e6e6e6",
-  },
-  drawerLabel: {
-    marginLeft: 10,
-    fontSize: 16,
-    color: "black",
+    flexDirection: "column", // Stack items vertically
   },
   screenContainer: {
     flex: 1,
     backgroundColor: "#fff",
+  },
+  tabContainer: {
+    flexDirection: "row",
+    justifyContent: "space-around", // Distribute items evenly
+    alignItems: "center",
+    backgroundColor: "#f8f8f8",
+    borderTopWidth: 1,
+    borderTopColor: "#ccc",
+    paddingVertical: 10,
+  },
+  tabItem: {
+    flexDirection: "column",
+    alignItems: "center",
+    padding: 10,
+  },
+  activeTabItem: {
+    backgroundColor: "#e6e6e6", // Highlight active tab
+  },
+  tabLabel: {
+    marginTop: 5,
+    fontSize: 12,
+    color: "black",
   },
 });

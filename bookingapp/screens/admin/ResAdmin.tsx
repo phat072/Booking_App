@@ -8,6 +8,7 @@ import {
   ActivityIndicator,
   StyleSheet,
   Alert,
+  Dimensions,
 } from "react-native";
 import { Button } from "@rneui/themed";
 import axios from "axios";
@@ -27,8 +28,9 @@ interface Restaurant {
 export type ResStackParamList = {
   ResAdmin: undefined;  // For ResAdmin screen
   AddRes: undefined;    // For AddRes screen
-  // add other screens here
 };
+
+const SCREEN_WIDTH = Dimensions.get("window").width;
 
 const ResAdmin = () => {
   const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
@@ -36,8 +38,6 @@ const ResAdmin = () => {
   const [error, setError] = useState<string | null>(null);
   const [swipedId, setSwipedId] = useState<string | null>(null);
   const swipeableRef = useRef<Swipeable | null>(null);
-  
-  // Correct place for useNavigation hook
   const navigation = useNavigation<NativeStackNavigationProp<ResStackParamList>>();
 
   useEffect(() => {
@@ -145,29 +145,16 @@ const ResAdmin = () => {
             renderRightActions={() => renderRightActions(item._id)}
           >
             <TouchableOpacity style={styles.resContainer}>
-              <View>
-                <Image
-                  source={{ uri: item.image }}
-                  style={{
-                    width: 100,
-                    height: 100,
-                    borderRadius: 5,
-                    objectFit: "cover",
-                  }}
-                />
-              </View>
-              <View>
-                <Text style={{ maxWidth: 270 }}>
-                  {item.name}
-                </Text>
-                <Text
-                  numberOfLines={1}
-                  ellipsizeMode="tail"
-                  style={{ marginTop: 2, fontSize: 14, color: "#8f8a8a" }}
-                >
+              <Image
+                source={{ uri: item.image || "https://cdn-icons-png.flaticon.com/512/1376/1376387.png"}}
+                style={styles.resImage}
+              />
+              <View style={styles.textContainer}>
+                <Text style={styles.resName}>{item.name}</Text>
+                <Text numberOfLines={1} ellipsizeMode="tail" style={styles.resAddress}>
                   {truncateText(item.address, 40)}
                 </Text>
-                <Text style={{ marginTop: 2, fontSize: 14, color: "#e67e22", fontWeight: "600" }}>
+                <Text style={styles.resRating}>
                   Đánh giá: {item.rating}
                 </Text>
               </View>
@@ -182,7 +169,7 @@ const ResAdmin = () => {
         radius="md"
         size="lg"
         color="#2DDB6D"
-        titleStyle={{ fontWeight: "600", fontSize: 23 }}
+        titleStyle={styles.addButtonTitle}
       >
         Add Restaurants
       </Button>
@@ -198,16 +185,51 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 2,
-    elevation: 2,
+    shadowOpacity: 0.1,
+    shadowRadius: 5,
+    elevation: 3,
     padding: 16,
     flexDirection: "row",
     marginVertical: 8,
+    marginHorizontal: 12,
+    justifyContent: "flex-start",
+  },
+  resImage: {
+    width: 80,
+    height: 80,
+    borderRadius: 8,
+    marginRight: 12,
+    resizeMode: "cover",
+  },
+  textContainer: {
+    flex: 1,
+    justifyContent: "center",
+  },
+  resName: {
+    fontSize: 16,
+    fontWeight: "600",
+    color: "#333",
+  },
+  resAddress: {
+    fontSize: 14,
+    color: "#8f8a8a",
+    marginTop: 4,
+  },
+  resRating: {
+    fontSize: 14,
+    fontWeight: "600",
+    color: "#e67e22",
+    marginTop: 6,
   },
   addButton: {
-    marginVertical: 15,
-    marginHorizontal: 8,
+    marginVertical: 20,
+    marginHorizontal: 16,
+    paddingVertical: 12,
+    paddingHorizontal: 24,
+  },
+  addButtonTitle: {
+    fontWeight: "600",
+    fontSize: 18,
   },
   center: {
     flex: 1,
