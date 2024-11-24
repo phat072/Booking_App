@@ -4,20 +4,10 @@ import axios from "axios";
 import { UserType } from "@/userContext";
 import { API_URL } from "@env";
 
-// interface Message {
-//   _id: string | number;
-//   text: string;
-//   createdAt: number | Date; // Updated type
-//   user: {
-//     _id: string | number;
-//     name: string;
-//     avatar: string;
-//   };
-// }
-
 const ChatScreen: React.FC = () => {
-  const { user } = useContext(UserType);
+  const { user } = useContext(UserType); // Assumes UserType provides the current user
   const [messages, setMessages] = useState<IMessage[]>([]); 
+  const recipientId = "VALID_RECIPIENT_ID"; // Replace with dynamic logic for recipient
 
   useEffect(() => {
     const fetchMessages = async () => {
@@ -46,22 +36,23 @@ const ChatScreen: React.FC = () => {
 
   const onSend = useCallback(
     async (newMessages: IMessage[] = []) => {
+      const newMessage = newMessages[0];
       setMessages((previousMessages) =>
         GiftedChat.append(previousMessages, newMessages)
       );
-      const newMessage = newMessages[0];
+
       try {
         await axios.post(`${API_URL}/api/chat`, {
           userId: user._id,
           text: newMessage.text,
-          createdAt: newMessage.createdAt.toString(), 
-          recipientId: 2,
+          createdAt: newMessage.createdAt.toISOString(), // ISO format for dates
+          recipientId, // Dynamic recipientId
         });
       } catch (error) {
-        console.error("Failed to send message:", error);
+        console.error("Failed to send message:", error.response?.data || error.message);
       }
     },
-    [user._id]
+    [user._id, recipientId]
   );
 
   const renderTime = (props: any) => {

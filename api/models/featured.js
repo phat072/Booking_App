@@ -39,3 +39,16 @@ const featuredSchema = new mongoose.Schema(
 const Featured = mongoose.model("Featured", featuredSchema);
 
 module.exports = Featured;
+
+/*
+{
+  "name": "Mới nhất",
+  "description": "Danh sách những nhà hàng mới nhất",
+  "restaurants": [
+    "673c2f7da8af1e84d14b7950",
+    "673c2fcba8af1e84d14b795a",
+    "673c2fe8a8af1e84d14b7964"
+  ],
+  "layout": 1
+}
+*/

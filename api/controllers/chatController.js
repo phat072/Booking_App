@@ -28,22 +28,47 @@ const getUserChats = async (req, res) => {
 
 // Post a new chat message
 const postChatMessage = async (req, res) => {
-  const { userId, text, createdAt, recipientId } = req.body;
-
   try {
-    const message = new Chat({
+    const { userId, text, recipientId } = req.body;
+
+    // Validate required fields
+    if (!userId || !text || !recipientId) {
+      return res.status(400).json({ error: "All fields are required" });
+    }
+
+    // Validate ObjectIds
+    if (!mongoose.Types.ObjectId.isValid(userId) || !mongoose.Types.ObjectId.isValid(recipientId)) {
+      return res.status(400).json({ error: "Invalid userId or recipientId" });
+    }
+
+    // Validate users exist
+    const sender = await User.findById(userId);
+    const recipient = await User.findById(recipientId);
+
+    if (!sender || !recipient) {
+      return res.status(400).json({ error: "Sender or recipient does not exist" });
+    }
+
+    // Create a new chat message
+    const newChat = new Chat({
       userId,
       text,
-      createdAt,
-      recipientId
+      recipientId,
     });
 
-    await message.save();
-    res.status(201).json(message);
+    // Save the chat message to the database
+    const savedChat = await newChat.save();
+
+    res.status(201).json({ message: "Chat message posted successfully", chat: savedChat });
   } catch (error) {
-    res.status(500).json({ error: "Failed to send chat message" });
+    console.error("Error saving chat message:", error);
+    res.status(500).json({ error: "Internal server error", details: error.message });
   }
 };
+
+
+module.exports = postChatMessage;
+
 
 module.exports = {
   getAllChats,
