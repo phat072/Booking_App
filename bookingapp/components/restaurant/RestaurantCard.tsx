@@ -1,10 +1,11 @@
-import { View, Text, TouchableOpacity, Image, StyleSheet } from "react-native";
+import { View, Text, TouchableOpacity, Image, StyleSheet, Dimensions } from "react-native";
 import React from "react";
 import { themeColors } from "../../theme";
 import * as Icon from "react-native-feather";
 import { useNavigation } from "@react-navigation/native";
-import { AntDesign, Entypo } from "@expo/vector-icons";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+
+const { width } = Dimensions.get("window");
 
 type RestaurantCardProps = {
   item: {
@@ -82,15 +83,15 @@ const styles = StyleSheet.create({
     marginRight: 16,
   },
   layoutTwoImage: {
-    width: 160,
-    height: 160,
+    width: width * 0.4,
+    height: width * 0.4,
     borderRadius: 8,
   },
   layoutTwoTextContainer: {
-    width: 144,
+    width: width * 0.35,
   },
   layoutTwoTitle: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: "bold",
     paddingTop: 8,
   },
@@ -99,10 +100,12 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     borderRadius: 16,
     shadowRadius: 7,
+    shadowOpacity: 0.2,
+    elevation: 3, // Bóng trên Android
   },
   layoutThreeImage: {
-    height: 144,
-    width: 256,
+    height: width * 0.4,
+    width: width * 0.7,
     borderTopLeftRadius: 16,
     borderTopRightRadius: 16,
   },
@@ -112,7 +115,7 @@ const styles = StyleSheet.create({
     paddingTop: 8,
   },
   layoutThreeTitle: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: "bold",
   },
   ratingContainer: {
@@ -129,6 +132,7 @@ const styles = StyleSheet.create({
   },
   ratingValue: {
     color: "green",
+    fontWeight: "bold",
   },
   ratingLabel: {
     color: "gray",
@@ -141,5 +145,6 @@ const styles = StyleSheet.create({
   addressText: {
     color: "gray",
     fontSize: 12,
+    marginLeft: 4,
   },
 });

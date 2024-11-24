@@ -274,7 +274,7 @@ export default function HomeScreen({ navigation, route }: { navigation: any; rou
         <Skeleton
           LinearGradientComponent={LinearGradient}
           animation="wave"
-          width={100}
+          width={200}
           height={300}
         />
       </View>

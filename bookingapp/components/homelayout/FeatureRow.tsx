@@ -5,12 +5,16 @@ import {
   ScrollView,
   TouchableOpacity,
   ImageBackground,
+  StyleSheet,
+  Dimensions,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { themeColors } from "../../theme";
 import RestaurantCard from "../restaurant/RestaurantCard";
 import RestaurantGridLayout from "../restaurant/RestaurantGridLayout";
 import { FeatureScreenNavigationProp } from "../type";
+
+const { width } = Dimensions.get("window");
 
 // Define the types for the props
 interface FeatureRowProps {
@@ -26,9 +30,9 @@ export default function FeatureRow({
   restaurants,
   layout,
 }: FeatureRowProps) {
-    const navigation = useNavigation<FeatureScreenNavigationProp>();
-    const rows: [any[], any[]] = [[], []];
-  
+  const navigation = useNavigation<FeatureScreenNavigationProp>();
+  const rows: [any[], any[]] = [[], []];
+
   restaurants.forEach((restaurant, index) => {
     rows[index % 2].push(restaurant);
   });
@@ -36,13 +40,13 @@ export default function FeatureRow({
   const renderLayout = () => {
     if (layout === 1) {
       return (
-        <View style={{ flexDirection: "column", justifyContent: "space-between" }}>
-          <View style={{ flexDirection: "row" }}>
+        <View style={styles.rowContainer}>
+          <View style={styles.row}>
             {rows[0].map((restaurant, index) => (
               <RestaurantGridLayout item={restaurant} key={`row1-${index}`} />
             ))}
           </View>
-          <View style={{ flexDirection: "row", marginTop: 10 }}>
+          <View style={[styles.row, styles.marginTop]}>
             {rows[1].map((restaurant, index) => (
               <RestaurantGridLayout item={restaurant} key={`row2-${index}`} />
             ))}
@@ -61,31 +65,20 @@ export default function FeatureRow({
   const renderFeature = () => {
     if (layout === 4) {
       return (
-        <View
-          className="bg-[#FFFFFF] h-[390]"
-          style={{
-            shadowColor: "#000000",
-            shadowOffset: { width: 3, height: 3 },
-            shadowOpacity: 0.25,
-            shadowRadius: 3.84,
-            elevation: 8,
-            borderRadius: 5,
-          }}
-        >
+        <View style={styles.featureContainer}>
           <ImageBackground
-            className="h-48"
+            style={styles.featureImage}
             source={{
               uri: "https://pasgo.vn/Upload/anh-chi-tiet/slide-bo-to-quan-moc-vo-oanh-4-normal-2318786063427.webp",
             }}
             resizeMode="cover"
-            imageStyle={{ borderTopLeftRadius: 5, borderTopRightRadius: 5 }}
+            imageStyle={styles.featureImageStyle}
           />
-          <View className="flex p-3">
-            <Text className="text-2xl font-bold">{title}</Text>
-            <Text className="text-base">{subTitle}</Text>
+          <View style={styles.featureTextContainer}>
+            <Text style={styles.featureTitle}>{title}</Text>
+            <Text style={styles.featureSubTitle}>{subTitle}</Text>
             <TouchableOpacity
-              className="p-2 bg-red-500 mt-4"
-              style={{ borderRadius: 50 }}
+              style={styles.featureButton}
               onPress={() =>
                 navigation.navigate("FeatureScreen", {
                   title,
@@ -95,7 +88,7 @@ export default function FeatureRow({
                 })
               }
             >
-              <Text className="text-white text-center text-xl font-bold">Xem ngay</Text>
+              <Text style={styles.featureButtonText}>Xem ngay</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -103,12 +96,12 @@ export default function FeatureRow({
     } else {
       return (
         <>
-          <View className="flex-row items-center">
-            <View className="w-9/12">
-              <Text className="font-bold text-xl">{title}</Text>
+          <View style={styles.featureHeader}>
+            <View style={styles.featureHeaderTitle}>
+              <Text style={styles.featureTitleText}>{title}</Text>
             </View>
             <TouchableOpacity
-              className="w-3/12 ml-2"
+              style={styles.featureHeaderButton}
               onPress={() =>
                 navigation.navigate("FeatureScreen", {
                   title,
@@ -118,12 +111,10 @@ export default function FeatureRow({
                 })
               }
             >
-              <Text style={{ color: themeColors.text }} className="text-base font-medium">
-                Xem tất cả
-              </Text>
+              <Text style={styles.featureHeaderButtonText}>Xem tất cả</Text>
             </TouchableOpacity>
           </View>
-          <Text className="text-[#404040] text-base">{subTitle}</Text>
+          <Text style={styles.subTitleText}>{subTitle}</Text>
         </>
       );
     }
@@ -131,13 +122,12 @@ export default function FeatureRow({
 
   return (
     <View>
-      <View className="px-3">{renderFeature()}</View>
-      <View className="px-3">
+      <View style={styles.featureWrapper}>{renderFeature()}</View>
+      <View style={styles.scrollWrapper}>
         <ScrollView
           horizontal
           showsHorizontalScrollIndicator={false}
-          contentContainerStyle={{}}
-          className="overflow-visible py-5"
+          contentContainerStyle={styles.scrollContent}
         >
           {renderLayout()}
         </ScrollView>
@@ -145,3 +135,90 @@ export default function FeatureRow({
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  rowContainer: {
+    flexDirection: "column",
+    justifyContent: "space-between",
+  },
+  row: {
+    flexDirection: "row",
+  },
+  marginTop: {
+    marginTop: 10,
+  },
+  featureContainer: {
+    backgroundColor: "white",
+    height: 310,
+    shadowColor: "#000000",
+    shadowOffset: { width: 3, height: 3 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 8,
+    borderRadius: 5,
+  },
+  featureImage: {
+    height: 150,
+  },
+  featureImageStyle: {
+    borderTopLeftRadius: 5,
+    borderTopRightRadius: 5,
+  },
+  featureTextContainer: {
+    padding: 12,
+  },
+  featureTitle: {
+    fontSize: 20,
+    fontWeight: "bold",
+  },
+  featureSubTitle: {
+    fontSize: 14,
+    color: "#404040",
+  },
+  featureButton: {
+    padding: 7,
+    backgroundColor: "red",
+    marginTop: 16,
+    borderRadius: 50,
+  },
+  featureButtonText: {
+    color: "white",
+    textAlign: "center",
+    fontSize: 15,
+    fontWeight: "bold",
+  },
+  featureHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  featureHeaderTitle: {
+    width: "75%",
+  },
+  featureTitleText: {
+    fontSize: 18,
+    fontWeight: "bold",
+  },
+  featureHeaderButton: {
+    width: "25%",
+    marginLeft: 8,
+  },
+  featureHeaderButtonText: {
+    color: themeColors.text,
+    fontSize: 18,
+    fontWeight: "500",
+    textDecorationLine: 'underline'
+  },
+  subTitleText: {
+    fontSize: 14,
+    color: "#404040",
+  },
+  featureWrapper: {
+    paddingHorizontal: 12,
+  },
+  scrollWrapper: {
+    paddingHorizontal: 12,
+  },
+  scrollContent: {
+    paddingVertical: 16,
+  },
+});
