@@ -6,14 +6,12 @@ import AccountScreen from "../screens/account/Account";
 // import MapCenter from "../screens/MapCenter";
 import ResultScreen from "../screens/result/ResultScreen";
 import RestaurantDetail from "../screens/restaurant/RestaurantDetail";
-// import ChatScreen from "../screens/ChatScreen";
 import MapScreen from '../screens/map/MapScreen'
 import FeatureScreen from "../screens/feature/FeatureScreen";
 import ChatScreen from "../screens/account/ChatScreen";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Entypo, AntDesign, Ionicons, FontAwesome, MaterialCommunityIcons } from "@expo/vector-icons";
-import * as Icon from "react-native-feather";
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
