@@ -5,6 +5,10 @@ const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 const nodemailer = require('nodemailer');
 const tokenBlacklist = new Set();
+const catchAsync = require('../utils/catchAsync');
+const  userService  = require('../services/userService');
+const ApiError = require('../utils/apiError');
+const httpStatus = require('http-status');
 
 const sendVerificationEmail = async (email, verificationToken) => {
     // Create a transporter object using the default SMTP transport
@@ -98,7 +102,8 @@ module.exports = {
             secretKey
           );
     
-          res.status(200).json({ token });
+        //   res.status(200).json({ token });
+        res.send({ user, token   });
           // Generate a token with role information
           // const token = jwt.sign({ userId: user._id, admin: user.admin }, secretKey);
     
@@ -125,6 +130,15 @@ module.exports = {
         }
     },
 
+    // Get user
+    getUser: catchAsync(async (req, res) => {
+        const user = await userService.getUserById(req.params.userId);
+        if (!user) {
+            throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
+        }
+        res.send(user);
+    }),
+      
 
     // Update Address
     updateAddress: async (req, res) => {

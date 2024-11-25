@@ -1,5 +1,7 @@
 const mongoose = require("mongoose");
+const { roles } = require('../configs/roles');
 
+const { toJSON, paginate } = require('./plugin');
 const userSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -55,6 +57,11 @@ const userSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  role: {
+    type: String,
+    enum: roles,
+    default: 'user',
+  },
   location: {
     type: {
       type: String,
@@ -66,6 +73,20 @@ const userSchema = new mongoose.Schema({
     },
   },
 });
+
+// Pre-save middleware to set the role based on the admin field
+userSchema.pre('save', function (next) {
+  if (this.admin) {
+    this.role = 'admin';
+  } else {
+    this.role = 'user';
+  }
+  next();
+});
+
+// add plugin that converts mongoose to json
+userSchema.plugin(toJSON);
+userSchema.plugin(paginate);
 
 const User = mongoose.model("User", userSchema);
 

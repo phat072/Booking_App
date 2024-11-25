@@ -1,4 +1,8 @@
 const User = require("../models/user");
+const { pick } = require('lodash');
+const catchAsync = require('../utils/catchAsync');
+const  userService  = require('../services/userService');
+
 
 const adminController = {
         // Get user by id
@@ -17,15 +21,12 @@ const adminController = {
         },
     
         // Get all users
-        getAllUsers: async (req, res) => {
-            try {
-                const users = await User.find();
-                res.status(200).json(users);
-            } catch (error) {
-                console.error('Failed to get all users', error);
-                res.status(500).json({ message: 'Failed to get all users' });
-            }
-        },
+        getUsers: catchAsync(async (req, res) => {
+            const filter = pick(req.query, ['name', 'role']);
+            const options = pick(req.query, ['sortBy', 'limit', 'page']);
+            const result = await userService.queryUsers(filter, options);
+            res.send(result);
+        }),
 
         // Delete user by id
         deleteUserById: async (req, res) => {

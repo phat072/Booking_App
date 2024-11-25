@@ -1,20 +1,22 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-const http = require("http");
-const socketSetup = require("./sockets/socketSetup"); // Import your socket setup
+const connectedDB = require('./configs/database'); 
 const cors = require("cors");
 const routes = require("./routes/routes");
 const swaggerUi = require("swagger-ui-express");
 const swaggerJsdoc = require("swagger-jsdoc");
+const http = require("http");
+const socketSetup = require("./sockets/socketSetup"); // Import your socket setup
 
 const app = express();
-const server = http.createServer(app); // Create an HTTP server
+const server = http.createServer(app);    
 const port = 8000;
 
-// Middleware
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+
+connectedDB();
 
 // Swagger setup
 const options = {
@@ -37,11 +39,9 @@ const options = {
 const swaggerSpec = swaggerJsdoc(options);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
-// Routes
 app.use("/", routes);
 
-// Start the server
-server.listen(port, () => {
+app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
 

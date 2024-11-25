@@ -25,10 +25,11 @@ router.post("/login", userController.login);
 router.put("/address/:userId", userController.updateAddress);
 router.get("/address/:userId", userController.getUserAddress);
 router.put("/change-password/:userId", userController.changePassword);
+router.get('/:userId', userController.getUser);
 
 // Admin routes
 router.get("/users/:userId", adminController.getUserById);
-router.get("/users", adminController.getAllUsers);
+router.get("/users", adminController.getUsers);
 router.delete("/users/:userId", adminController.deleteUserById);
 router.put("/users/:userId", adminController.updateUserById);
 

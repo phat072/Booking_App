@@ -55,16 +55,17 @@ const restaurantSchema = new mongoose.Schema({
     type: String,
   },
   image: {
-    type: String 
+    type: String ,
   },
   location: {
     type: {
       type: String,
-      default: 'Point'
+      default: 'Point',
     },
     coordinates: {
       type: [Number],
-      index: '2dsphere'
+      required: true,
+      index: '2dsphere',
     }
   },
   address: {
@@ -74,28 +75,28 @@ const restaurantSchema = new mongoose.Schema({
   rating: {
     type: Number,
     min: 1,
-    max: 5
+    max: 5,
   },
   type: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Category',
-    required: true
+    required: true,
   },
   promotions : {
     type : String, 
-    default: 'Đặt bàn giữ chỗ'
+    default: 'Đặt bàn giữ chỗ', 
   },
   imagePrice: [
     {
       image: {
-        type: String 
+        type: String,
       }
     }
   ],
   album: [
     {
       image: {
-        type: String 
+        type: String,
       }
     }
   ],
@@ -106,7 +107,7 @@ const restaurantSchema = new mongoose.Schema({
     type: String,
     required: true,
   }],
-  suggestions: [suggestionSchema]
+  suggestions: [suggestionSchema],
 });
 
 const Restaurant = mongoose.model('Restaurant', restaurantSchema);

@@ -1,264 +1,245 @@
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
-import { View, StyleSheet, TouchableOpacity, Keyboard, Text, ActivityIndicator } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-import { GiftedChat, Bubble, Send, InputToolbar, IMessage } from 'react-native-gifted-chat';
-import  Colors  from '@/constants/Colors';
-import EmojiModal from 'react-native-emoji-modal';
-import { useNavigation, NavigationProp } from '@react-navigation/native';
-import * as ImagePicker from 'expo-image-picker';
-import uuid from 'react-native-uuid';
-import axios from 'axios';
-import { API_URL } from '@env';
+import React, { useState, useEffect, useRef } from "react";
+import {
+  View,
+  Text,
+  TextInput,
+  FlatList,
+  TouchableOpacity,
+  StyleSheet,
+  Button,
+  KeyboardAvoidingView,
+} from "react-native";
+import { io, Socket } from "socket.io-client";
+import { API_URL } from "@env";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-interface ChatRouteParams {
-    id: string;
-    userId: string;
-    userName : string;
+interface User {
+  id: string;
+  name: string;
 }
 
-interface ChatProps {
-    route: { params: ChatRouteParams };
+interface Message {
+  receiverChatID: string;
+  senderChatID: string;
+  text: string;
+  from: string;
 }
 
-const ChatScreen: React.FC<ChatProps> = ({ route }) => {
-    const navigation = useNavigation<NavigationProp<any>>();
-    const [messages, setMessages] = useState<IMessage[]>([]);
-    const [modal, setModal] = useState<boolean>(false);
-    const [uploading, setUploading] = useState<boolean>(false);
+interface Props {
+  currentUser: {
+    user: { id: string; name: string };
+    tokens: { access: { token: string } };
+  };
+  navigation: any;
+}
 
-    const chatId = route.params.id;
-    const userId = route.params.userId
-    const userName = route.params.userName
-    const userAvatar = 'https://i.pravatar.cc/200';
+const ChatScreen: React.FC<Props> = ({ currentUser, navigation }) => {
+  const [currentMessage, setCurrentMessage] = useState<string>("");
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [users, setUsers] = useState<User[]>([]);
+  const [userTo, setUserTo] = useState<string | null>(null);
 
-    // Fetch messages from backend (`${API_URL}/address/${userId}`)
-    useEffect(() => {
-        const fetchMessages = async () => {
-            try {
-                const response = await axios.get<IMessage[]>(`${API_URL}/messages/${chatId}`);
-                setMessages(
-                    response.data.map((msg) => ({
-                        ...msg,
-                        createdAt: new Date(msg.createdAt),
-                    }))
-                );
-            } catch (err) {
-                console.error('Failed to fetch messages:', err);
-            }
-        };
+  const socketRef = useRef<Socket | null>(null);
 
-        fetchMessages();
-    }, [chatId]);
-
-    // Send a new message
-    const onSend = useCallback(
-        async (m: IMessage[] = []) => {
-            try {
-                const newMessage: IMessage = {
-                    ...m[0],
-                    createdAt: new Date(),
-                    user: {
-                        _id: userId,
-                        name: userName,
-                        avatar: userAvatar,
-                    },
-                };
-
-                const response = await axios.post<IMessage[]>(`${API_URL}/messages/${chatId}`, { newMessage });
-                setMessages(
-                    response.data.map((msg) => ({
-                        ...msg,
-                        createdAt: new Date(msg.createdAt),
-                    }))
-                );
-            } catch (err) {
-                console.error('Failed to send message:', err);
-            }
-        },
-        [chatId]
-    );
-
-    const pickImage = async () => {
-        const result = await ImagePicker.launchImageLibraryAsync({
-            mediaTypes: ImagePicker.MediaTypeOptions.Images,
-            allowsEditing: true,
-            quality: 1,
+  useEffect(() => {
+    const fetchUsersAndConnectSocket = async () => {
+      try {
+        const token = currentUser.tokens.access.token;
+        const response = await fetch(`${API_URL}/users`, {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         });
 
-        if (!result.canceled) {
-            await uploadImageAsync(result.assets[0].uri);
-        }
+        const data = await response.json();
+        const firstUserId = data.results[0]?.id || null;
+        setUsers(data.results);
+        setUserTo(firstUserId);
+
+        const socket = io("http://localhost:8000", {
+          query: { chatID: currentUser.user.id, token },
+        });
+
+        socketRef.current = socket;
+
+        socket.on("connect", () => {
+          console.log("Socket connected:", socket.id);
+        });
+
+        socket.on("connect_error", (error: any) => {
+          console.error("Socket connection error:", error);
+        });
+
+        socket.on("receive_message", (message: Message) => {
+          if (message.senderChatID === userTo) {
+            setMessages((prevMessages) => [...prevMessages, message]);
+          }
+        });
+      } catch (error) {
+        console.error("Error fetching users or connecting to socket:", error);
+        alert("Error fetching users. Please try again.");
+      }
     };
 
-    const uploadImageAsync = async (uri: string) => {
-        setUploading(true);
-        const formData = new FormData();
-        const file = {
-            uri,
-            name: `${uuid.v4()}.jpg`,
-            type: 'image/jpeg',
-        } as any;
+    fetchUsersAndConnectSocket();
 
-        formData.append('file', file);
+    return () => {
+      socketRef.current?.disconnect();
+    };
+  }, [currentUser.user.id, currentUser.tokens.access.token, userTo]);
 
-        try {
-            const response = await axios.post<{ url: string }>(`${API_URL}/upload`, formData, {
-                headers: { 'Content-Type': 'multipart/form-data' },
-            });
-
-            const imageUrl = response.data.url;
-
-            onSend([
-                {
-                    _id: uuid.v4() as string,
-                    createdAt: new Date(),
-                    text: '',
-                    image: imageUrl,
-                    user: {
-                        _id: userId,
-                        name: userName,
-                        avatar: userAvatar,
-                    },
-                },
-            ]);
-        } catch (err) {
-            console.error('Failed to upload image:', err);
-        } finally {
-            setUploading(false);
+  const handleChatSwitch = async (userId: string) => {
+    try {
+      const token = currentUser.tokens.access.token;
+      const response = await fetch(
+        `${API_URL}/messages?userId=${currentUser.user.id}&toId=${userId}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
+      );
+
+      const data = await response.json();
+      setMessages(data || []);
+      setUserTo(userId);
+    } catch (error) {
+      console.error("Error fetching messages:", error);
+      alert("Error fetching messages. Please try again.");
+    }
+  };
+
+  const handleSubmit = async () => {
+    if (!currentMessage.trim() || !userTo) return;
+
+    const message: Message = {
+      receiverChatID: userTo,
+      senderChatID: currentUser.user.id,
+      text: currentMessage,
+      from: currentUser.user.name,
     };
 
-    const renderBubble = useMemo(
-        () => (props: any) => (
-            <Bubble
-                {...props}
-                wrapperStyle={{
-                    right: { backgroundColor: Colors.primary },
-                    left: { backgroundColor: 'lightgrey' },
-                }}
-            />
-        ),
-        []
-    );
+    try {
+      const token = currentUser.tokens.access.token;
+      const response = await fetch(`${API_URL}/messages`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(message),
+      });
 
-    const renderSend = useMemo(
-        () => (props: any) => (
-            <>
-                <TouchableOpacity style={styles.addImageIcon} onPress={pickImage}>
-                    <View>
-                        <Ionicons name='attach-outline' size={32} color={Colors.teal} />
-                    </View>
-                </TouchableOpacity>
-                <Send {...props}>
-                    <View style={{ justifyContent: 'center', height: '100%', marginLeft: 8, marginRight: 4, marginTop: 12 }}>
-                        <Ionicons name='send' size={24} color={Colors.teal} />
-                    </View>
-                </Send>
-            </>
-        ),
-        []
-    );
+      if (response.ok) {
+        setMessages((prevMessages) => [...prevMessages, message]);
+        setCurrentMessage("");
+        socketRef.current?.emit("send_message", message);
+      }
+    } catch (error) {
+      console.error("Error sending message:", error);
+      alert("Error sending message. Please try again.");
+    }
+  };
 
-    const renderInputToolbar = useMemo(
-        () => (props: any) => (
-            <InputToolbar
-                {...props}
-                containerStyle={styles.inputToolbar}
-                renderActions={renderActions}
-            />
-        ),
-        []
-    );
+  return (
+    <KeyboardAvoidingView style={styles.container} behavior="padding">
+      {/* Header */}
+      <View style={styles.header}>
+        <Text style={styles.headerTitle}>Chat App</Text>
+        <View style={styles.headerButtons}>
+          <Button
+            title="Annotations"
+            onPress={() => navigation.navigate("Annotations")}
+          />
+          <Button
+            title="Logout"
+            onPress={() => {
+              AsyncStorage.clear();
+              navigation.replace("Login");
+            }}
+          />
+        </View>
+      </View>
 
-    const renderActions = useMemo(
-        () => () => (
-            <TouchableOpacity style={styles.emojiIcon} onPress={handleEmojiPanel}>
-                <View>
-                    <Ionicons name='happy-outline' size={32} color={Colors.teal} />
-                </View>
+      {/* User List */}
+      <View style={styles.sidebar}>
+        <FlatList
+          data={users}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => (
+            <TouchableOpacity
+              style={styles.userItem}
+              onPress={() => handleChatSwitch(item.id)}
+            >
+              <Text style={styles.userName}>{item.name}</Text>
             </TouchableOpacity>
-        ),
-        [modal]
-    );
+          )}
+        />
+      </View>
 
-    const handleEmojiPanel = useCallback(() => {
-        setModal(!modal);
-    }, [modal]);
+      {/* Chat Messages */}
+      <View style={styles.messagesContainer}>
+        <FlatList
+          data={messages}
+          keyExtractor={(_, index) => index.toString()}
+          renderItem={({ item }) => (
+            <View
+              style={[
+                styles.messageBubble,
+                item.senderChatID === currentUser.user.id
+                  ? styles.ours
+                  : styles.theirs,
+              ]}
+            >
+              <Text style={styles.messageText}>{item.text}</Text>
+              <Text style={styles.messageSender}>{item.from}</Text>
+            </View>
+          )}
+        />
+      </View>
 
-    return (
-        <>
-            {uploading && (
-                <View style={styles.loadingContainerUpload}>
-                    <ActivityIndicator size='large' color={Colors.teal} />
-                </View>
-            )}
-            <GiftedChat
-                messages={messages}
-                onSend={(messages) => onSend(messages)}
-                user={{
-                    _id: userId,
-                    name: userName,
-                    avatar: userAvatar,
-                }}
-                renderBubble={renderBubble}
-                renderSend={renderSend}
-                renderInputToolbar={renderInputToolbar}
-                minInputToolbarHeight={56}
-            />
-            {modal && (
-                <EmojiModal
-                    onPressOutside={handleEmojiPanel}
-                    onEmojiSelected={(emoji) => {
-                        onSend([
-                            {
-                                _id: uuid.v4() as string,
-                                createdAt: new Date(),
-                                text: emoji || '',
-                                user: {
-                                    _id: userId,
-                                    name: userName,
-                                    avatar: userAvatar,
-                                },
-                            },
-                        ]);
-                    }}
-                />
-            )}
-        </>
-    );
+      {/* Input Field */}
+      <View style={styles.inputContainer}>
+        <TextInput
+          style={styles.input}
+          placeholder="Type a message..."
+          value={currentMessage}
+          onChangeText={(text) => setCurrentMessage(text)}
+          onSubmitEditing={handleSubmit}
+        />
+        <Button title="Send" onPress={handleSubmit} />
+      </View>
+    </KeyboardAvoidingView>
+  );
 };
 
 const styles = StyleSheet.create({
-    addImageIcon: {
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: 8,
-        marginLeft: 4,
-    },
-    inputToolbar: {
-        backgroundColor: '#f0f0f0',
-        borderTopWidth: 1,
-        borderTopColor: '#e0e0e0',
-        paddingHorizontal: 8,
-        minHeight: 56,
-    },
-    emojiIcon: {
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: 8,
-        marginRight: 8,
-    },
-    loadingContainerUpload: {
-        position: 'absolute',
-        top: 0,
-        bottom: 0,
-        left: 0,
-        right: 0,
-        backgroundColor: 'rgba(0, 0, 0, 0.5)',
-        justifyContent: 'center',
-        alignItems: 'center',
-        zIndex: 10,
-    },
+  container: { flex: 1, backgroundColor: "#f9f9f9" },
+  header: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    padding: 15,
+    backgroundColor: "#fff",
+  },
+  headerTitle: { fontSize: 20, fontWeight: "bold" },
+  headerButtons: { flexDirection: "row", gap: 10 },
+  sidebar: { width: "25%", backgroundColor: "#eee", padding: 10 },
+  userItem: { padding: 10, borderBottomWidth: 1, borderBottomColor: "#ddd" },
+  userName: { fontSize: 16 },
+  messagesContainer: { flex: 1, padding: 10 },
+  messageBubble: { padding: 10, borderRadius: 10, marginBottom: 5 },
+  ours: { alignSelf: "flex-end", backgroundColor: "#d1f5d3" },
+  theirs: { alignSelf: "flex-start", backgroundColor: "#f0f0f0" },
+  messageText: { fontSize: 16 },
+  messageSender: { fontSize: 12, color: "#888" },
+  inputContainer: {
+    flexDirection: "row",
+    padding: 10,
+    backgroundColor: "#fff",
+  },
+  input: { flex: 1, borderWidth: 1, borderColor: "#ddd", borderRadius: 5, padding: 10 },
 });
 
 export default ChatScreen;
