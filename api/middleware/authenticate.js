@@ -1,21 +1,31 @@
-const jwt = require('jsonwebtoken');
-const tokenBlacklist = new Set();  // Assuming this is where you store blacklisted tokens
-const secretKey = process.env.SECRET_KEY || 'your_default_secret_key'; // Load from environment or use default
+const passport = require('passport');
+const httpStatus = require('http-status');
+const ApiError = require('../utils/apiError');
+const { roleRights } = require('../configs/roles');
 
-// Middleware to check for blacklisted tokens
-const authenticate = (req, res, next) => {
-    try {
-        const token = req.header('Authorization').replace('Bearer ', '');
-        if (tokenBlacklist.has(token)) {
-            return res.status(401).json({ message: 'Invalid token' });
-        }
+const verifyCallback = (req, resolve, reject, requiredRights) => async (err, user, info) => {
+  if (err || info || !user) {
+    return reject(new ApiError(httpStatus.UNAUTHORIZED, 'Please authenticate'));
+  }
+  req.user = user;
 
-        const decoded = jwt.verify(token, secretKey);
-        req.user = decoded;
-        next();
-    } catch (error) {
-        res.status(401).json({ message: 'Authentication failed' });
+  if (requiredRights.length) {
+    const userRights = roleRights.get(user.role);
+    const hasRequiredRights = requiredRights.every((requiredRight) => userRights.includes(requiredRight));
+    if (!hasRequiredRights && req.params.userId !== user.id) {
+      return reject(new ApiError(httpStatus.FORBIDDEN, 'Forbidden'));
     }
+  }
+
+  resolve();
+};
+
+const authenticate = (...requiredRights) => async (req, res, next) => {
+  return new Promise((resolve, reject) => {
+    passport.authenticate('jwt', { session: false }, verifyCallback(req, resolve, reject, requiredRights))(req, res, next);
+  })
+    .then(() => next())
+    .catch((err) => next(err));
 };
 
 module.exports = authenticate;
