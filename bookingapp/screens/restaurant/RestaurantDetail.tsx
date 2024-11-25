@@ -25,8 +25,6 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { OrdersStackParamList } from "@/screens/type";
 type RestaurantDetailNavigationProp = StackNavigationProp<OrdersStackParamList, "Order">;
 
-
-
 const RestaurantDetail: React.FC = () => {
   const { params } = useRoute();
   const navigation = useNavigation<RestaurantDetailNavigationProp>();
@@ -46,18 +44,21 @@ const RestaurantDetail: React.FC = () => {
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerTitle: () => (
-        <Text style={styles.headerTitle}>{name}</Text>
+      headerTitle: "", // Remove the restaurant name from the header title
+      headerLeft: () => (
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <Ionicons name="arrow-back" size={24} color="black" style={styles.backButton} />
+        </TouchableOpacity>
       ),
       headerRight: () => (
         <View style={styles.headerRight}>
           <TouchableOpacity style={styles.roundButton}>
-            <Ionicons name="share-outline" size={22} color={"#000"} />
+            <Ionicons name="share-outline" size={18} color={"#000"} />
           </TouchableOpacity>
           <TouchableOpacity onPress={handleFavoritePress} style={styles.roundButton}>
             <Ionicons
               name={isFavorite ? "heart" : "heart-outline"}
-              size={24}
+              size={20}
               color={isFavorite ? "red" : "black"}
             />
           </TouchableOpacity>
@@ -115,14 +116,15 @@ const RestaurantDetail: React.FC = () => {
           source={item.image}
           height={height / 5.5}
           width={width}
-          border={30} radius={0}        />
+          border={30} radius={0}
+        />
         <View style={styles.popupContainer}>
           <Text style={styles.restaurantName}>{item.name}</Text>
           <Text style={styles.restaurantAddress}>{item.address}</Text>
           <View style={styles.detailsContainer}>
             <View style={styles.row}>
               <View style={styles.row}>
-                <FontAwesome5 name="door-open" size={24} color="#A0C69D" />
+                <FontAwesome5 name="door-open" size={20} color="#A0C69D" />
                 <Text style={styles.detailText}>Đang mở cửa</Text>
               </View>
               <Text style={styles.truncateText}>
@@ -131,26 +133,26 @@ const RestaurantDetail: React.FC = () => {
             </View>
             <View style={styles.row}>
               <View style={styles.row}>
-                <AntDesign name="star" size={24} color="gold" />
+                <AntDesign name="star" size={20} color="gold" />
                 <Text style={styles.ratingText}>{item.rating}</Text>
               </View>
-              <View style={styles.row}>
-                <Ionicons name="location-sharp" size={24} color="red" />
+              <View style={[styles.row, {marginRight: 65}]}>
+                <Ionicons name="location-sharp" size={20} color="red" />
                 <Text style={styles.detailText}>4.5 km</Text>
               </View>
             </View>
           </View>
         </View>
       </View>
-      <View style={styles.menuContainer}>
+  <View style={styles.menuContainer}>
         <MenuTab item={item} />
-      </View>
-      <View style={styles.footer}>
-        <PopUp
-          buttonText="Book"
-          onPress={() => navigation.navigate("Order", { restaurant: item })}
-        />
-      </View>
+  </View>
+  <View>
+    <Pressable style={styles.bookButtonText} onPress={() => navigation.navigate("Order", { restaurant: item })}>
+      <Text style={styles.bookButtonText}>Book</Text>
+    </Pressable>
+  </View>
+
 
       {/* Custom Modal */}
       <Modal
@@ -182,24 +184,24 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginTop: 20,
   },
-  headerTitle: {
-    fontWeight: "bold",
-    fontSize: 18,
-    color: "white",
+  backButton: {
+    marginLeft: 10,
+    color: "black"
   },
   headerRight: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
+    bottom: 15
   },
   roundButton: {
-    width: 40,
-    height: 40,
+    width: 27,
+    height: 27,
     borderRadius: 50,
     backgroundColor: "white",
     alignItems: "center",
     justifyContent: "center",
-    marginHorizontal: 5,
+    marginHorizontal: 3,
   },
   popupContainer: {
     position: "absolute",
@@ -225,35 +227,31 @@ const styles = StyleSheet.create({
   restaurantAddress: {
     textAlign: "center",
     color: "#666",
+    fontSize: 13,
   },
   detailsContainer: {
-    marginTop: 10,
+    marginTop: 5,
   },
   row: {
     flexDirection: "row",
-    justifyContent: "space-between",
+    justifyContent: 'space-between',
     alignItems: "center",
-    marginVertical: 5,
+    marginVertical: 4,
   },
   truncateText: {
     maxWidth: 150,
     overflow: "hidden",
+    fontSize: 13,
   },
   ratingText: {
     marginLeft: 5,
   },
   detailText: {
-    marginLeft: 10,
+    fontSize: 13
   },
   menuContainer: {
     flex: 1,
     marginTop: 80,
-  },
-  footer: {
-    position: "absolute",
-    bottom: 5,
-    left: 0,
-    right: 0,
   },
   modalContainer: {
     flex: 1,
@@ -269,7 +267,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   modalText: {
-    fontSize: 18,
+    fontSize: 15,
     fontWeight: "bold",
   },
   modalCloseButton: {
@@ -281,6 +279,17 @@ const styles = StyleSheet.create({
   modalCloseButtonText: {
     color: "white",
     fontSize: 16,
+  },
+  bookButtonText: {
+    color: "white",          
+    fontSize: 18,        
+    textAlign: "center",     
+    backgroundColor: 'red', 
+    height: 40,             
+    justifyContent: 'center',
+    borderRadius: 5,        
+    fontWeight: "bold",     
+    marginTop: 20,           
   },
 });
 

@@ -20,6 +20,13 @@ const Colors = {
   backBlue: '#2488FF',
   detailsBlue: '#3479F6',
   activeOrange: '#F44234',
+  darkGray: "#333333", 
+  lightGray: "#f5f5f5", // Thêm dòng này
+  lightText: "#f0f0f0",    // Define lightText color
+  secondary: "#FFBB00",   // Define secondary color
+  textPrimary: "#ffffff", // Define textPrimary color
+  background: "#f5f5f5",  // Define background color
+  textSecondary: "#7a7a7a", // Define textSecondary color
 } as const;
 
 export default Colors;
