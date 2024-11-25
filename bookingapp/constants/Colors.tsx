@@ -20,7 +20,6 @@ const Colors = {
   backBlue: '#2488FF',
   detailsBlue: '#3479F6',
   activeOrange: '#F44234',
-  teal: '#26A69A',
 } as const;
 
 export default Colors;

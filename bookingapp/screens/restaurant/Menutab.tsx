@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from 'axios';
 import {
   Button,
   Image,
@@ -7,6 +8,7 @@ import {
   Text,
   View,
   useWindowDimensions,
+  Pressable,
 } from "react-native";
 import PopUp from "../../components/menu/Popup";
 import Menu from "../../components/menu/Menu";
@@ -17,9 +19,10 @@ import { useNavigation } from "@react-navigation/native";
 import MapView, { Marker, Callout } from "react-native-maps";
 import Octicons from "@expo/vector-icons/Octicons";
 import ImageView from "react-native-image-viewing";
-
-// Define prop types
+import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
+import { API_URL } from "@env";
 interface Item {
+  _id: string;
   name: string;
   address: string;
   description: string;
@@ -36,15 +39,15 @@ interface Item {
 
 interface RouteProps {
   item: Item;
+  selectedItem: any;
   handlePresentModalPress?: () => void;
 }
-
 
 import { StackNavigationProp } from "@react-navigation/stack";
 import { OrdersStackParamList } from "@/screens/type";
 type MenutabNavigationProp = StackNavigationProp<OrdersStackParamList, "Order">;
 
-const FirstRoute: React.FC<RouteProps> = ({ item }) => {
+const FirstRoute: React.FC<RouteProps> = ({ item, selectedItem }) => {
   const navigation = useNavigation<MenutabNavigationProp>();
   const handleItemSelect = (selectedItem: any) => {
     navigation.navigate("Order", { restaurant: item, selectedItem });
@@ -53,26 +56,24 @@ const FirstRoute: React.FC<RouteProps> = ({ item }) => {
   const hasItems = item.suggestions.some((suggestion) => suggestion.items.length > 0);
 
   return (
-    <View className="flex">
-      <Text className="text-lg font-semibold ml-6">Đề xuất</Text>
+    <View style={styles.flexContainer}>
+      <Text style={styles.sectionTitle}>Đề xuất</Text>
       <ScrollView>
         {!hasItems ? (
-          <View style={{ flex: 1, backgroundColor: "#FFFFFF", padding: 15 }}>
-            <Text></Text>
-            <Text className="font-bold text-2xl mb-4">{`Thông tin đặt chỗ nhà hàng ${item.name}`}</Text>
-            <Text className="mt-2" style={styles.header}>I. Đặt chỗ PasGo : Tư vấn - Giữ chỗ</Text>
+          <View style={styles.informationContainer}>
+            <Text style={styles.header}>I. Đặt chỗ PasGo : Tư vấn - Giữ chỗ</Text>
             <View style={styles.contentContainer}>
-              <Text className="mt-4 text-lg">
-                - Quý khách vui lòng đặt chỗ trước ít nhất <Text className="font-bold">60 phút</Text> để được phục vụ tốt nhất.
+              <Text style={styles.text}>
+                - Quý khách vui lòng đặt chỗ trước ít nhất <Text style={styles.boldText}>60 phút</Text> để được phục vụ tốt nhất.
               </Text>
-              <Text className="mt-4 text-lg">
-                - Bàn đặt của Quý khách được giữ tối đa <Text className="font-bold">15 phút</Text>
+              <Text style={styles.text}>
+                - Bàn đặt của Quý khách được giữ tối đa <Text style={styles.boldText}>15 phút</Text>
               </Text>
             </View>
-            <Text className="mt-4" style={styles.header}>II. Ưu đãi tặng kèm: Chương trình ưu đãi đang được xây dựng</Text>
-            <Text className="mt-2" style={styles.header}>III. Lưu ý</Text>
+            <Text style={styles.header}>II. Ưu đãi tặng kèm: Chương trình ưu đãi đang được xây dựng</Text>
+            <Text style={styles.header}>III. Lưu ý</Text>
             <View style={styles.contentContainer}>
-              <Text className="mt-4 text-lg">- Giá menu chưa bao gồm VAT. Nhà hàng luôn thu VAT theo Quy định hiện hành</Text>
+              <Text style={styles.text}>- Giá menu chưa bao gồm VAT. Nhà hàng luôn thu VAT theo Quy định hiện hành</Text>
             </View>
           </View>
         ) : (
@@ -89,59 +90,91 @@ const FirstRoute: React.FC<RouteProps> = ({ item }) => {
               )
           )
         )}
-        <View className="bg-[#E0E0E0] w-full h-3"></View>
+        <View style={styles.divider}></View>
       </ScrollView>
     </View>
   );
 };
 
-const SecondRoute: React.FC<RouteProps> = ({ item }) => (
+const SecondRoute: React.FC<RouteProps> = ({ item, selectedItem }) => (
   <ScrollView>
-    <View style={{ flex: 1, backgroundColor: "#ffffff", padding: 15 }}>
-      <View style={{ flexDirection: "row", flexWrap: "wrap" }}>
+    <View style={styles.informationContainer}>
+      <View style={styles.imageRow}>
         {item.imagePrice.map((menuImage, index) => (
-          <View key={index} style={{ width: "50%", padding: 5 }}>
-            <Image source={{ uri: menuImage.image }} style={{ width: "100%", height: 120, marginBottom: 10 }} />
+          <View key={index} style={styles.imageItem}>
+            <Image source={{ uri: menuImage.image }} style={styles.image} />
           </View>
         ))}
       </View>
     </View>
-    <View className="bg-[#E0E0E0] w-full h-3"></View>
+    <View style={styles.divider}></View>
   </ScrollView>
 );
 
-const ThirdRoute: React.FC<RouteProps> = () => {
-  const images = [
-    { uri: "https://images.unsplash.com/photo-1571501679680-de32f1e7aad4" },
-    { uri: "https://images.unsplash.com/photo-1573273787173-0eb81a833b34" },
-    { uri: "https://images.unsplash.com/photo-1569569970363-df7b6160d111" },
-  ];
-  const [visible, setIsVisible] = useState(false);
+const ThirdRoute: React.FC<RouteProps> = ({ item }) => {
+  const [galleryImages, setGalleryImages] = useState<string[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    // Fetch restaurant data
+    axios
+      .get(`${API_URL}/restaurants/${item._id}`)
+      .then((response) => {
+        // Extract the main restaurant image and check its validity
+        const mainImage = response.data.restaurant?.image;
+
+        if (mainImage) {
+          setGalleryImages([mainImage]); // Add the main image to the gallery
+        } else {
+          setError('No image found for this restaurant.');
+        }
+
+        setLoading(false); // Set loading to false after data is processed
+      })
+      .catch((err) => {
+        console.error('Error fetching images:', err); // Log the error for debugging
+        setError('Failed to load images');
+        setLoading(false);
+      });
+  }, [item._id]); // Dependency on item._id ensures the effect is rerun when item changes
+
+  if (loading) {
+    return <Text>Loading restaurant images...</Text>; // More informative loading message
+  }
+
+  if (error) {
+    return <Text>{error}</Text>; // Display error message if something went wrong
+  }
 
   return (
     <ScrollView>
-      <View style={{ flex: 1, backgroundColor: "#ffffff", padding: 15 }}>
-        <View style={{ flexDirection: "row", flexWrap: "wrap" }}>
-          <ImageView images={images} imageIndex={0} visible={visible} onRequestClose={() => setIsVisible(false)} />
+      <View style={styles.informationContainer}>
+        <View style={styles.imageRow}>
+          {galleryImages.map((imageUri, index) => (
+            <View key={index} style={styles.imageItem}>
+              <Image source={{ uri: imageUri }} style={styles.image} />
+            </View>
+          ))}
         </View>
       </View>
-      <View className="bg-[#E0E0E0] w-full h-3"></View>
+      <View style={styles.divider}></View>
     </ScrollView>
   );
 };
 
-const FourRoute: React.FC<RouteProps> = ({ item }) => {
+const FourRoute: React.FC<RouteProps> = ({ item, selectedItem }) => {
   const { coordinates } = item.location;
   return (
     <View>
-      <View style={{ flex: 1, backgroundColor: "#fafafa", padding: 15 }}>
-        <Text className="text-lg font-semibold ml-2 mb-5">Chỉ đường</Text>
-        <View className="flex flex-row justify-center items-center space-x-2">
+      <View style={styles.mapContainer}>
+        <Text style={styles.sectionTitle}>Chỉ đường</Text>
+        <View style={styles.locationRow}>
           <Octicons name="location" size={24} color="black" />
-          <Text className="text-base text-slate-600">{item.address}</Text>
+          <Text style={styles.locationText}>{item.address}</Text>
         </View>
-        <Text>({"Nhấn vào ảnh bản đồ để xem chỉ đường"})</Text>
-        <View className="mt-4 p-4">
+        <Text style={styles.text}>{"(Nhấn vào ảnh bản đồ để xem chỉ đường)"}</Text>
+        <View style={styles.mapWrapper}>
           <MapView
             style={styles.map}
             initialRegion={{
@@ -159,102 +192,46 @@ const FourRoute: React.FC<RouteProps> = ({ item }) => {
           </MapView>
         </View>
       </View>
-      <View className="bg-[#E0E0E0] w-full h-3"></View>
+      <View style={styles.divider}></View>
     </View>
   );
 };
 
-const FifthRoute: React.FC<RouteProps> = ({ item }) => (
-  <View className="">
-    <View className="ml-4 mb-5">
-      <Text className="text-lg font-bold">Giờ hoạt động</Text>
-      {/* <Text>{item.openingHours}</Text> */}
-      <View className="flex flex-row justify-between mt-4">
-        <View className="space-y-2">
-          <Text className="text-base font-semibold text-[#232323]">
-            Chủ nhật
-          </Text>
-          <Text className="text-base font-semibold text-[#232323]">Thứ 2</Text>
-          <Text className="text-base font-semibold text-[#232323]">Thứ 3</Text>
-          <Text className="text-base font-semibold text-[#232323]">Thứ 4</Text>
-          <Text className="text-base font-semibold text-[#232323]">Thứ 5</Text>
-          <Text className="text-base font-semibold text-[#232323]">Thứ 6</Text>
-          <Text className="text-base font-semibold text-[#232323]">Thứ 7</Text>
-        </View>
-        <View className="mr-4 space-y-2 mt-3">
-          {Array.from({ length: 7 }).map((_, index) => (
-            <Text className="text-base" key={index}>
-              {item.openingHours}
-            </Text>
-          ))}
-        </View>
-      </View>
-    </View>
-    <View className="bg-[#E0E0E0] w-full h-3"></View>
-  </View>
-);
-const SixthRoute: React.FC<RouteProps> = ({ item }) => {
-  const tags = [
-    "Món Âu",
-    "Hải sản",
-    "Buffet",
-    "Sang trọng",
-    "Quận 2",
-    "Gợi ý cho bạn",
-    "Sắp xếp gợi ý",
-    "Mức giá 250K - 500K",
-  ];
+const FifthRoute: React.FC<RouteProps> = ({ item }) => {
+  // Destructure openingHours from the item
+  const openingHours = item.openingHours || "Không có thông tin"; // Default message if no openingHours
+
   return (
-    <View className="mb-[200]">
-      <View className="p-4">
-        <Text className="text-lg font-bold">
-          Giới thiệu nhà hàng {item.name}
-        </Text>
-        <Text className="text-[#222222] mt-2 text-base">
-          {item.description}
-        </Text>
-      </View>
-      <View className="bg-[#E0E0E0] w-full h-3"></View>
-      <View className="p-4">
-        <Text className="text-2xl font-bold relative">TAGS :</Text>
-        <View className="absolute w-16 h-[6] bottom-3 left-4 bg-[#E63837]"></View>
-      </View>
-      <View className="p-4">
-        <View className="flex flex-row flex-wrap">
-          {tags.map((tag, index) => (
-            <View
-              key={index}
-              className="bg-[#F2F2F2] p-2 m-1 rounded-lg"
-              style={styles.shadow}
-            >
-              <Text className="text-lg font-semibold">{tag}</Text>
-            </View>
-          ))}
+    <View>
+      <View style={styles.informationContainer}>
+        <Text style={styles.sectionTitle}>Giờ hoạt động</Text>
+        <View style={styles.dayHoursRow}>
+          <Text style={styles.dayText}>{openingHours}</Text>
         </View>
       </View>
-      <View className="bg-[#E0E0E0] w-full h-3"></View>
+      <View style={styles.divider}></View>
     </View>
   );
 };
+const SixthRoute: React.FC<RouteProps> = ({ item, selectedItem }) => {
+  const tags = [
+    "Món Âu", "Hải sản", "Buffet", "Sang trọng", "Quận 2", "Gợi ý cho bạn", "Sắp xếp gợi ý", "Mức giá 250K - 500K"
+  ];
 
-const renderScene = (props: { route: { key: string }; item: any }) => {
-  const { route } = props;
-  switch (route.key) {
-    case "first":
-      return <FirstRoute {...props} />;
-    case "second":
-      return <SecondRoute {...props} />;
-    case "third":
-      return <ThirdRoute {...props} />;
-    case "four":
-      return <FourRoute {...props} />;
-    case "fifth":
-      return <FifthRoute {...props} />;
-    case "sixth":
-      return <SixthRoute {...props} />;
-    default:
-      return null;
-  }
+  return (
+    <View style={styles.infoSection}>
+      <Text style={styles.sectionTitle}>Giới thiệu nhà hàng {item.name}</Text>
+      <Text style={styles.description}>{item.description}</Text>
+      <Text style={styles.sectionTitle}>TAGS:</Text>
+      <View style={styles.tagsContainer}>
+        {tags.map((tag, index) => (
+          <View key={index} style={styles.tagItem}>
+            <Text style={styles.tagText}>{tag}</Text>
+          </View>
+        ))}
+      </View>
+    </View>
+  );
 };
 
 interface MenuTabProps {
@@ -263,6 +240,8 @@ interface MenuTabProps {
 
 const MenuTab: React.FC<MenuTabProps> = ({ item }) => {
   const [index, setIndex] = useState(0);
+  const [selectedItem, setSelectedItem] = useState<any>(null);
+
   const routes = [
     { key: "first", title: "Ưu đãi" },
     { key: "second", title: "Bảng giá" },
@@ -272,54 +251,182 @@ const MenuTab: React.FC<MenuTabProps> = ({ item }) => {
     { key: "sixth", title: "Chi tiết" },
   ];
 
-  const sections = routes.map((route) => ({
-    title: route.title,
-    key: route.key,
-    data: [item],
-  }));
+  const renderScene = SceneMap({
+    first: () => <FirstRoute {...{ item, selectedItem }} />,
+    second: () => <SecondRoute {...{ item, selectedItem }} />,
+    third: () => <ThirdRoute {...{ item, selectedItem }} />,
+    four: () => <FourRoute {...{ item, selectedItem }} />,
+    fifth: () => <FifthRoute {...{ item, selectedItem }} />,
+    sixth: () => <SixthRoute {...{ item, selectedItem }} />,
+  });
 
   return (
-    <TabbedHeaderList
-      backgroundColor={Colors.white}
-      titleStyle={screenStyles.text}
-      parallaxHeight={0}
-      foregroundImage={{ uri: item.image }}
-      tabs={routes.map(({ title }) => ({ title }))}
-      tabTextStyle={screenStyles.text}
-      sections={sections}
-      tabTextContainerActiveStyle={{ backgroundColor: Colors.activeOrange }}
-      tabTextActiveStyle={{ color: "#fff", fontSize: 17, fontWeight: "bold" }}
-      renderItem={({ item, section }) => renderScene({ route: section, item })}
-      showsVerticalScrollIndicator={false}
-      headerHeight={0}
-      stickyTabs
-      tabsContainerHorizontalPadding={1}
+    <TabView
+      navigationState={{ index, routes }}
+      renderScene={renderScene}
+      onIndexChange={setIndex}
+      initialLayout={{ width: useWindowDimensions().width }}
+      swipeEnabled={true}
+      lazy={true} 
+      renderTabBar={(props) => (
+        <TabBar
+          {...props}
+          indicatorStyle={styles.tabIndicator} // Indicator style
+          style={styles.tabBar} // Tab bar background
+          labelStyle={styles.tabLabel} // Tab label style
+        />
+      )}
     />
-  );
+);
 };
 
-export default MenuTab;
-
 const styles = StyleSheet.create({
+  sectionTitle: {
+    fontSize: 20, // Tăng kích thước tiêu đề
+    fontWeight: "700", // Đậm hơn để dễ nhận diện
+    marginBottom: 15,
+    color: Colors.primary, // Sử dụng màu chủ đạo cho tiêu đề
+  },
+  informationContainer: {
+    paddingHorizontal: 15,
+    paddingVertical: 25,
+    backgroundColor: "#f9f9f9", // Nền nhẹ cho các phần thông tin
+    borderRadius: 10,
+    marginBottom: 15,
+  },
+  text: {
+    fontSize: 16, // Tăng kích thước chữ để dễ đọc hơn
+    marginVertical: 8,
+    color: "#555", // Màu sắc trung tính cho văn bản
+  },
+  boldText: {
+    fontWeight: "700",
+  },
   header: {
     fontSize: 18,
-    fontWeight: "bold",
+    fontWeight: "700",
+    marginVertical: 12,
+    color: Colors.secondary, // Màu cho tiêu đề phụ
   },
   contentContainer: {
-    marginLeft: 5,
+    marginVertical: 8,
+    paddingHorizontal: 12,
+  },
+  imageRow: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "space-between", // Căn đều các hình ảnh
+  },
+  imageItem: {
+    margin: 8,
+    width: "30%",
+    borderRadius: 8,
+    overflow: "hidden",
+  },
+  image: {
+    width: "100%",
+    height: 160, // Điều chỉnh chiều cao hình ảnh cho hợp lý
+    borderRadius: 8,
+  },
+  mapContainer: {
+    flexDirection: "column",
+    padding: 15,
+    backgroundColor: "#f5f5f5", // Nền cho phần bản đồ
+    borderRadius: 10,
+    marginBottom: 15,
+  },
+  mapWrapper: {
+    height: 260,
+    marginVertical: 25,
+    borderRadius: 10, // Bo tròn góc bản đồ
+    overflow: "hidden",
   },
   map: {
     flex: 1,
-    width: "100%",
-    height: 250,
   },
-  shadow: {
-    backgroundColor: "#f2f2f2",
+  dayHoursRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  dayText: {
+    fontSize: 16,
+    marginVertical: 8,
+    color: "#333", // Màu tối cho giờ hoạt động
+  },
+  infoSection: {
+    padding: 25,
+    backgroundColor: "#fff",
     borderRadius: 10,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 2,
-    elevation: 2,
+    marginBottom: 15,
+  },
+  description: {
+    fontSize: 16,
+    marginVertical: 12,
+    color: "#666", // Màu cho mô tả nhà hàng
+  },
+  tagsContainer: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    marginTop: 10,
+  },
+  tagItem: {
+    margin: 6,
+    backgroundColor: "#f0f0f0", // Màu nền cho tags
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    borderRadius: 20,
+  },
+  tagText: {
+    fontSize: 14,
+    color: "#333", // Màu chữ cho tags
+  },
+  locationRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginVertical: 10,
+  },
+  locationText: {
+    marginLeft: 8,
+    fontSize: 16,
+    color: "#555", // Màu văn bản địa chỉ
+  },
+  divider: {
+    height: 1,
+    backgroundColor: "#ddd",
+    marginVertical: 20,
+  },
+  flexContainer: {
+    flex: 1,
+  },
+  buttonContainer: {
+    marginTop: 15,
+    paddingHorizontal: 10,
+  },
+  button: {
+    backgroundColor: Colors.primary,
+    paddingVertical: 12,
+    borderRadius: 8,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  buttonText: {
+    fontSize: 16,
+    color: "#fff", // Màu chữ button
+    fontWeight: "600",
+  },
+  tabBar: {
+    backgroundColor: Colors.primary, // Tab bar background color
+    height: 70, // Tab bar height
+  },
+  tabLabel: {
+    fontSize: 13,
+    fontWeight: 'bold',
+    color: '#fff', // Tab label text color
+  },
+  tabIndicator: {
+    backgroundColor: Colors.secondary, // Tab indicator color
+    height: 3, // Height of the indicator
   },
 });
+
+export default MenuTab;
