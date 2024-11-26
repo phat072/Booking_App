@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { View, Image, Text, Alert, StyleSheet } from "react-native";
-import MapView, { Marker, Callout } from "react-native-maps";
+import MapView, { Marker, Callout, PROVIDER_GOOGLE } from "react-native-maps";
 import * as Location from "expo-location";
 import axios from "axios";
 import { API_URL } from "@env";
@@ -27,6 +27,7 @@ const haversineDistance = (coords1: any, coords2: any) => {
 const MapScreen: React.FC = () => {
   const [userLocation, setUserLocation] = useState<any>(null);
   const [restaurants, setRestaurants] = useState<any[]>([]);
+  const [mapType, setMapType] = useState<'satellite' | 'terrain'>('satellite'); // State for map type
   const mapRef = useRef<MapView>(null);
 
   useEffect(() => {
@@ -84,10 +85,32 @@ const MapScreen: React.FC = () => {
     }
   };
 
+  const set3DView = async () => {
+    if (mapRef.current) {
+      const camera = await mapRef.current.getCamera();
+      mapRef.current.animateCamera({
+        ...camera,
+        pitch: 60, // Góc nghiêng của camera
+        heading: 90, // Hướng của camera
+      });
+    }
+  };
+
+  // Use useCallback to memoize the toggleMapType function
+  const toggleMapType = useCallback(() => {
+    setMapType((prevType) => {
+      console.log('Previous MapType:', prevType);  // Log the previous state
+      const newType = prevType === 'satellite' ? 'terrain' : 'satellite';
+      console.log('New MapType:', newType);  // Log the new state
+      return newType;
+    });
+  }, []);  // Empty dependency array to ensure the function is stable
+
   return (
     <View style={{ flex: 1 }}>
       <MapView
         ref={mapRef}
+        provider={PROVIDER_GOOGLE} // Sử dụng Google Maps cho chế độ 3D
         style={{ flex: 1 }}
         initialRegion={{
           latitude: userLocation?.latitude || 10.75,
@@ -96,6 +119,7 @@ const MapScreen: React.FC = () => {
           longitudeDelta: 0.05,
         }}
         showsUserLocation={true}
+        mapType={mapType} // Dynamically set mapType
       >
         {restaurants.map((restaurant) => {
           const distance = userLocation
@@ -118,7 +142,7 @@ const MapScreen: React.FC = () => {
                 source={{ uri: restaurant.image }}
                 style={{ width: 40, height: 40 }}
               />
-              <Callout >
+              <Callout>
                 <View style={styles.calloutmapContainer}>
                   <Text style={styles.calloutTitle}>{restaurant.name}</Text>
                   <Text style={styles.calloutText}>Distance: {distance} km</Text>
@@ -133,6 +157,20 @@ const MapScreen: React.FC = () => {
 
       {/* Tích hợp component ZoomControls */}
       <ZoomControls onZoomIn={zoomIn} onZoomOut={zoomOut} />
+
+      {/* Nút kích hoạt chế độ xem 3D */}
+      <View style={styles.ThreeDButtonContainer}>
+        <Text style={styles.ThreeDButton} onPress={set3DView}>
+          View 3D
+        </Text>
+      </View>
+
+      {/* Nút chuyển đổi giữa các chế độ bản đồ */}
+      <View style={styles.MapTypeButtonContainer}>
+        <Text style={styles.MapTypeButton} onPress={toggleMapType}>
+          Toggle Map Type
+        </Text>
+      </View>
     </View>
   );
 };
@@ -140,7 +178,7 @@ const MapScreen: React.FC = () => {
 const styles = StyleSheet.create({
   calloutmapContainer: {
     width: 200,
-    padding: 10
+    padding: 10,
   },
   calloutTitle: {
     fontSize: 14,
@@ -150,6 +188,44 @@ const styles = StyleSheet.create({
   calloutText: {
     fontSize: 13,
     color: "#333",
+  },
+  ThreeDButtonContainer: {
+    position: "absolute",
+    bottom: 20,
+    right: 20,
+    backgroundColor: "#fff",
+    padding: 10,
+    borderRadius: 8,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 3,
+    elevation: 5,
+  },
+  ThreeDButton: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: "#007AFF",
+    textAlign: "center",
+  },
+  MapTypeButtonContainer: {
+    position: "absolute",
+    bottom: 80,
+    right: 20,
+    backgroundColor: "#fff",
+    padding: 10,
+    borderRadius: 8,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 3,
+    elevation: 5,
+  },
+  MapTypeButton: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: "#007AFF",
+    textAlign: "center",
   },
 });
 
