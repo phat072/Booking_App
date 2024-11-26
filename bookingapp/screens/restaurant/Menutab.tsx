@@ -1,5 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
-import axios from 'axios';
+import React, { useState, useRef } from "react";
 import {
   Button,
   Image,
@@ -7,16 +6,11 @@ import {
   StyleSheet,
   Text,
   View,
-  useWindowDimensions,
   Pressable,
 } from "react-native";
-import PopUp from "../../components/menu/Popup";
-import Menu from "../../components/menu/Menu";
-import { useNavigation } from "@react-navigation/native";
 import MapView, { Marker, Callout } from "react-native-maps";
 import Octicons from "@expo/vector-icons/Octicons";
 import Colors from "../../constants/Colors";
-import { API_URL } from "@env";
 
 interface Item {
   _id: string;
@@ -34,49 +28,75 @@ interface Item {
   album: Array<{ image: string }>;
 }
 
-interface RouteProps {
-  item: Item;
-  selectedItem: any;
-  handlePresentModalPress?: () => void;
-}
-
-import { StackNavigationProp } from "@react-navigation/stack";
-import { OrdersStackParamList } from "@/screens/type";
-type MenutabNavigationProp = StackNavigationProp<OrdersStackParamList, "Order">;
-
 const MenuTab: React.FC<{ item: Item }> = ({ item }) => {
-  const [selectedTab, setSelectedTab] = useState<string>("first");
+  const [selectedTab, setSelectedTab] = useState<string>("Ưu đãi");
+
+  // Create a ref for ScrollView
   const scrollViewRef = useRef<ScrollView>(null);
+
+  // Create refs for each section
+  const advSectionRef = useRef<View>(null);
+  const priceSectionRef = useRef<View>(null);
+  const imageSectionRef = useRef<View>(null);
+  const locationSectionRef = useRef<View>(null);
+  const hoursSectionRef = useRef<View>(null);
+  const detailsSectionRef = useRef<View>(null);
 
   const handleTabSelect = (tab: string) => {
     setSelectedTab(tab);
-    if (scrollViewRef.current) {
-      const offsetY = getSectionOffset(tab);
-      scrollViewRef.current.scrollTo({ y: offsetY, animated: true });
+    // Scroll to the appropriate section
+    switch (tab) {
+      case "Ưu đãi":
+        advSectionRef.current?.measureLayout(
+          scrollViewRef.current?.getInnerViewNode() as any,
+          (x, y) => {
+            scrollViewRef.current?.scrollTo({ y, animated: true });
+          }
+        );
+        break;
+      case "Bảng giá":
+        priceSectionRef.current?.measureLayout(
+          scrollViewRef.current?.getInnerViewNode() as any,
+          (x, y) => {
+            scrollViewRef.current?.scrollTo({ y, animated: true });
+          }
+        );
+        break;
+      case "Ảnh":
+        imageSectionRef.current?.measureLayout(
+          scrollViewRef.current?.getInnerViewNode() as any,
+          (x, y) => {
+            scrollViewRef.current?.scrollTo({ y, animated: true });
+          }
+        );
+        break;
+      case "Chỉ đường":
+        locationSectionRef.current?.measureLayout(
+          scrollViewRef.current?.getInnerViewNode() as any,
+          (x, y) => {
+            scrollViewRef.current?.scrollTo({ y, animated: true });
+          }
+        );
+        break;
+      case "Giờ hoạt động":
+        hoursSectionRef.current?.measureLayout(
+          scrollViewRef.current?.getInnerViewNode() as any,
+          (x, y) => {
+            scrollViewRef.current?.scrollTo({ y, animated: true });
+          }
+        );
+        break;
+      case "Chi tiết":
+        detailsSectionRef.current?.measureLayout(
+          scrollViewRef.current?.getInnerViewNode() as any,
+          (x, y) => {
+            scrollViewRef.current?.scrollTo({ y, animated: true });
+          }
+        );
+        break;
+      default:
+        break;
     }
-  };
-
-  const getSectionOffset = (section: string) => {
-    switch (section) {
-      case "Ưu đãi": return 0;
-      case "Bảng giá": return 250;
-      case "Ảnh": return 1700;
-      case "Chỉ đường": return 2100;
-      case "Giờ hoạt động": return 2300;
-      case "Chi tiết": return 2500;
-      default: return 0;
-    }
-  };
-
-  const handleScroll = (event: any) => {
-    const contentOffsetY = event.nativeEvent.contentOffset.y;
-    let activeTab = "first";
-    if (contentOffsetY >= 250 && contentOffsetY < 1700) activeTab = "Bảng giá";
-    else if (contentOffsetY >= 1700 && contentOffsetY < 2100) activeTab = "Ảnh";
-    else if (contentOffsetY >= 2100 && contentOffsetY < 2300) activeTab = "Chỉ đường";
-    else if (contentOffsetY >= 2300 && contentOffsetY < 2500) activeTab = "Giờ hoạt động";
-    else if (contentOffsetY >= 2500) activeTab = "Chi tiết";
-    setSelectedTab(activeTab);
   };
 
   return (
@@ -122,20 +142,15 @@ const MenuTab: React.FC<{ item: Item }> = ({ item }) => {
       </View>
 
       {/* Content */}
-      <ScrollView
-        ref={scrollViewRef}
-        style={styles.scrollView}
-        onScroll={handleScroll}
-        scrollEventThrottle={16} // To optimize scroll event handling
-      >
+      <ScrollView ref={scrollViewRef} style={styles.scrollView}>
         {/* First Section: Ưu đãi */}
-        <View style={[styles.section, styles.advSection]} id="first">
+        <View ref={advSectionRef} style={[styles.section, styles.advSection]}>
           <Text style={styles.sectionTitle}>Ưu đãi</Text>
           <Text>{item.description}</Text>
         </View>
 
         {/* Second Section: Bảng giá */}
-        <View style={[styles.section, styles.priceSection]} id="second">
+        <View ref={priceSectionRef} style={[styles.section, styles.priceSection]}>
           <Text style={styles.sectionTitle}>Bảng giá</Text>
           {item.imagePrice.map((menuImage, index) => (
             <View key={index} style={styles.imageItem}>
@@ -145,13 +160,13 @@ const MenuTab: React.FC<{ item: Item }> = ({ item }) => {
         </View>
 
         {/* Third Section: Ảnh */}
-        <View style={[styles.section, styles.imageSection]} id="third">
+        <View ref={imageSectionRef} style={[styles.section, styles.imageSection]}>
           <Text style={styles.sectionTitle}>Ảnh</Text>
           <Image source={{ uri: item.image }} style={styles.image} />
         </View>
 
         {/* Fourth Section: Chỉ đường */}
-        <View style={[styles.section, styles.locationSection]} id="four">
+        <View ref={locationSectionRef} style={[styles.section, styles.locationSection]}>
           <Text style={styles.sectionTitle}>Chỉ đường</Text>
           <View style={styles.locationRow}>
             <Octicons name="location" size={24} color="black" />
@@ -182,13 +197,13 @@ const MenuTab: React.FC<{ item: Item }> = ({ item }) => {
         </View>
 
         {/* Fifth Section: Giờ hoạt động */}
-        <View style={[styles.section, styles.hoursSection]} id="fifth">
+        <View ref={hoursSectionRef} style={[styles.section, styles.hoursSection]}>
           <Text style={styles.sectionTitle}>Giờ hoạt động</Text>
           <Text>{item.openingHours}</Text>
         </View>
 
         {/* Sixth Section: Chi tiết */}
-        <View style={[styles.section, styles.detailsSection]} id="sixth">
+        <View ref={detailsSectionRef} style={[styles.section, styles.detailsSection]}>
           <Text style={styles.sectionTitle}>Chi tiết</Text>
           <Text>{item.description}</Text>
         </View>
@@ -205,78 +220,66 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     backgroundColor: "transparent",
     paddingVertical: 15,
-    flexWrap: "wrap", // Allow wrapping if tabs are too wide
-    paddingHorizontal:3,
+    flexWrap: "wrap",
+    paddingHorizontal: 3,
   },
   tab: {
-    width: 58, // Set a fixed width for each button
-    height: 40, // Set a fixed height for each button
-    justifyContent: "center", // Center the text inside the button
-    alignItems: "center", // Align text horizontally
-    margin: 3, // Space between the buttons
-    borderRadius: 25, // This makes the button circular
-    backgroundColor: Colors.primary, // No background by default
-    borderWidth: 2, // Border width to create a border
-    borderColor: "#fff", // White border color (you can customize this)
+    width: 58,
+    height: 40,
+    justifyContent: "center",
+    alignItems: "center",
+    margin: 3,
+    borderRadius: 25,
+    backgroundColor: Colors.primary,
+    borderWidth: 2,
+    borderColor: "#fff",
   },
   selectedTab: {
-    backgroundColor: Colors.secondary, // Background color when selected
+    backgroundColor: Colors.primaryGreen,
   },
   tabText: {
-    color: "#fff", // White text color
-    fontWeight: "bold", // Bold text
-    fontSize: 12, // Font size for the tab text
-    textAlign: "center", // Center the text horizontally
+    color: "#fff",
+    fontWeight: "bold",
+    fontSize: 12,
+    textAlign: "center",
   },
   scrollView: {
     paddingTop: 20,
   },
   section: {
-    paddingHorizontal: 15,
-    paddingVertical: 20,
-    marginBottom: 20,
-    backgroundColor: "#f8f8f8", // General background for all sections
-    borderRadius: 8, // Rounded corners for sections
+    padding: 20,
+    marginVertical: 10,
+  },
+  advSection: {
+    backgroundColor: "#f9f9f9",
+  },
+  priceSection: {
+    backgroundColor: "#fafafa",
+  },
+  imageSection: {
+    backgroundColor: "#f0f0f0",
+  },
+  locationSection: {
+    backgroundColor: "#e8e8e8",
+  },
+  hoursSection: {
+    backgroundColor: "#d0d0d0",
+  },
+  detailsSection: {
+    backgroundColor: "#c0c0c0",
   },
   sectionTitle: {
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: "bold",
     marginBottom: 10,
   },
-  advSection: {
-    backgroundColor: "#e6f7ff", // Light blue for Ưu đãi
-  },
-  priceSection: {
-    backgroundColor: "#fff3e6", // Light orange for Bảng giá
-  },
-  imageSection: {
-    backgroundColor: "#f9f9f9", // Light gray for Ảnh
-  },
-  locationSection: {
-    backgroundColor: "#e6f2ff", // Light blue for Chỉ đường
-  },
-  hoursSection: {
-    backgroundColor: "#fff0f0", // Light pink for Giờ hoạt động
-  },
-  detailsSection: {
-    backgroundColor: "#f4f4f4", // Light gray for Chi tiết
-  },
   imageItem: {
-    marginVertical: 10,
+    marginBottom: 10,
   },
   image: {
     width: "100%",
     height: 200,
-    borderRadius: 10,
-  },
-  mapWrapper: {
-    height: 260,
-    marginVertical: 25,
-    borderRadius: 10,
-    overflow: "hidden",
-  },
-  map: {
-    flex: 1,
+    resizeMode: "cover",
   },
   locationRow: {
     flexDirection: "row",
@@ -287,6 +290,14 @@ const styles = StyleSheet.create({
     marginLeft: 8,
     fontSize: 16,
     color: "#555",
+  },
+  mapWrapper: {
+    height: 200,
+    borderRadius: 10,
+    overflow: "hidden",
+  },
+  map: {
+    flex: 1,
   },
 });
 
