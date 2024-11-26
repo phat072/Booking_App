@@ -1,5 +1,5 @@
 const httpStatus = require('http-status');
-const { Message } = require('../models/message');
+const  Message  = require('../models/message');
 const ApiError = require('../utils/apiError');
 
 /**

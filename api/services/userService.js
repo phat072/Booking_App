@@ -31,7 +31,7 @@ const queryUsers = async (filter, options) => {
 
 /**
  * Get user by id
- * @param {ObjectId} id
+ * @param {string} id
  * @returns {Promise<User>}
  */
 const getUserById = async (id) => {

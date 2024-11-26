@@ -131,13 +131,15 @@ module.exports = {
     },
 
     // Get user
-    getUser: catchAsync(async (req, res) => {
-        const user = await userService.getUserById(req.params.userId);
-        if (!user) {
-            throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
-        }
-        res.send(user);
-    }),
+    // getUser: catchAsync(async (req, res) => {
+    //     const { userId } = req.params;
+    //     console.log(userId);
+    //     const user = await userService.getUserById(userId);
+    //     if (!user) {
+    //         throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
+    //     }
+    //     res.send(user);
+    // }),
       
 
     // Update Address

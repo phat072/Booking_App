@@ -8,7 +8,7 @@ const ApiError = require('../utils/ApiError');
 
 /**
  * Generate token
- * @param {ObjectId} userId
+ * @param {id} userId
  * @param {Moment} expires
  * @param {string} [secret]
  * @returns {string}
@@ -25,7 +25,7 @@ const generateToken = (userId, expires, secret = config.jwt.secret) => {
 /**
  * Save a token
  * @param {string} token
- * @param {ObjectId} userId
+ * @param {id} userId
  * @param {Moment} expires
  * @param {string} type
  * @param {boolean} [blacklisted]

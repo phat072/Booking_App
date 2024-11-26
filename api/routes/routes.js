@@ -25,7 +25,6 @@ router.post("/login", userController.login);
 router.put("/address/:userId", userController.updateAddress);
 router.get("/address/:userId", userController.getUserAddress);
 router.put("/change-password/:userId", userController.changePassword);
-router.get('/:userId', userController.getUser);
 
 // Admin routes
 router.get("/users/:userId", adminController.getUserById);
