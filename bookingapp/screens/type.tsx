@@ -14,6 +14,8 @@ export type OrdersStackParamList = {
     Home: undefined;
     Orders: undefined;
     Dashboard: undefined;
+    RestaurantDetail: { item: any }; // Thay `any` bằng kiểu dữ liệu chính xác của nhà hàng nếu có
+    SearchScreen: undefined; // Định nghĩa các màn hình khác nếu có
     DetailOrders: {
       order: {
         _id: string;

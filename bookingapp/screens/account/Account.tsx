@@ -152,9 +152,12 @@ const AccountScreen: React.FC = () => {
 
   return (
     <View>
+      <View style={styles.titleContainer}>
+        <Text style={styles.title}>Tài khoản</Text>
+      </View>
       <ScrollView>
-        <View style={{ backgroundColor: COLORS.offwhite, height: SIZES.height }}>
-          <View style={{ backgroundColor: COLORS.offwhite, height: SIZES.height - 170 }}>
+        <View style={{ backgroundColor: '#fffff', height: SIZES.height }}>
+          <View style={{ backgroundColor: '#fffff', height: SIZES.height - 170 }}>
             <View style={styles.profile}>
               <View style={{ flexDirection: "row" }}>
                 <TouchableOpacity onPress={handleAvatarPress}>
@@ -245,6 +248,19 @@ const AccountScreen: React.FC = () => {
 };
 
 const styles = StyleSheet.create({
+  titleContainer: {
+    backgroundColor: "#ff4757", // Màu nền đỏ cho container title
+    paddingVertical: 20,    // Điều chỉnh padding cho chiều dọc
+    alignItems: "center",   // Căn giữa theo chiều ngang
+    justifyContent: "center", // Căn giữa theo chiều dọc
+    width: "100%",          // Chiều rộng đầy đủ
+    marginBottom: 0,        // Loại bỏ khoảng cách dưới tiêu đề
+  },
+  title: {
+    fontSize: 20,
+    fontWeight: "bold",
+    color: "#fff", // Màu chữ trắng
+  },
   avatarPlaceholder: {
     width: 100,
     height: 100,
@@ -272,7 +288,7 @@ const styles = StyleSheet.create({
   },
   section: {
     height: 210,
-    backgroundColor: COLORS.lightWhite,
+    backgroundColor: "#ffffff",
     borderRadius: 12,
   },
   subSection: {
@@ -283,14 +299,15 @@ const styles = StyleSheet.create({
   },
   logoutSection: {
     alignItems: "center",
-    marginTop: 20,
+    marginTop: 40,  // Tăng khoảng cách trên cho logout section
+    paddingBottom: 60, // Tăng thêm padding dưới để không bị cắt dòng footer
   },
   logoutButton: {
     backgroundColor: "#FEF2F2",
     padding: 15,
     borderRadius: 8,
     width: "60%",
-    marginTop: 60,
+    marginTop: 20, // Giảm khoảng cách trên của logout button để tránh bị cắt
   },
   logoutButtonText: {
     color: "#D02B39",
@@ -300,6 +317,7 @@ const styles = StyleSheet.create({
   footerText: {
     color: "#6C6C6C",
     marginTop: 20,
+    marginBottom: 20, // Thêm margin dưới để cách dòng copyright không bị sát
   },
 });
 

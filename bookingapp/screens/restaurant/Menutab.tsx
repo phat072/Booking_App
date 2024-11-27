@@ -219,23 +219,24 @@ const styles = StyleSheet.create({
   tabsContainer: {
     flexDirection: "row",
     backgroundColor: "transparent",
-    paddingVertical: 15,
+    paddingVertical: 5,
     flexWrap: "wrap",
     paddingHorizontal: 3,
+    marginTop: 10,
   },
   tab: {
     width: 58,
-    height: 40,
+    height: 42,
     justifyContent: "center",
     alignItems: "center",
-    margin: 3,
+    margin: 2,
     borderRadius: 25,
-    backgroundColor: Colors.primary,
+    backgroundColor: '#ff6b81',
     borderWidth: 2,
-    borderColor: "#fff",
+    borderColor: "#ffffff",
   },
   selectedTab: {
-    backgroundColor: Colors.primaryGreen,
+    backgroundColor: '#ff4757',
   },
   tabText: {
     color: "#fff",
@@ -244,47 +245,52 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   scrollView: {
-    paddingTop: 20,
+    paddingTop: 1,
   },
   section: {
-    padding: 20,
+    padding: 10,
     marginVertical: 10,
+    backgroundColor:'#f1f2f6'
   },
   advSection: {
-    backgroundColor: "#f9f9f9",
+    backgroundColor: "#f1f2f6",
   },
   priceSection: {
-    backgroundColor: "#fafafa",
+    backgroundColor: "#f1f2f6",
   },
   imageSection: {
-    backgroundColor: "#f0f0f0",
+    backgroundColor: "#f1f2f6",
   },
   locationSection: {
-    backgroundColor: "#e8e8e8",
+    backgroundColor: "#f1f2f6",
   },
   hoursSection: {
-    backgroundColor: "#d0d0d0",
+    backgroundColor: "#f1f2f6",
   },
   detailsSection: {
-    backgroundColor: "#c0c0c0",
+    backgroundColor: "#f1f2f6",
   },
   sectionTitle: {
     fontSize: 18,
     fontWeight: "bold",
     marginBottom: 10,
+    color:'#2f3542'
   },
   imageItem: {
+    backgroundColor:"#f1f2f6",
     marginBottom: 10,
   },
   image: {
     width: "100%",
-    height: 200,
+    aspectRatio: 1,
     resizeMode: "cover",
+    backgroundColor:"#f1f2f6"
   },
   locationRow: {
     flexDirection: "row",
     alignItems: "center",
     marginVertical: 10,
+    backgroundColor: "#f1f2f6"
   },
   locationText: {
     marginLeft: 8,
