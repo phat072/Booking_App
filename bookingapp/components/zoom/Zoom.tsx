@@ -27,12 +27,13 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     backgroundColor: "rgba(255, 255, 255, 0.8)",
     borderRadius: 8,
-    padding: 8,
+    padding: 3,
   },
   zoomButton: {
     alignItems: "center",
     justifyContent: "center",
-    padding: 10,
+    paddingHorizontal: 10,    // Padding chiều ngang (X-axis)
+    paddingVertical: 5,      // Padding chiều dọc (Y-axis)
   },
   zoomText: {
     fontSize: 18,
