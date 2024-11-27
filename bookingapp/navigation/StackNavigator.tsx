@@ -31,6 +31,7 @@ import FavouriteScreen from "../screens/favourite/FavouriteScreen";
 import { useNavigation } from '@react-navigation/native';
 import { Ionicons} from "@expo/vector-icons";
 const Stack = createNativeStackNavigator<StackStackParamList>();
+import Colors from "@/constants/Colors";
 
 const StackNavigator: React.FC = () => {
   return (
@@ -67,7 +68,7 @@ const StackNavigator: React.FC = () => {
           options={{
             title: "Lịch sử giao dịch",
             headerTitleAlign: "center",
-            headerStyle: { backgroundColor: "red" },
+            headerStyle: { backgroundColor: Colors.primary },
             headerTintColor: "#fff",
             headerTitleStyle: {
               fontWeight: "bold",
@@ -80,7 +81,7 @@ const StackNavigator: React.FC = () => {
           options={{
             title: "Yêu thích",
             headerTitleAlign: "center",
-            headerStyle: { backgroundColor: "red" },
+            headerStyle: { backgroundColor: Colors.primary },
             headerTintColor: "#fff",
             headerTitleStyle: {
               fontWeight: "bold",
@@ -92,6 +93,12 @@ const StackNavigator: React.FC = () => {
           component={BottomSheetTest}
           options={{
             title: "",
+            // headerTitleAlign: "center",
+            // headerStyle: { backgroundColor: Colors.primary },
+            // headerTintColor: "#fff",
+            // headerTitleStyle: {
+            //   fontWeight: "bold",
+            // },
           }}
         />
         <Stack.Screen
@@ -99,7 +106,7 @@ const StackNavigator: React.FC = () => {
           component={CityScreen}
           options={{
             title: "Chọn tỉnh/thành",
-            headerStyle: { backgroundColor: "red" },
+            headerStyle: { backgroundColor: Colors.primary },
             headerTintColor: "#fff",
             headerTitleStyle: {
               fontWeight: "bold",
@@ -111,7 +118,7 @@ const StackNavigator: React.FC = () => {
           component={NotificationScreen}
           options={{
             title: "Ưu đãi",
-            headerStyle: { backgroundColor: "red" },
+            headerStyle: { backgroundColor: Colors.primary },
             headerTintColor: "#fff",
             headerTitleAlign: "center",
             headerTitleStyle: {
@@ -124,7 +131,7 @@ const StackNavigator: React.FC = () => {
           component={ChangePassword}
           options={{
             title: "Change password",
-            headerStyle: { backgroundColor: "red" },
+            headerStyle: { backgroundColor: Colors.primary },
             headerTintColor: "#fff",
             headerTitleAlign: "center",
             headerTitleStyle: {
@@ -137,7 +144,7 @@ const StackNavigator: React.FC = () => {
           component={BookingHours}
           options={{
             title: "Thông tin giao dịch",
-            headerStyle: { backgroundColor: "red" },
+            headerStyle: { backgroundColor: Colors.primary },
             headerTintColor: "#fff",
             headerTitleAlign: "center",
             headerTitleStyle: {
@@ -164,7 +171,7 @@ const StackNavigator: React.FC = () => {
           component={Success}
           options={{
             title: "order tình trạng",
-            headerStyle: { backgroundColor: "red" },
+            headerStyle: { backgroundColor: Colors.primary },
             headerTintColor: "#fff",
             headerTitleAlign: "center",
             headerTitleStyle: {
@@ -178,7 +185,7 @@ const StackNavigator: React.FC = () => {
           component={OrderScreen}
           options={{
             title: "Thông tin giao dịch",
-            headerStyle: { backgroundColor: "red" },
+            headerStyle: { backgroundColor: Colors.primary },
             headerTintColor: "#fff",
             headerTitleAlign: "center",
             headerTitleStyle: {
@@ -204,7 +211,7 @@ const StackNavigator: React.FC = () => {
           component={FilterScreen}
           options={{
             title: "Lọc",
-            headerStyle: { backgroundColor: "red" },
+            headerStyle: { backgroundColor: Colors.primary },
             headerTintColor: "#fff",
             headerTitleAlign: "center",
             headerTitleStyle: {
@@ -223,7 +230,7 @@ const StackNavigator: React.FC = () => {
           component={EditAccount}
           options={{
             title: "Thông tin người dùng",
-            headerStyle: { backgroundColor: "#ff4757" },
+            headerStyle: { backgroundColor: Colors.primary },
             headerTintColor: "#fff",
             headerTitleAlign: "center",
             headerTitleStyle: {

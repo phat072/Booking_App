@@ -17,6 +17,7 @@ import Animated, {
 } from "react-native-reanimated";
 import { FontAwesome6, Ionicons } from "@expo/vector-icons";
 import { StackStackParamList } from "../type";
+import Colors from "@/constants/Colors";
 
 const { width } = Dimensions.get("window");
 const IMG_HEIGHT = 250;
@@ -296,7 +297,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   header: {
-    backgroundColor: "red",
+    backgroundColor: Colors.primary,
     height: 100,
   },
   sectionTitle: {

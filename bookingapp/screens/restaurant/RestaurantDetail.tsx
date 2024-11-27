@@ -59,7 +59,7 @@ const RestaurantDetail: React.FC = () => {
             <Ionicons
               name={isFavorite ? "heart" : "heart-outline"}
               size={20}
-              color={isFavorite ? "red" : "black"}
+              color={isFavorite ? Colors.primary : "black"}
             />
           </TouchableOpacity>
         </View>
@@ -137,7 +137,7 @@ const RestaurantDetail: React.FC = () => {
                 <Text style={styles.ratingText}>{item.rating}</Text>
               </View>
               <View style={[styles.row, {marginRight: 65}]}>
-                <Ionicons name="location-sharp" size={20} color="red" />
+                <Ionicons name="location-sharp" size={20} color={Colors.primary} />
                 <Text style={styles.detailText}>4.5 km</Text>
               </View>
             </View>
@@ -180,7 +180,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#ffffff",
   },
   errorText: {
-    color: "red",
+    color: Colors.primary,
     textAlign: "center",
     marginTop: 20,
   },

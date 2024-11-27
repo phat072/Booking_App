@@ -1,13 +1,13 @@
 import "react-native-gesture-handler";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import React, { useState, useCallback, useEffect } from "react";
-import { StyleSheet } from "react-native";
+import React, { useCallback } from "react";
 import StackNavigator from "../navigation/StackNavigator";
 import { useFonts } from "expo-font";
 import { UserProvider } from "../userContext";
 import { SplashScreen } from "expo-router";
 import { API_URL } from "@env";
 import { MD3LightTheme as DefaultTheme, PaperProvider } from 'react-native-paper';
+import Colors from "@/constants/Colors";
 
 // Log loading of .env and API_URL
 console.log("env: load .env");
@@ -42,7 +42,7 @@ export default function App() {
       primaryContainer:'red',
       secondary: 'yellow',
       placeholder: 'yellow',
-      outlineVariant:"red"
+      outlineVariant:Colors.primary
     },
   };
 

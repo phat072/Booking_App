@@ -10,6 +10,7 @@ import { CheckBox, Icon, Divider } from "react-native-elements";
 import { Shadow } from "react-native-shadow-2";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { CityStackParamList } from "../type";
+import Colors from "@/constants/Colors";
 
 type CityScreenProps = NativeStackScreenProps<CityStackParamList, "City">;
 
@@ -52,7 +53,7 @@ const CityScreen: React.FC<CityScreenProps> = ({ navigation, route }) => {
                 <Icon
                   name="radio-button-checked"
                   type="material"
-                  color="red"
+                  color={Colors.primary}
                   size={30}
                   iconStyle={{ marginRight: 10 }}
                 />
@@ -110,7 +111,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
   },
   applyButton: {
-    backgroundColor: "red",
+    backgroundColor: Colors.primary,
     padding: 20,
     width: "90%",
     borderRadius: 10,

@@ -16,6 +16,7 @@ import { Swipeable } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
 import { API_URL } from "@env";
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import Colors from "@/constants/Colors";
 
 interface Restaurant {
   _id: string;
@@ -243,7 +244,7 @@ const styles = StyleSheet.create({
   deleteButtonContainer: {
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "red",
+    backgroundColor: Colors.primary,
     width: 100,
     height: "89%",
     borderRadius: 5,
