@@ -47,7 +47,7 @@ const RestaurantDetail: React.FC = () => {
       headerTitle: "", // Remove the restaurant name from the header title
       headerLeft: () => (
         <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Ionicons name="arrow-back" size={24} color="black" style={styles.backButton} />
+          <Ionicons name="arrow-back" size={30} style={styles.backButton} />
         </TouchableOpacity>
       ),
       headerRight: () => (
@@ -185,7 +185,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   backButton: {
-    marginLeft: 10,
+    marginBottom: 10,
     color: "black"
   },
   headerRight: {

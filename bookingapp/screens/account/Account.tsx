@@ -156,8 +156,8 @@ const AccountScreen: React.FC = () => {
         <Text style={styles.title}>Tài khoản</Text>
       </View>
       <ScrollView>
-        <View style={{ backgroundColor: '#fffff', height: SIZES.height }}>
-          <View style={{ backgroundColor: '#fffff', height: SIZES.height - 170 }}>
+        <View style={{ backgroundColor: '#fffff', height: 790 }}>
+          <View style={{ backgroundColor: '#fffff', height: 690 }}>
             <View style={styles.profile}>
               <View style={{ flexDirection: "row" }}>
                 <TouchableOpacity onPress={handleAvatarPress}>
@@ -214,7 +214,7 @@ const AccountScreen: React.FC = () => {
               />
               <ProfileTile title="Hoạt động gần đây" icon="clock"font={3} />
             </View>
-            <View style={styles.subSection}>
+            <View style={styles.subSection1}>
               <ProfileTile
                 title="Chat"
                 icon="chatbox-outline"
@@ -284,33 +284,39 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     marginHorizontal: 20,
-    margin: 20,
+    margin: 10,
   },
   section: {
-    height: 210,
+    height: 200,
     backgroundColor: "#ffffff",
     borderRadius: 12,
   },
   subSection: {
     height: 100,
-    backgroundColor: COLORS.lightWhite,
+    backgroundColor: "#ffffff",
+    margin: 2,
+    borderRadius: 12,
+  },
+  subSection1: {
+    height: 150,
+    backgroundColor: "#ffffff",
     margin: 2,
     borderRadius: 12,
   },
   logoutSection: {
     alignItems: "center",
-    marginTop: 40,  // Tăng khoảng cách trên cho logout section
+    marginTop: 25,  // Tăng khoảng cách trên cho logout section
     paddingBottom: 60, // Tăng thêm padding dưới để không bị cắt dòng footer
   },
   logoutButton: {
-    backgroundColor: "#FEF2F2",
+    backgroundColor: "#ff4757",
     padding: 15,
     borderRadius: 8,
     width: "60%",
     marginTop: 20, // Giảm khoảng cách trên của logout button để tránh bị cắt
   },
   logoutButtonText: {
-    color: "#D02B39",
+    color: "#ffffff",
     textAlign: "center",
     fontWeight: "bold",
   },

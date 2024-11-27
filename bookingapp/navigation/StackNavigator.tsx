@@ -1,14 +1,13 @@
 import {
-    StyleSheet,
-    Text,
-    View,
-    TextInput,
-    TouchableOpacity,
-  } from "react-native";
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  Image,
+} from "react-native";
 import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import RegisterScreen from "../screens/register/RegisterScreen";
-// import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import LoginScreen from "../screens/login/LoginScreen";
 import OnboardingScreen from "../screens/onboarding/OnboardingScreen";
@@ -29,6 +28,8 @@ import ListMenuRes from "../screens/menu/ListMenuRes";
 import OrderScreen from "../screens/restaurant/OrderScreen";
 import AdminTabNavigator from "../navigation/AdminTabNavigator"
 import FavouriteScreen from "../screens/favourite/FavouriteScreen";
+import { useNavigation } from '@react-navigation/native';
+import { Ionicons} from "@expo/vector-icons";
 const Stack = createNativeStackNavigator<StackStackParamList>();
 import Colors from "@/constants/Colors";
 
@@ -76,7 +77,6 @@ const StackNavigator: React.FC = () => {
         />
         <Stack.Screen
           name="Favourite"
-          // component={BottomSheetTest}
           component={FavouriteScreen}
           options={{
             title: "Yêu thích",
@@ -237,6 +237,7 @@ const StackNavigator: React.FC = () => {
               fontWeight: "bold",
             },
             headerShown: true,
+            header: () => <CustomHeader />,
           }}
         />
       </Stack.Navigator>
@@ -245,4 +246,37 @@ const StackNavigator: React.FC = () => {
 };
 
 export default StackNavigator;
-const styles = StyleSheet.create({});
+
+const CustomHeader = () => {
+  const navigation = useNavigation();
+
+  return (
+    <View style={styles.customHeader}>
+      {/* Back button */}
+      <TouchableOpacity onPress={() => navigation.goBack()}>
+      <Ionicons name="arrow-back" size={30}/>
+      </TouchableOpacity>
+      <Text style={styles.headerTitle}>Thông tin người dùng</Text>
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  customHeader: {
+    backgroundColor: "#ff4757", // Màu nền đỏ cho container title
+    paddingVertical: 20,    // Điều chỉnh padding cho chiều dọc
+    alignItems: "center",   // Căn giữa theo chiều ngang
+    justifyContent: "center", // Căn giữa theo chiều dọc
+    width: "100%",          // Chiều rộng đầy đủ
+    marginBottom: 0,        // Loại bỏ khoảng cách dưới tiêu đề
+    flexDirection: "row",   // Sắp xếp ngang
+    paddingHorizontal: 10,  // Điều chỉnh khoảng cách ngang
+  },
+  headerTitle: {
+    fontSize: 20,
+    fontWeight: "bold",
+    color: "#fff", // Màu chữ trắng
+    flex: 1,        // Căn giữa tiêu đề
+    textAlign: "center",
+  },
+});

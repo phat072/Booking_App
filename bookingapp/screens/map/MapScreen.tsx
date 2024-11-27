@@ -99,9 +99,7 @@ const MapScreen: React.FC = () => {
   // Use useCallback to memoize the toggleMapType function
   const toggleMapType = useCallback(() => {
     setMapType((prevType) => {
-      console.log('Previous MapType:', prevType);  // Log the previous state
       const newType = prevType === 'satellite' ? 'terrain' : 'satellite';
-      console.log('New MapType:', newType);  // Log the new state
       return newType;
     });
   }, []);  // Empty dependency array to ensure the function is stable
@@ -168,7 +166,7 @@ const MapScreen: React.FC = () => {
       {/* Nút chuyển đổi giữa các chế độ bản đồ */}
       <View style={styles.MapTypeButtonContainer}>
         <Text style={styles.MapTypeButton} onPress={toggleMapType}>
-          Toggle Map Type
+          Toggle Map
         </Text>
       </View>
     </View>
@@ -191,10 +189,10 @@ const styles = StyleSheet.create({
   },
   ThreeDButtonContainer: {
     position: "absolute",
-    bottom: 20,
+    bottom: 70,
     right: 20,
     backgroundColor: "#fff",
-    padding: 10,
+    padding: 7,
     borderRadius: 8,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
@@ -210,10 +208,10 @@ const styles = StyleSheet.create({
   },
   MapTypeButtonContainer: {
     position: "absolute",
-    bottom: 80,
+    bottom: 120,
     right: 20,
     backgroundColor: "#fff",
-    padding: 10,
+    padding: 7,
     borderRadius: 8,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
