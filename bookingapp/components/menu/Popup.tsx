@@ -1,6 +1,7 @@
 import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
+import Colors from "@/constants/Colors";
 
 interface PopUpProps {
   buttonText: string;
@@ -34,7 +35,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
   },
   applyButton: {
-    backgroundColor: "red",
+    backgroundColor: Colors.primary,
     padding: 10,
     borderRadius: 5,
     width: "90%",

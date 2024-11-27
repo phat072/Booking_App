@@ -1,4 +1,5 @@
 import { Dimensions } from 'react-native';
+import Colors from './Colors';
 
 const { height, width } = Dimensions.get('window');
 
@@ -21,7 +22,7 @@ interface Colors {
 }
 
 const COLORS: Colors = {
-  primary: "red",
+  primary: Colors.primary,
   primary1: "#00fff53c",
   secondary: "#ffa44f",
   secondary1: "#ffe5db",
@@ -31,7 +32,7 @@ const COLORS: Colors = {
   lightGray: "#ccc",
   white: "#ffffff",
   offwhite: "#FFFFFF",
-  error: "red",
+  error: Colors.primary,
   black: "#000000",
   red: "#e81e4d",
   green: "#00C135",

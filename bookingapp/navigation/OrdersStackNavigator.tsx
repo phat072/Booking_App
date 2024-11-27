@@ -22,7 +22,7 @@ const OrdersStackNavigator: React.FC = () => {
         headerTitleAlign: "center",
         headerTitle: "List Orders",
         headerTintColor: "#fff",
-        headerStyle: { backgroundColor: "#1C212D" },
+        headerStyle: { backgroundColor: "#8dcae0" },
         headerLeft: () => (
           <TouchableOpacity
             onPress={() => {

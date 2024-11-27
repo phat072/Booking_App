@@ -19,7 +19,6 @@ import Colors from "../../constants/Colors";
 // import { defaultStyles } from "../../constants/Styles";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import RestaurantCard from "../../components/restaurant/RestaurantCard";
-
 const { width } = Dimensions.get("window");
 const IMG_HEIGHT = 200;
 
@@ -179,7 +178,7 @@ const styles = StyleSheet.create({
   sortButton: { backgroundColor: "#fff", padding: 10, borderColor: "#CCCCCC", borderWidth: 1, borderRadius: 8, marginTop: 8 },
   roundButton: { width: 40, height: 40, borderRadius: 20, backgroundColor: "#000", opacity: 0.7, justifyContent: "center", alignItems: "center" },
   bar: { flexDirection: "row", gap: 10, justifyContent: "center" },
-  header: { backgroundColor: "red", height: 100 },
+  header: { backgroundColor: Colors.primary, height: 100 },
   headerTitle: { fontSize: 18, fontWeight: "bold", color: "#fff" },
 });
 

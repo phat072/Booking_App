@@ -20,6 +20,7 @@ import {
   import { API_URL } from "@env";
   import { OrdersStackParamList } from "@/screens/type";
   import { RouteProp, useRoute } from "@react-navigation/native";
+import Colors from "@/constants/Colors";
 
   type DetailOrdersRouteProp = RouteProp<OrdersStackParamList, "DetailOrders">;
 
@@ -327,7 +328,7 @@ import {
       backgroundColor: "#fff",
     },
     applyButton: {
-      backgroundColor: "red",
+      backgroundColor: Colors.primary,
       width: "90%",
       marginTop: 20,
       padding: 17,

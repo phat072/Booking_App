@@ -9,6 +9,7 @@ import {
   Alert,
   StyleSheet,
 } from "react-native";
+import Colors from "@/constants/Colors";
 import Categories from "../../components/homelayout/Categories";
 import FeaturedRow from "../../components/homelayout/FeatureRow";
 import * as Icon from "react-native-feather";
@@ -23,6 +24,7 @@ import axios from "axios";
 import Banner from "../../components/homelayout/Banner";
 import { Skeleton } from "@rneui/themed";
 import { LinearGradient } from "expo-linear-gradient";
+import { colors } from "react-native-elements";
 
 // Define types for the expected data
 interface FeaturedData {
@@ -163,7 +165,7 @@ export default function HomeScreen({ navigation, route }: { navigation: any; rou
       }
     >
       <View style={{ flexDirection: 'row' }}>
-        <Ionicons name="location-sharp" size={24} color="red" />
+        <Ionicons name="location-sharp" size={24} color={Colors.primary} />
         <Text
           style={{
             textTransform: 'uppercase',
@@ -171,7 +173,7 @@ export default function HomeScreen({ navigation, route }: { navigation: any; rou
             marginLeft: 10,
             fontWeight: 'bold',
             marginRight: 5,
-            color: '#DA4C40',
+            color: Colors.primary,
           }}
         >
           {selectedCity}
@@ -203,7 +205,7 @@ export default function HomeScreen({ navigation, route }: { navigation: any; rou
           style={{
             marginLeft: 10,
             flex: 1,
-            color: '#888888',
+            color: Colors.grey,
             fontSize: 16,
           }}
         >
@@ -293,7 +295,7 @@ export default function HomeScreen({ navigation, route }: { navigation: any; rou
     {/* Handle errors */}
     {error && (
       <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginTop: 16 }}>
-        <Text style={{ color: 'red' }}>{error}</Text>
+        <Text style={{ color: Colors.primary }}>{error}</Text>
         <TouchableOpacity onPress={handleRetry}>
           <Text style={{ color: 'blue', marginLeft: 8 }}>Retry</Text>
         </TouchableOpacity>
