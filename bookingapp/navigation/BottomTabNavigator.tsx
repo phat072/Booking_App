@@ -29,7 +29,7 @@ const HomeStack: React.FC = () => (
       component={ResultScreen}
       options={{
         title: "",
-        headerStyle: { backgroundColor: w.primary },
+        headerStyle: { backgroundColor: Colors.primary },
         headerTintColor: "#fff",
         headerTitleAlign: "center",
         headerTitleStyle: { fontWeight: "bold" },
