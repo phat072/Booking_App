@@ -1,9 +1,8 @@
 import React from "react";
 import { View, TextInput, TouchableOpacity, TextInputProps, ViewStyle, TextStyle } from "react-native";
 import HomeScreen from "../screens/home/HomeScreen";
-// import SearchScreen from "../screens/SearchScreen";
+import SearchScreen from "../screens/search/SearchScreen";
 import AccountScreen from "../screens/account/Account";
-// import MapCenter from "../screens/MapCenter";
 import ResultScreen from "../screens/result/ResultScreen";
 import RestaurantDetail from "../screens/restaurant/RestaurantDetail";
 import MapScreen from '../screens/map/MapScreen'
@@ -67,10 +66,9 @@ const AccountStack: React.FC = () => (
       component={AccountScreen}
        options={{
         title: "Tài khoản",
-        headerStyle: { backgroundColor: "red" },
         headerTintColor: "#fff",
         headerTitleAlign: "center",
-        headerShown: true,
+        headerShown: false,
       }}
     />
      <Stack.Screen
@@ -124,79 +122,22 @@ const BottomTabNavigator: React.FC = () => {
             ),
         }}
       />
-      {/* <Tab.Screen
+       <Tab.Screen
         name="Search"
         component={SearchScreen}
         options={({ navigation }) => ({
-          headerStyle: { backgroundColor: "red" },
           tabBarLabelStyle: { color: "#008E97" } as TextStyle,
           title: "Search",
+          headerShown: false,
           tabBarIcon: ({ focused }: { focused: boolean }) =>
             focused ? (
               <FontAwesome name="search" size={24} color="#D71537" />
             ) : (
               <FontAwesome name="search" size={24} color="#7E7E80" />
             ),
-          headerTitleAlign: "center",
-          headerTitle: () => (
-            <View>
-              <View
-                style={{
-                  borderRadius: 100,
-                  color: "#008E97",
-                  alignItems: "center",
-                  justifyContent: "space-around",
-                  padding: 10,
-                  flexDirection: "row",
-                } as ViewStyle}
-              >
-                <TouchableOpacity onPress={() => navigation.goBack()}>
-                  <Ionicons name="arrow-back" size={30} color="white" />
-                </TouchableOpacity>
-                <Icon.Search
-                  style={{
-                    position: "absolute",
-                    left: 60,
-                    zIndex: 2,
-                  }}
-                  height="20"
-                  width="20"
-                  stroke="gray"
-                />
-                <TextInput
-                  placeholder="Tìm kiếm"
-                  style={{
-                    zIndex: 1,
-                    position: "relative",
-                    borderRadius: 100,
-                    backgroundColor: "white",
-                    width: 320,
-                    height: 35,
-                    paddingLeft: 40,
-                    marginLeft: 30,
-                  } as TextInputProps["style"]}
-                  keyboardType="default"
-                />
-              </View>
-            </View>
-          ),
+ 
         })}
       />
-      <Tab.Screen
-        name="MapCenter"
-        component={MapCenter}
-        options={{
-          tabBarLabel: "MapCenter",
-          tabBarLabelStyle: { color: "#008E97" } as TextStyle,
-          headerShown: false,
-          tabBarIcon: ({ focused }: { focused: boolean }) =>
-            focused ? (
-              <Entypo name="map" size={24} color="#D71537" />
-            ) : (
-              <Entypo name="map" size={24} color="#7E7E80" />
-            ),
-        }}
-      />*/}
       <Tab.Screen
         name="AccountTab"
         component={AccountStack}
