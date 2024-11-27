@@ -70,6 +70,15 @@ Before you begin, ensure you have the following installed:
 2. **Create a `.env` file in the root directory and define the required environment variables:**
 ### Environment Variables
   ```env
-  MONGO_URI=your_mongodb_connection_string
-  JWT_SECRET=your_jwt_secret
-  PORT=3000
+    MONGO_URI=your_mongodb_connection_string
+    JWT_SECRET=your_jwt_secret
+    PORT=3000
+  ```
+
+3. **Run the Application**
+   ***Start the development server:***
+   ```bash
+    npm start
+   ```
+   The app will be available at http://localhost:3000.
+   
