@@ -7,7 +7,6 @@ import {
   TouchableOpacity,
   ScrollView,
   TextInput,
-  Alert,
 } from "react-native";
 import {
   FontAwesome5,
@@ -17,22 +16,22 @@ import {
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { useRoute } from "@react-navigation/native";
 import { API_URL } from "@env";
-import { UserType } from "@/userContext";
+import { UserType } from "@/userContext"; // Your user context to get the user info
 import { Button, Dialog, Portal } from "react-native-paper";
 import moment from "moment";
-
 import { NavigationProp } from "@react-navigation/native";
 
 const OrderScreen = ({ navigation }: { navigation: NavigationProp<any> }) => {
   const route = useRoute<{ key: string; name: string; params: { restaurant: any; selectedItem: any } }>();
   const { restaurant, selectedItem } = route.params;
-  const { user } = useContext(UserType);
+  const { user } = useContext(UserType);  // Assuming user is fetched from context
 
   const [adults, setAdults] = useState("0");
   const [children, setChildren] = useState("0");
   const [selectedTime, setSelectedTime] = useState("");
   const [orderNote, setOrderNote] = useState("");
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+  const [isTimePickerVisible, setTimePickerVisibility] = useState(false);  // For Time Picker Modal
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [visible, setVisible] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
@@ -69,9 +68,23 @@ const OrderScreen = ({ navigation }: { navigation: NavigationProp<any> }) => {
     setDatePickerVisibility(false);
   };
 
-  const handleConfirm = (date: Date) => {
+  const handleDateConfirm = (date: Date) => {
     setSelectedDate(date);
     hideDatePicker();
+  };
+
+  const showTimePicker = () => {
+    setTimePickerVisibility(true);
+  };
+
+  const hideTimePicker = () => {
+    setTimePickerVisibility(false);
+  };
+
+  const handleTimeConfirm = (time: Date) => {
+    const formattedTime = moment(time).format("HH:mm");
+    setSelectedTime(formattedTime);
+    hideTimePicker();
   };
 
   const showDialog = (message: React.SetStateAction<string>) => {
@@ -86,8 +99,8 @@ const OrderScreen = ({ navigation }: { navigation: NavigationProp<any> }) => {
 
   const submitOrder = async () => {
     try {
-      if (!selectedDate) {
-        showDialog("Please select a date.");
+      if (!selectedDate || !selectedTime) {
+        showDialog("Please select both a date and time.");
         return;
       }
       if (!user || !restaurant) {
@@ -95,9 +108,10 @@ const OrderScreen = ({ navigation }: { navigation: NavigationProp<any> }) => {
         return;
       }
 
+      // Make sure to pass userId and restaurantId correctly
       const orderData = {
-        userId: user._id,
-        restaurantId: restaurant._id,
+        userId: user.id, // Make sure `user.id` is properly set
+        restaurantId: restaurant._id, // Ensure this is correctly passed
         adults: parseInt(adults),
         children: parseInt(children),
         date: selectedDate.toISOString(),
@@ -106,21 +120,24 @@ const OrderScreen = ({ navigation }: { navigation: NavigationProp<any> }) => {
         selectedItem,
       };
 
-      const response = await fetch(`${API_URL}/api/orders`, {
+      // Log order data before sending it to the backend
+
+      const response = await fetch(`${API_URL}/order`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(orderData),
       });
 
+      const responseText = await response.text();
+
       if (response.ok) {
-        const responseData = await response.json();
+        const responseData = JSON.parse(responseText);
         navigation.navigate("OrderSuccess");
       } else {
-        const errorResponse = await response.json();
-        console.error("Error response:", errorResponse);
+        showDialog("There was an error submitting your order.");
       }
     } catch (error) {
-      console.error("Error submitting order:", error);
+      showDialog("An error occurred while submitting the order.");
     }
   };
 
@@ -174,8 +191,10 @@ const OrderScreen = ({ navigation }: { navigation: NavigationProp<any> }) => {
 
           <View style={styles.inputRow}>
             <AntDesign name="clockcircleo" size={24} style={styles.icon} />
-            <TouchableOpacity>
-              <Text style={styles.dateText}>{selectedTime || closestTime}</Text>
+            <TouchableOpacity onPress={showTimePicker}>
+              <Text style={styles.dateText}>
+                {selectedTime || closestTime || "Chọn giờ"}
+              </Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -202,8 +221,15 @@ const OrderScreen = ({ navigation }: { navigation: NavigationProp<any> }) => {
       <DateTimePickerModal
         isVisible={isDatePickerVisible}
         mode="date"
-        onConfirm={handleConfirm}
+        onConfirm={handleDateConfirm}
         onCancel={hideDatePicker}
+      />
+
+      <DateTimePickerModal
+        isVisible={isTimePickerVisible}
+        mode="time"
+        onConfirm={handleTimeConfirm}
+        onCancel={hideTimePicker}
       />
     </>
   );

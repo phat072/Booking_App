@@ -98,7 +98,6 @@ const AccountScreen: React.FC = () => {
       const decodedToken = jwt_decode(token) as DecodedToken;
       
       const userId = decodedToken.userId;
-
       await axios.put(`${API_URL}/address/${userId}`, updatedData, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -129,6 +128,7 @@ const AccountScreen: React.FC = () => {
 
       const decodedToken = jwt_decode(token) as DecodedToken;
       const userId = decodedToken.userId;
+      console.log("Fetched User ID:", userId); // Log userId sau khi giải mã token
       setUserId(userId);
       await fetchAddressData(userId);
     } catch (error) {
