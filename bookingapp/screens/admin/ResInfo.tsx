@@ -9,6 +9,7 @@ import { AntDesign } from "@expo/vector-icons";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import axios from "axios";
 import { StackNavigationProp } from "@react-navigation/stack";
+import Colors from "@/constants/Colors";
 
 // Hàm generateUUID thay thế uuidv4()
 const generateUUID = () => {
@@ -197,14 +198,14 @@ const ResInfo = () => {
             </Text>
           </View>
         ) : (
-          <View style={{ borderWidth: 1, padding: 16, borderColor: "red", marginBottom: 16 }}>
+          <View style={{ borderWidth: 1, padding: 16, borderColor: Colors.primary, marginBottom: 16 }}>
             <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "center" }}>
-              <AntDesign name="warning" size={30} color="red" />
-              <Text style={{ fontSize: 16, color: "red", fontWeight: "bold" }}>Longitude and Latitude are missing!!!</Text>
+              <AntDesign name="warning" size={30} color={Colors.primary} />
+              <Text style={{ fontSize: 16, color: Colors.primary, fontWeight: "bold" }}>Longitude and Latitude are missing!!!</Text>
             </View>
             <TouchableOpacity onPress={() => navigation.goBack()} style={{ flexDirection: "row", marginTop: 12, justifyContent: "center", alignItems: "center" }}>
-              <Text style={{ fontSize: 16, color: "red" }}>Go back to map</Text>
-              <Ionicons name="location-sharp" size={20} color="red" />
+              <Text style={{ fontSize: 16, color: Colors.primary }}>Go back to map</Text>
+              <Ionicons name="location-sharp" size={20} color={Colors.primary} />
             </TouchableOpacity>
           </View>
         )}

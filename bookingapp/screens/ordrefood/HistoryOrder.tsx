@@ -12,6 +12,7 @@ import { UserType } from "@/userContext";
 import { API_URL } from "@env";
 import Status from "@/components/menu/Status";
 import PopUp from "@/components/menu/Popup";
+import Colors from "@/constants/Colors";
 
 interface Order {
   _id: string;
@@ -217,7 +218,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   reorderButton: {
-    backgroundColor: "red",
+    backgroundColor: Colors.primary,
     color: "white",
     padding: 5,
     width: 70,

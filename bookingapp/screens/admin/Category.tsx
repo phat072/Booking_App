@@ -10,6 +10,7 @@ import {
 import { API_URL } from "@env";
 import { Avatar, Button, Icon, Overlay } from "@rneui/themed";
 import { SpeedDial } from "@rneui/themed";
+import Colors from "@/constants/Colors";
 
 // Define types for category and the component state
 interface CategoryItem {
@@ -195,7 +196,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#FF6347",
   },
   selected: {
-    borderColor: "red",
+    borderColor: Colors.primary,
     borderWidth: 2,
     margin: 4,
   },

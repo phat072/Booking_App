@@ -12,6 +12,7 @@ import ChatScreen from "../screens/account/ChatScreen";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Entypo, AntDesign, Ionicons, FontAwesome, MaterialCommunityIcons } from "@expo/vector-icons";
+import Colors from "@/constants/Colors";
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -28,7 +29,7 @@ const HomeStack: React.FC = () => (
       component={ResultScreen}
       options={{
         title: "",
-        headerStyle: { backgroundColor: "red" },
+        headerStyle: { backgroundColor: Colors.primary },
         headerTintColor: "#fff",
         headerTitleAlign: "center",
         headerTitleStyle: { fontWeight: "bold" },
@@ -77,7 +78,7 @@ const AccountStack: React.FC = () => (
       options={{
         headerShown: true,
         title: "Trò chuyện",
-        headerStyle: { backgroundColor: "red" },
+        headerStyle: { backgroundColor: Colors.primary },
         headerTintColor: "#fff",
         headerTitleAlign: "center",
         headerTitleStyle: {
@@ -143,7 +144,7 @@ const BottomTabNavigator: React.FC = () => {
         component={AccountStack}
         options={{
           title: "Account",
-          headerStyle: { backgroundColor: "red" },
+          headerStyle: { backgroundColor: Colors.primary },
           headerTintColor: "#fff",
           headerTitleAlign: "center",
           tabBarLabelStyle: { color: "#008E97" } as TextStyle,

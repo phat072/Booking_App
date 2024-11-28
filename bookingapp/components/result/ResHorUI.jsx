@@ -11,7 +11,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
 import { Entypo } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
-
+import Colors from "@/constants/Colors";
 const RestaurantUI = ({ restaurantData }) => {
   if (
     !restaurantData ||
@@ -42,7 +42,7 @@ const RestaurantUI = ({ restaurantData }) => {
             <View style={styles.infoContainer}>
               <Text style={styles.restaurantName}>{restaurant.name}</Text>
               <View style={styles.row}>
-                <Ionicons name="location-sharp" size={24} color="red" />
+                <Ionicons name="location-sharp" size={24} color={Colors.primary} />
                 <Text style={styles.address}>{restaurant.address}</Text>
               </View>
               <View style={styles.ratingRow}>

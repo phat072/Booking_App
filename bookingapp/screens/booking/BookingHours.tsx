@@ -11,6 +11,7 @@ import {
 import PopUp from "@/components/menu/Popup";
 import { useRoute, RouteProp, useNavigation, NavigationProp } from "@react-navigation/native";
 import { Feather } from "@expo/vector-icons";
+import Colors from "@/constants/Colors";
 
 interface BookingHoursProps {
   restaurant: {
@@ -91,7 +92,7 @@ const BookingHours: React.FC = () => {
                   {
                     backgroundColor:
                       selectedTime === hour
-                        ? "red"
+                        ? Colors.primary
                         : isPastTime(hour)
                         ? "#D0D0D0"
                         : "#ffffff",

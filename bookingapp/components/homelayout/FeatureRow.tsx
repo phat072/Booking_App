@@ -13,6 +13,7 @@ import { themeColors } from "../../theme";
 import RestaurantCard from "../restaurant/RestaurantCard";
 import RestaurantGridLayout from "../restaurant/RestaurantGridLayout";
 import { FeatureScreenNavigationProp } from "../type";
+import Colors from "@/constants/Colors";
 
 const { width } = Dimensions.get("window");
 
@@ -177,7 +178,7 @@ const styles = StyleSheet.create({
   },
   featureButton: {
     padding: 7,
-    backgroundColor: "red",
+    backgroundColor: Colors.primary,
     marginTop: 16,
     borderRadius: 50,
   },

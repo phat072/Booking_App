@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import PopUp from "@/components/menu/Popup";
-
+import Colors from "@/constants/Colors";
 const FilterScreen: React.FC = () => {
   const handleApply = (item: any) => {
     console.log("Applied with item:", item);
@@ -78,7 +78,7 @@ const FilterCategory: React.FC<{ title: string; children: React.ReactNode }> = (
 
 const MoreButton: React.FC = () => (
   <View style={[styles.tag, styles.more]}>
-    <Feather name="more-horizontal" size={24} color="red" />
+    <Feather name="more-horizontal" size={24} color={Colors.primary} />
     <Text style={styles.moreText}>Xem thêm</Text>
   </View>
 );
@@ -119,14 +119,14 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   } as TextStyle,
   red: {
-    backgroundColor: "red",
+    backgroundColor: Colors.primary,
     color: "#FFFFFF",
   } as TextStyle,
   customWidth: {
     width: 100,
   } as TextStyle,
   customStyles: {
-    backgroundColor: "red",
+    backgroundColor: Colors.primary,
     color: "white",
   } as TextStyle,
   more: {

@@ -2,6 +2,7 @@ import React from "react";
 import { View, Text, StyleSheet, TextStyle, ViewStyle } from "react-native";
 import { useNavigation, NavigationProp } from "@react-navigation/native";
 import LottieView from "lottie-react-native";
+import Colors from "@/constants/Colors";
 
 const Success: React.FC = () => {
   const navigation = useNavigation<NavigationProp<any>>();
@@ -61,7 +62,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   } as ViewStyle,
   button: {
-    backgroundColor: "red",
+    backgroundColor: Colors.primary,
     color: "#ffffff",
     fontSize: 17,
     padding: 20,
