@@ -36,7 +36,6 @@ interface DecodedToken {
   userId: string;
 }
 
-
 const AccountScreen: React.FC = () => {
   const navigation = useNavigation<StackNavigationProp<AccountStackParamList>>();
   const { userId, setUserId, user, updateUser } = useContext(UserType);
@@ -98,7 +97,6 @@ const AccountScreen: React.FC = () => {
       const decodedToken = jwt_decode(token) as DecodedToken;
       
       const userId = decodedToken.userId;
-
       await axios.put(`${API_URL}/address/${userId}`, updatedData, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -328,3 +326,4 @@ const styles = StyleSheet.create({
 });
 
 export default AccountScreen;
+

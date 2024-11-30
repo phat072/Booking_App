@@ -5,7 +5,6 @@ import {
   StyleSheet,
   TouchableOpacity,
   ScrollView,
-  Image,
   Modal,
 } from "react-native";
 import { Feather } from "@expo/vector-icons";
@@ -13,32 +12,20 @@ import { UserType } from "@/userContext";
 import { API_URL } from "@env";
 import Status from "@/components/menu/Status";
 import PopUp from "@/components/menu/Popup";
-import Colors from "@/constants/Colors";
 
 interface Order {
   _id: string;
-  restaurant: string;
+  restaurant: { name: string }; // Cập nhật kiểu dữ liệu
   date: string;
   status: string;
   selectedHour: string;
 }
 
-interface Restaurant {
-  name: string;
-  image: string;
-}
-
 const HistoryOrder: React.FC = () => {
   const [orders, setOrders] = useState<Order[]>([]);
-  const [restaurants, setRestaurants] = useState<Record<string, Restaurant>>(
-    {}
-  );
   const { user } = useContext(UserType);
-  const [filteredOrders, setFilteredOrders] = useState<Order[]>([]);
-  const [selectedContentType, setSelectedContentType] = useState<string>(
-    "status"
-  );
   const [selectedStatus, setSelectedStatus] = useState<string>("Tất cả");
+  const [selectedContentType, setSelectedContentType] = useState<string>("status");
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   const status = [
@@ -48,39 +35,22 @@ const HistoryOrder: React.FC = () => {
     "Hoàn thành",
     "Đã hủy",
   ];
-  const services = ["Tất cả", "Đặt chỗ", "Giao hàng", "Tự đến lấy"];
 
+  // Fetch orders only
   useEffect(() => {
     const fetchUserOrders = async () => {
       try {
-        const response = await fetch(`${API_URL}/api/orders/${user._id}`);
+        const response = await fetch(`${API_URL}/order/${user.id}`);
         const data = await response.json();
         if (response.ok) {
-          setOrders(data.orders);
-          setFilteredOrders(data.orders);
-
-          const restaurantIds = Array.from(
-            new Set(data.orders.map((order: Order) => order.restaurant))
-          );
-          const restaurantPromises = restaurantIds.map(async (restaurantId) => {
-            const restaurantResponse = await fetch(
-              `${API_URL}/restaurants/${restaurantId}`
-            );
-            const restaurantData = await restaurantResponse.json();
-            if (restaurantResponse.ok) {
-              setRestaurants((prev) => ({
-                ...prev,
-                [String(restaurantId)]: restaurantData.restaurant,
-              }));
-            } else {
-              console.error(
-                "Error fetching restaurant data:",
-                restaurantData.message
-              );
-            }
-          });
-
-          await Promise.all(restaurantPromises);
+          const formattedOrders = data.orders.map((order: any) => ({
+            ...order,
+            restaurant:
+              typeof order.restaurant === "object"
+                ? order.restaurant
+                : { name: "Unknown" },
+          }));
+          setOrders(formattedOrders);
         } else {
           console.error("Error fetching user orders:", data.message);
         }
@@ -88,35 +58,33 @@ const HistoryOrder: React.FC = () => {
         console.error("Error fetching data:", error.message);
       }
     };
-
+  
     fetchUserOrders();
-  }, [user._id]);
-
+  }, [user.id]); // Sử dụng user.id
+  
   const formatDate = (dateString: string) => {
     const options: Intl.DateTimeFormatOptions = {
       day: "2-digit",
       month: "2-digit",
       year: "numeric",
     };
-
     return new Date(dateString).toLocaleDateString("vi-VN", options);
+  };
+
+  // Filter orders by selected status
+  const getFilteredOrders = (): Order[] => {
+    if (selectedStatus === "Tất cả") {
+      return orders;
+    }
+    return orders.filter((order) => order.status === selectedStatus);
   };
 
   const toggleModal = () => {
     setIsModalVisible(!isModalVisible);
   };
 
-  const filterOrdersByStatus = (status: string) => {
-    if (status === "Tất cả") {
-      setFilteredOrders(orders);
-    } else {
-      setFilteredOrders(orders.filter((order) => order.status === status));
-    }
-  };
-
   const handleStatusPress = (status: string) => {
     setSelectedStatus(status);
-    filterOrdersByStatus(status);
     toggleModal();
   };
 
@@ -130,28 +98,18 @@ const HistoryOrder: React.FC = () => {
       />
 
       <ScrollView style={styles.scrollContainer}>
-        {filteredOrders.map((order) => (
+        {getFilteredOrders().map((order) => (
           <View key={order._id} style={styles.orderCard}>
             <View style={styles.orderHeader}>
-              <View style={styles.orderImageContainer}>
-                {restaurants[order.restaurant] && (
-                  <Image
-                    source={{ uri: restaurants[order.restaurant].image }}
-                    style={styles.orderImage}
-                  />
-                )}
-              </View>
               <View style={styles.orderInfo}>
                 <View style={styles.orderDetails}>
                   <Text style={styles.orderId}>
                     ID: {order._id.substring(0, 11)}
                   </Text>
-                  <Text style={styles.orderDate}>
-                    {formatDate(order.date)}
-                  </Text>
+                  <Text style={styles.orderDate}>{formatDate(order.date)}</Text>
                 </View>
                 <Text style={styles.restaurantName}>
-                  {restaurants[order.restaurant]?.name || "No restaurant found"}
+                  Restaurant: {order.restaurant.name}
                 </Text>
                 <Text style={styles.orderTime}>
                   Thời gian đến: {formatDate(order.date)} {order.selectedHour}
@@ -192,12 +150,6 @@ const HistoryOrder: React.FC = () => {
                     <Text>{item}</Text>
                   </TouchableOpacity>
                 ))}
-              {selectedContentType === "services" &&
-                services.map((item, index) => (
-                  <View key={index} style={styles.statusItem}>
-                    <Text>{item}</Text>
-                  </View>
-                ))}
             </ScrollView>
             <PopUp buttonText="Xác nhận" onPress={toggleModal} />
           </View>
@@ -232,14 +184,6 @@ const styles = StyleSheet.create({
     borderBottomColor: "#ccc",
     paddingBottom: 10,
   },
-  orderImageContainer: {
-    marginRight: 10,
-  },
-  orderImage: {
-    width: 85,
-    height: 85,
-    borderRadius: 5,
-  },
   orderInfo: {
     flex: 1,
   },
@@ -271,7 +215,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   reorderButton: {
-    backgroundColor: Colors.primary,
+    backgroundColor: "red",
     color: "white",
     padding: 5,
     width: 70,
@@ -309,3 +253,4 @@ const styles = StyleSheet.create({
     backgroundColor: "#e0e0e0",
   },
 });
+
