@@ -12,7 +12,6 @@ import { UserType } from "@/userContext";
 import { API_URL } from "@env";
 import Status from "@/components/menu/Status";
 import PopUp from "@/components/menu/Popup";
-import Colors from "@/constants/Colors";
 
 interface Order {
   _id: string;
@@ -25,7 +24,6 @@ interface Order {
 const HistoryOrder: React.FC = () => {
   const [orders, setOrders] = useState<Order[]>([]);
   const { user } = useContext(UserType);
-  console.log("User Context:", user);
   const [selectedStatus, setSelectedStatus] = useState<string>("Tất cả");
   const [selectedContentType, setSelectedContentType] = useState<string>("status");
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -42,7 +40,6 @@ const HistoryOrder: React.FC = () => {
   useEffect(() => {
     const fetchUserOrders = async () => {
       try {
-        console.log("Fetched User ID:", user.id); // Log user.id
         const response = await fetch(`${API_URL}/order/${user.id}`);
         const data = await response.json();
         if (response.ok) {
@@ -218,7 +215,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   reorderButton: {
-    backgroundColor: Colors.primary,
+    backgroundColor: "red",
     color: "white",
     padding: 5,
     width: 70,
@@ -256,3 +253,4 @@ const styles = StyleSheet.create({
     backgroundColor: "#e0e0e0",
   },
 });
+
