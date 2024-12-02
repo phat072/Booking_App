@@ -45,11 +45,19 @@ const ChatScreen: React.FC = () => {
         await axios.post(`${API_URL}/api/chat`, {
           userId: user._id,
           text: newMessage.text,
-          createdAt: newMessage.createdAt.toISOString(), // ISO format for dates
+          createdAt: newMessage.createdAt.toString(), // ISO format for dates
           recipientId, // Dynamic recipientId
         });
       } catch (error) {
-        console.error("Failed to send message:", error.response?.data || error.message);
+        if (axios.isAxiosError(error)) {
+          console.error("Failed to send message:", error.response?.data || error.message);
+        } else {
+          if (error instanceof Error) {
+            console.error("Failed to send message:", error.message);
+          } else {
+            console.error("Failed to send message:", error);
+          }
+        }
       }
     },
     [user._id, recipientId]

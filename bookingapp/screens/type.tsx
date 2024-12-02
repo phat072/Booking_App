@@ -55,18 +55,19 @@ export type OrdersStackParamList = {
     };
   };
 
-  export type AccountStackParamList ={
+  // Define AccountStackParamList properly
+  export type AccountStackParamList = {
     Account: undefined;
     EditAccount: undefined;
-    ChangePassword : undefined;
-    HistoryOrder : undefined;
-    Favourite : undefined;
-    Chat : undefined;
-    BottomSheet : undefined;
-    Privacy : undefined;
-    Login : undefined;
-  }
-
+    ChangePassword: undefined;
+    HistoryOrder: undefined;
+    Favourite: undefined;
+    Chat: { currentUser: { user: { _id: string; name: string }; tokens: { access: { token: string } } } };
+    BottomSheet: undefined;
+    Privacy: undefined;
+    Login: undefined;
+    Annotations: undefined;
+  };
 
   export type CityStackParamList = {
     City: {

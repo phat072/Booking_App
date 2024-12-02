@@ -5,10 +5,7 @@ const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 const nodemailer = require('nodemailer');
 const tokenBlacklist = new Set();
-const catchAsync = require('../utils/catchAsync');
-const  userService  = require('../services/userService');
 const ApiError = require('../utils/apiError');
-const httpStatus = require('http-status');
 
 const sendVerificationEmail = async (email, verificationToken) => {
     // Create a transporter object using the default SMTP transport
@@ -140,8 +137,40 @@ module.exports = {
     //     }
     //     res.send(user);
     // }),
-      
-
+    
+    // Get current user
+    getCurrentUser: async (req, res) => {
+        try {
+            // Get token from Authorization header
+            const token = req.headers.authorization?.split(" ")[1];
+    
+            if (!token) {
+                return res.status(401).json({ message: 'No token provided' });
+            }
+    
+            // Secret key should be the same as the one used to sign the token
+            const secret = process.env.JWT_SECRET || 'your_jwt_secret';  // Replace with actual secret
+    
+            // Verify token and decode it
+            const decoded = jwt.verify(token, secret);
+            const userId = decoded.userId;
+    
+            // Fetch user from database
+            const user = await User.findById(userId);
+            
+            if (!user) {
+                return res.status(404).json({ message: 'User not found' });
+            }
+    
+            res.status(200).json(user);
+        } catch (error) {
+            console.error('Failed to get current user', error);
+            if (error.name === 'JsonWebTokenError') {
+                return res.status(401).json({ message: 'Invalid token' });
+            }
+            res.status(500).json({ message: 'Failed to get current user' });
+        }
+    },
     // Update Address
     updateAddress: async (req, res) => {
         try {

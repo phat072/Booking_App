@@ -236,7 +236,7 @@ const styles = StyleSheet.create({
     borderColor: "#ffffff",
   },
   selectedTab: {
-    backgroundColor: '#ff4757',
+    backgroundColor: Colors.primary,
   },
   tabText: {
     color: "#fff",

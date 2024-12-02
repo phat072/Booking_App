@@ -12,7 +12,11 @@ import {
 import { io, Socket } from "socket.io-client";
 import { API_URL } from "@env";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useNavigation, useRoute } from "@react-navigation/native";
+import { AccountStackParamList } from "../../type"; // Correct import of your types
+import { StackNavigationProp } from "@react-navigation/stack";
 
+// Message and User Types
 interface User {
   id: string;
   name: string;
@@ -25,26 +29,28 @@ interface Message {
   from: string;
 }
 
-interface Props {
-  currentUser: {
-    user: { id: string; name: string };
-    tokens: { access: { token: string } };
-  };
-  navigation: any;
-}
-
-const ChatScreen: React.FC<Props> = ({ currentUser, navigation }) => {
+const ChatScreen: React.FC = () => {
+  const navigation = useNavigation<StackNavigationProp<AccountStackParamList>>();
+  const route = useRoute<any>(); // Use useRoute to access route params
+  const  currentUser  = route.params.currentUser; // Access currentUser from route.params
+  console.log("currentUser: ", currentUser);
   const [currentMessage, setCurrentMessage] = useState<string>("");
   const [messages, setMessages] = useState<Message[]>([]);
   const [users, setUsers] = useState<User[]>([]);
   const [userTo, setUserTo] = useState<string | null>(null);
 
   const socketRef = useRef<Socket | null>(null);
-
+  const [token, setToken] = useState<string | null>(null);
   useEffect(() => {
+    const fetchToken = async () => {
+      const token = await AsyncStorage.getItem("authToken");
+      setToken(token);
+    };
+  
+    fetchToken();
     const fetchUsersAndConnectSocket = async () => {
       try {
-        const token = currentUser.tokens.access.token;
+        const token = await AsyncStorage.getItem("authToken");
         const response = await fetch(`${API_URL}/users`, {
           method: "GET",
           headers: {
@@ -58,7 +64,7 @@ const ChatScreen: React.FC<Props> = ({ currentUser, navigation }) => {
         setUserTo(firstUserId);
 
         const socket = io("http://localhost:8000", {
-          query: { chatID: currentUser.user.id, token },
+          query: { chatID: currentUser.id, token },
         });
 
         socketRef.current = socket;
@@ -87,11 +93,11 @@ const ChatScreen: React.FC<Props> = ({ currentUser, navigation }) => {
     return () => {
       socketRef.current?.disconnect();
     };
-  }, [currentUser.user.id, currentUser.tokens.access.token, userTo]);
+  }, [currentUser.id, token, userTo]);
 
   const handleChatSwitch = async (userId: string) => {
     try {
-      const token = currentUser.tokens.access.token;
+      const token = await AsyncStorage.getItem("authToken");
       const response = await fetch(
         `${API_URL}/messages?userId=${currentUser.user.id}&toId=${userId}`,
         {
@@ -122,7 +128,7 @@ const ChatScreen: React.FC<Props> = ({ currentUser, navigation }) => {
     };
 
     try {
-      const token = currentUser.tokens.access.token;
+      const token = await AsyncStorage.getItem("authToken");
       const response = await fetch(`${API_URL}/messages`, {
         method: "POST",
         headers: {

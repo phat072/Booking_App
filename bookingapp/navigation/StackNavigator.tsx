@@ -32,6 +32,7 @@ import { useNavigation } from '@react-navigation/native';
 import { Ionicons} from "@expo/vector-icons";
 const Stack = createNativeStackNavigator<StackStackParamList>();
 import Colors from "@/constants/Colors";
+import { color } from "react-native-elements/dist/helpers";
 
 const StackNavigator: React.FC = () => {
   return (
@@ -263,7 +264,7 @@ const CustomHeader = () => {
 
 const styles = StyleSheet.create({
   customHeader: {
-    backgroundColor: "#ff4757", // Màu nền đỏ cho container title
+    backgroundColor: Colors.primary, // Màu nền đỏ cho container title
     paddingVertical: 20,    // Điều chỉnh padding cho chiều dọc
     alignItems: "center",   // Căn giữa theo chiều ngang
     justifyContent: "center", // Căn giữa theo chiều dọc

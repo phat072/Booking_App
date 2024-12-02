@@ -14,6 +14,7 @@ import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { OrdersStackParamList } from "@/screens/type"; // Thay đổi đường dẫn này theo cấu trúc project
 import { API_URL } from "@env";
+import Colors from "@/constants/Colors";
 
 type SearchScreenNavigationProp = StackNavigationProp<
   OrdersStackParamList,
@@ -126,7 +127,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#ffffff",
   },
   titleContainer: {
-    backgroundColor: "#ff4757", // Màu nền đỏ cho container title
+    backgroundColor: Colors.primary, // Màu nền đỏ cho container title
     paddingVertical: 20,    // Padding cho chiều dọc
     alignItems: "center",   // Căn giữa theo chiều ngang
     justifyContent: "center", // Căn giữa theo chiều dọc
@@ -150,7 +151,7 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   searchButton: {
-    backgroundColor: "#ff4757",
+    backgroundColor: Colors.primary,
     paddingVertical: 12,
     borderRadius: 8,
     alignItems: "center",

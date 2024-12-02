@@ -21,6 +21,7 @@ import ProfileTile from "@/components/profileTitle/ProfileTitle";
 import { API_URL } from "@env";
 import { AccountStackParamList } from "../type";
 import { StackNavigationProp } from "@react-navigation/stack";
+import Colors from "@/constants/Colors";
 
 interface Address {
   avatar?: string;
@@ -217,7 +218,8 @@ const AccountScreen: React.FC = () => {
                 title="Chat"
                 icon="chatbox-outline"
                 font={1}
-                onPress={() => navigation.navigate("Chat")}
+                onPress={() => navigation.navigate('Chat', { currentUser: user })}
+
               />
               <ProfileTile
                 title="Mời bạn bè"
@@ -247,7 +249,7 @@ const AccountScreen: React.FC = () => {
 
 const styles = StyleSheet.create({
   titleContainer: {
-    backgroundColor: "#ff4757", // Màu nền đỏ cho container title
+    backgroundColor: Colors.primary, // Màu nền đỏ cho container title
     paddingVertical: 20,    // Điều chỉnh padding cho chiều dọc
     alignItems: "center",   // Căn giữa theo chiều ngang
     justifyContent: "center", // Căn giữa theo chiều dọc
@@ -307,7 +309,7 @@ const styles = StyleSheet.create({
     paddingBottom: 60, // Tăng thêm padding dưới để không bị cắt dòng footer
   },
   logoutButton: {
-    backgroundColor: "#ff4757",
+    backgroundColor: Colors.primary,
     padding: 15,
     borderRadius: 8,
     width: "60%",

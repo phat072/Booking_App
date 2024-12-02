@@ -7,8 +7,8 @@ import ResultScreen from "../screens/result/ResultScreen";
 import RestaurantDetail from "../screens/restaurant/RestaurantDetail";
 import MapScreen from '../screens/map/MapScreen'
 import FeatureScreen from "../screens/feature/FeatureScreen";
-import ChatScreen from "../screens/account/ChatScreen";
-// import ChatScreen from "../screens/account/message/Chat";
+// import ChatScreen from "../screens/account/ChatScreen";
+import ChatScreen from "../screens/account/message/Chat";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Entypo, AntDesign, Ionicons, FontAwesome, MaterialCommunityIcons } from "@expo/vector-icons";
