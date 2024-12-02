@@ -1,4 +1,3 @@
-const { get } = require("mongoose");
 const Order = require("../models/order");
 const Restaurant = require("../models/restaurant");
 const User = require("../models/user");

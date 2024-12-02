@@ -1,7 +1,5 @@
 const mongoose = require("mongoose");
 const { roles } = require('../configs/roles');
-
-const { toJSON, paginate } = require('./plugin');
 const userSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -72,6 +70,30 @@ const userSchema = new mongoose.Schema({
       index: "2dsphere",
     },
   },
+  requests: [
+    {
+      from: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: true,
+      },
+      message: {
+        type: String,
+        required: true,
+      },
+      status: {
+        type: String,
+        enum: ['pending', 'accepted', 'rejected'],
+        default: 'pending',
+      },
+    },
+  ],
+  friends: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+    },
+  ],
 });
 
 // Pre-save middleware to set the role based on the admin field
@@ -84,9 +106,6 @@ userSchema.pre('save', function (next) {
   next();
 });
 
-// add plugin that converts mongoose to json
-userSchema.plugin(toJSON);
-userSchema.plugin(paginate);
 
 const User = mongoose.model("User", userSchema);
 

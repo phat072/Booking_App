@@ -41,9 +41,14 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.use("/", routes);
 
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
-});
+// app.listen(port, () => {
+//   console.log(`Server is running on port ${port}`);
+// });
 
 // Initialize Socket.IO with the server
 socketSetup(server);
+
+server.listen(port, () => {
+  console.log(`HTTP server running on port ${port}`);
+  console.log(`WebSocket (Socket.IO) server is accessible at ws://localhost:${port}`);
+});

@@ -5,7 +5,6 @@ const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 const nodemailer = require('nodemailer');
 const tokenBlacklist = new Set();
-const ApiError = require('../utils/apiError');
 
 const sendVerificationEmail = async (email, verificationToken) => {
     // Create a transporter object using the default SMTP transport
@@ -124,6 +123,20 @@ module.exports = {
         } catch (error) {
             console.error('Failed to logout user', error);
             res.status(500).json({ message: 'Failed to logout user' });
+        }
+    },
+
+    getUserById: async (req, res) => {
+        try {
+            const userId = req.params.userId;
+            const user = await User.findById(userId);
+            if (!user) {
+                return res.status(404).json({ message: 'User not found' });
+            }
+            res.status(200).json(user);
+        } catch (error) {
+            console.error('Failed to get user by id', error);
+            res.status(500).json({ message: 'Failed to get user by id' });
         }
     },
 

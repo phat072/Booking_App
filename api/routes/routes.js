@@ -11,12 +11,6 @@ const GeospatialController = require('../controllers/geospatialController');
 const ChatController = require('../controllers/chatController');
 
 
-const authenticate = require('../middleware/authenticate');
-const validate = require('../middleware/validate');
-const messageValidation = require('../validations/messageValidation');
-const messageController = require('../controllers/messageController');
-
-
 // User routes
 router.post("/register", userController.register);
 router.get("/verify/:token", userController.verifyEmail);
@@ -26,9 +20,10 @@ router.put("/address/:userId", userController.updateAddress);
 router.get("/address/:userId", userController.getUserAddress);
 router.put("/change-password/:userId", userController.changePassword);
 router.get("/user", userController.getCurrentUser);
+router.get("/users/:userId", userController.getUserById);
 
 // Admin routes
-router.get("/users/:userId", adminController.getUserById);
+// router.get("/users/:userId", adminController.getUserById);
 router.get("/users", adminController.getUsers);
 router.delete("/users/:userId", adminController.deleteUserById);
 router.put("/users/:userId", adminController.updateUserById);
@@ -81,20 +76,7 @@ router.get('/api/chat', ChatController.getAllChats);
 router.post('/api/chat', ChatController.postChatMessage)
 router.get('/api/chat/:userId', ChatController.getUserChats)
 
-// Message routes (Explicit integration)
-router
-  .route('/messages')
-  .post(authenticate('sendMessages'), validate(messageValidation.createMessage), messageController.createMessage)
-  .get(authenticate('getMessages'), validate(messageValidation.getMessagesByUserId), messageController.getMessagesByUserId);
 
-router
-  .route('/messages/:messageId')
-  .get(authenticate('getMessages'), validate(messageValidation.getMessage), messageController.getMessage)
-  .patch(authenticate('manageMessages'), validate(messageValidation.updateMessage), messageController.updateMessage)
-  .delete(authenticate('manageMessages'), validate(messageValidation.deleteMessage), messageController.deleteMessage);
-
-
-// message routes
 module.exports = router;
 
 

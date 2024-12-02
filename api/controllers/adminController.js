@@ -1,24 +1,21 @@
 const User = require("../models/user");
-const { pick } = require('lodash');
-const catchAsync = require('../utils/catchAsync');
-const  userService  = require('../services/userService');
 
 
-const adminController = {
+module.exports  = {
         // Get user by id
-        getUserById: async (req, res) => {
-            try {
-                const userId = req.params.userId;
-                const user = await User.findById(userId);
-                if (!user) {
-                    return res.status(404).json({ message: 'User not found' });
-                }
-                res.status(200).json(user);
-            } catch (error) {
-                console.error('Failed to get user by id', error);
-                res.status(500).json({ message: 'Failed to get user by id' });
-            }
-        },
+        // getUserById: async (req, res) => {
+        //     try {
+        //         const userId = req.params.userId;
+        //         const user = await User.findById(userId);
+        //         if (!user) {
+        //             return res.status(404).json({ message: 'User not found' });
+        //         }
+        //         res.status(200).json(user);
+        //     } catch (error) {
+        //         console.error('Failed to get user by id', error);
+        //         res.status(500).json({ message: 'Failed to get user by id' });
+        //     }
+        // },
     
         // Get all users
         getUsers: async (req, res) => {
@@ -63,4 +60,3 @@ const adminController = {
         },
 };
 
-module.exports = adminController;

@@ -33,7 +33,7 @@ const ChatScreen: React.FC = () => {
   const navigation = useNavigation<StackNavigationProp<AccountStackParamList>>();
   const route = useRoute<any>(); // Use useRoute to access route params
   const  currentUser  = route.params.currentUser; // Access currentUser from route.params
-  console.log("currentUser: ", currentUser);
+  // console.log("currentUser: ", currentUser);
   const [currentMessage, setCurrentMessage] = useState<string>("");
   const [messages, setMessages] = useState<Message[]>([]);
   const [users, setUsers] = useState<User[]>([]);
@@ -44,6 +44,7 @@ const ChatScreen: React.FC = () => {
   useEffect(() => {
     const fetchToken = async () => {
       const token = await AsyncStorage.getItem("authToken");
+      console.log("Token:", token);
       setToken(token);
     };
   
@@ -58,6 +59,9 @@ const ChatScreen: React.FC = () => {
           },
         });
 
+        if (!response.ok) {
+          console.error("Error fetching users:", response.statusText);
+        }
         const data = await response.json();
         const firstUserId = data.results[0]?.id || null;
         setUsers(data.results);
