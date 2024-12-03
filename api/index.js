@@ -1,6 +1,6 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-const connectedDB = require('./configs/database'); 
+const connectedDB = require('./configs/database');
 const cors = require("cors");
 const routes = require("./routes/routes");
 const swaggerUi = require("swagger-ui-express");
@@ -9,8 +9,10 @@ const http = require("http");
 const socketSetup = require("./sockets/socketSetup"); // Import your socket setup
 
 const app = express();
-const server = http.createServer(app);    
+const server = http.createServer(app);    // This is your HTTP server for the Express app
+const socketServer = http.createServer(); // Separate socket server
 const port = 8000;
+const socketPort = 3000;
 
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -41,14 +43,13 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.use("/", routes);
 
-// app.listen(port, () => {
-//   console.log(`Server is running on port ${port}`);
-// });
-
-// Initialize Socket.IO with the server
-socketSetup(server);
-
 server.listen(port, () => {
-  console.log(`HTTP server running on port ${port}`);
-  console.log(`WebSocket (Socket.IO) server is accessible at ws://localhost:${port}`);
+  console.log(`Server is running on port ${port}`);
+});
+
+// Initialize Socket.IO with the socket server
+socketSetup(socketServer);
+
+socketServer.listen(socketPort, () => {
+  console.log(`Socket.IO server is running on port ${socketPort}`);
 });

@@ -1,21 +1,82 @@
-import React from "react";
+import React, { useContext, useEffect } from 'react';
 import { View, TextInput, TouchableOpacity, TextInputProps, ViewStyle, TextStyle } from "react-native";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { Entypo, AntDesign, Ionicons, FontAwesome, MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
+import Colors from "@/constants/Colors";
+
+// Screens import
 import HomeScreen from "../screens/home/HomeScreen";
 import SearchScreen from "../screens/search/SearchScreen";
 import AccountScreen from "../screens/account/Account";
 import ResultScreen from "../screens/result/ResultScreen";
 import RestaurantDetail from "../screens/restaurant/RestaurantDetail";
-import MapScreen from '../screens/map/MapScreen'
+import MapScreen from '../screens/map/MapScreen';
 import FeatureScreen from "../screens/feature/FeatureScreen";
-// import ChatScreen from "../screens/account/ChatScreen";
-import ChatScreen from "../screens/account/message/Chat";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { Entypo, AntDesign, Ionicons, FontAwesome, MaterialCommunityIcons } from "@expo/vector-icons";
-import Colors from "@/constants/Colors";
+import ChatScreen from "../screens/account/message/ChatScreen";
+import ProfileScreen from '@/screens/account/message/ProfileScreen';
+import RequestChatRoom from '@/screens/account/message/RequestChatRoom';
+import ChatRoom from '@/screens/account/message/ChatRoom';
+import PeopleScreen from '@/screens/account/message/PeopleScreen';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
+
+function BottomTabs() {
+  return (
+    <Tab.Navigator>
+      <Tab.Screen
+        name="Chat"
+        component={ChatScreen}
+        options={{
+          tabBarStyle: { backgroundColor: '#101010' },
+          headerShown: false,
+          tabBarIcon: ({ focused }) => (
+            <MaterialIcons
+              name="chat-bubble-outline"
+              size={30}
+              color={focused ? 'white' : '#989898'}
+            />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Profile"
+        component={ProfileScreen}
+        options={{
+          tabBarStyle: { backgroundColor: '#101010' },
+          headerShown: false,
+          tabBarIcon: ({ focused }) => (
+            <Ionicons
+              name="person-outline"
+              size={30}
+              color={focused ? 'white' : '#989898'}
+            />
+          ),
+        }}
+      />
+    </Tab.Navigator>
+  );
+}
+
+function Chat() {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        name="Main"
+        component={BottomTabs}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="People"
+        component={PeopleScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen name="Request" component={RequestChatRoom} />
+      <Stack.Screen name="ChatRoom" component={ChatRoom} />
+    </Stack.Navigator>
+  );
+}
 
 const HomeStack: React.FC = () => (
   <Stack.Navigator>
@@ -42,7 +103,7 @@ const HomeStack: React.FC = () => (
         headerShown: true,
         headerTitleAlign: "center",
         headerTintColor: "white",
-        headerTitleStyle: { fontWeight: "bold"},
+        headerTitleStyle: { fontWeight: "bold" },
         headerTransparent: true,
       }}
     />
@@ -56,39 +117,31 @@ const HomeStack: React.FC = () => (
         headerTitleStyle: { fontWeight: "bold" },
         headerTransparent: true,
       }}
-    /> 
+    />
   </Stack.Navigator>
 );
 
-const AccountStack: React.FC = () => (
-  <Stack.Navigator>
-   <Stack.Screen
-       name="AccountScreen"
-      component={AccountScreen}
-       options={{
-        title: "Tài khoản",
-        headerTintColor: "#fff",
-        headerTitleAlign: "center",
-        headerShown: false,
-      }}
-    />
-     <Stack.Screen
-      name="Chat"
-      component={ChatScreen}
-      options={{
-        headerShown: true,
-        title: "Trò chuyện",
-        headerStyle: { backgroundColor: Colors.primary },
-        headerTintColor: "#fff",
-        headerTitleAlign: "center",
-        headerTitleStyle: {
-          fontWeight: "bold",
-        },
-      }}
-    />
-
-   </Stack.Navigator>
- );
+const AccountStack: React.FC = () => {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        name="AccountScreen"
+        component={AccountScreen}
+        options={{
+          title: "Tài khoản",
+          headerTintColor: "#fff",
+          headerTitleAlign: "center",
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="Chat"
+        component={Chat}
+        options={{ headerShown: false }} 
+      />
+    </Stack.Navigator>
+  );
+};
 
 const BottomTabNavigator: React.FC = () => {
   return (
@@ -108,9 +161,9 @@ const BottomTabNavigator: React.FC = () => {
             ),
         }}
       />
-            <Tab.Screen
+      <Tab.Screen
         name="MapScreen"
-        component={MapScreen} // Thêm màn hình MapScreen
+        component={MapScreen}
         options={{
           tabBarLabel: "Map",
           tabBarLabelStyle: { color: "#008E97" } as TextStyle,
@@ -123,10 +176,10 @@ const BottomTabNavigator: React.FC = () => {
             ),
         }}
       />
-       <Tab.Screen
+      <Tab.Screen
         name="Search"
         component={SearchScreen}
-        options={({ navigation }) => ({
+        options={{
           tabBarLabelStyle: { color: "#008E97" } as TextStyle,
           title: "Search",
           headerShown: false,
@@ -136,8 +189,7 @@ const BottomTabNavigator: React.FC = () => {
             ) : (
               <FontAwesome name="search" size={24} color="#7E7E80" />
             ),
- 
-        })}
+        }}
       />
       <Tab.Screen
         name="AccountTab"
@@ -156,7 +208,7 @@ const BottomTabNavigator: React.FC = () => {
               <MaterialCommunityIcons name="account" size={24} color="#7E7E80" />
             ),
         }}
-      /> 
+      />
     </Tab.Navigator>
   );
 };

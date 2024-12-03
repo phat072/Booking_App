@@ -20,6 +20,6 @@
     "nativewind-env.d.ts",
     "components/*",
     "screens/*",
-    "hooks/*",
+    "hooks/*"
   ]
 }

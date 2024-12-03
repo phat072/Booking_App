@@ -39,3 +39,14 @@ export interface SearchBarProps {
   searchPhrase: string;
   setSearchPhrase: (phrase: string) => void;
 }
+
+
+export type ChatRootStackParamList = {
+  ChatScreen: undefined;
+  Login: undefined;
+  People: undefined;
+  ChatRoom: { name: string; receiverId: string; image: string }; 
+  Request: { name: string; receiverId: string };
+};
+
+export type ChatNavigationProp = StackNavigationProp<ChatRootStackParamList, "ChatScreen">;

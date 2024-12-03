@@ -10,6 +10,15 @@ export type HomeAdminRootStackParamList = {
 
 export type HomeAdminNavigationProp = StackNavigationProp<HomeAdminRootStackParamList, "HomeAdmin">;
 
+export type ChatRootStackParamList = {
+  ChatScreen: undefined;
+  Login: undefined;
+  People: undefined;
+  AccountTab: undefined;
+};
+
+export type ChatNavigationProp = StackNavigationProp<ChatRootStackParamList, "ChatScreen">;
+
 export type OrdersStackParamList = {
     Home: undefined;
     Orders: undefined;

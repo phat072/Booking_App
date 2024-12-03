@@ -9,7 +9,7 @@ const FeatureController = require('../controllers/featureController');
 const CategoryController = require('../controllers/categoryController');
 const GeospatialController = require('../controllers/geospatialController');
 const ChatController = require('../controllers/chatController');
-
+const MessageController = require('../controllers/messageController');
 
 // User routes
 router.post("/register", userController.register);
@@ -77,6 +77,12 @@ router.post('/api/chat', ChatController.postChatMessage)
 router.get('/api/chat/:userId', ChatController.getUserChats)
 
 
-module.exports = router;
+router.post('/request', MessageController.SendRequest);
+router.get('/requests/:userId', MessageController.GetRequests);
+router.post('/request/accept', MessageController.AcceptRequest);
+router.post('/sendMessage', MessageController.SendMessage);
+router.get('/messages', MessageController.GetMessages);
 
+
+module.exports = router;
 
