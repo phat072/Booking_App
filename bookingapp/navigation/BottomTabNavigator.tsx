@@ -1,5 +1,5 @@
-import React, { useContext, useEffect } from 'react';
-import { View, TextInput, TouchableOpacity, TextInputProps, ViewStyle, TextStyle } from "react-native";
+import React from 'react';
+import { Text, TextStyle } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Entypo, AntDesign, Ionicons, FontAwesome, MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
@@ -29,14 +29,17 @@ function BottomTabs() {
         name="Chat"
         component={ChatScreen}
         options={{
-          tabBarStyle: { backgroundColor: '#101010' },
+          tabBarStyle: { backgroundColor: 'white'},
           headerShown: false,
           tabBarIcon: ({ focused }) => (
             <MaterialIcons
               name="chat-bubble-outline"
               size={30}
-              color={focused ? 'white' : '#989898'}
+              color={focused ? '#ff4757' : '#989898'}
             />
+          ),
+          tabBarLabel: ({ focused }) => (
+            <Text style={{ color: focused ? '#ff4757' : '#989898' }}>Profile</Text>
           ),
         }}
       />
@@ -44,14 +47,17 @@ function BottomTabs() {
         name="Profile"
         component={ProfileScreen}
         options={{
-          tabBarStyle: { backgroundColor: '#101010' },
+          tabBarStyle: { backgroundColor: 'white' },
           headerShown: false,
           tabBarIcon: ({ focused }) => (
             <Ionicons
               name="person-outline"
               size={30}
-              color={focused ? 'white' : '#989898'}
+              color={focused ? '#ff4757' : '#989898'}
             />
+          ),
+          tabBarLabel: ({ focused }) => (
+            <Text style={{ color: focused ? '#ff4757' : '#989898' }}>Profile</Text>
           ),
         }}
       />
@@ -59,7 +65,7 @@ function BottomTabs() {
   );
 }
 
-function Chat() {
+export function Chat() {
   return (
     <Stack.Navigator>
       <Stack.Screen
@@ -133,11 +139,6 @@ const AccountStack: React.FC = () => {
           headerTitleAlign: "center",
           headerShown: false,
         }}
-      />
-      <Stack.Screen
-        name="Chat"
-        component={Chat}
-        options={{ headerShown: false }} 
       />
     </Stack.Navigator>
   );

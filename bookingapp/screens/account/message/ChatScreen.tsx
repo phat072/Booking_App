@@ -114,6 +114,11 @@ const ChatScreen: React.FC = () => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
+        {/* Back Button */}
+        <Pressable onPress={() => navigation.goBack()} style={styles.backButton}>
+          <AntDesign name="arrowleft" size={26} color="black" />
+        </Pressable>
+
         <Pressable onPress={changetoaccount}>
           <Image
             style={styles.profileImage}
@@ -278,4 +283,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: 'white',
   },
+  backButton:{
+    marginRight: 'auto',
+  }
 });

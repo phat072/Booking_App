@@ -32,7 +32,7 @@ import { useNavigation } from '@react-navigation/native';
 import { Ionicons} from "@expo/vector-icons";
 const Stack = createNativeStackNavigator<StackStackParamList>();
 import Colors from "@/constants/Colors";
-import { color } from "react-native-elements/dist/helpers";
+import { Chat } from "./BottomTabNavigator";
 
 const StackNavigator: React.FC = () => {
   return (
@@ -206,6 +206,11 @@ const StackNavigator: React.FC = () => {
               fontWeight: "bold",
             },
           }}
+        />
+        <Stack.Screen
+          name="Chat"
+          component={Chat}
+          options={{ headerShown: false }} 
         />
         <Stack.Screen
           name="Filter"

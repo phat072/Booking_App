@@ -71,7 +71,6 @@ export type OrdersStackParamList = {
     ChangePassword: undefined;
     HistoryOrder: undefined;
     Favourite: undefined;
-    Chat: { currentUser: { user: { _id: string; name: string }; tokens: { access: { token: string } } } };
     BottomSheet: undefined;
     Privacy: undefined;
     Login: undefined;
@@ -128,6 +127,7 @@ export type OrdersStackParamList = {
     ListMenuRes : undefined;
     Order : undefined;
     Favourite : undefined;
+    Chat: undefined;
   };
 
 export type AdminStackParamList = {
