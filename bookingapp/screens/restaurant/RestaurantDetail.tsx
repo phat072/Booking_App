@@ -14,7 +14,6 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 import axios from "axios";
 import MenuTab from "./Menutab";
 import NetworkImage from "@/components/networkImage/NetworkImage";
-import PopUp from "@/components/menu/Popup";
 import Colors from "@/constants/Colors";
 import { UserType } from "@/userContext";
 import { API_URL } from "@env";
@@ -55,11 +54,20 @@ const RestaurantDetail: React.FC = () => {
           <TouchableOpacity style={styles.roundButton}>
             <Ionicons name="share-outline" size={18} color={"#000"} />
           </TouchableOpacity>
-          <TouchableOpacity onPress={handleFavoritePress} style={styles.roundButton}>
+          <TouchableOpacity 
+            onPress={() => {
+              if (isFavorite) {
+                handleRemoveFavoritePress(userId, restaurantId);
+              } else {
+                handleFavoritePress(userId, restaurantId);
+              }
+            }} 
+            style={styles.roundButton}
+          >
             <Ionicons
               name={isFavorite ? "heart" : "heart-outline"}
               size={20}
-              color={isFavorite ? Colors.primary : "black"}
+              color={isFavorite ? Colors.primary : "#ff08ea"}
             />
           </TouchableOpacity>
         </View>
@@ -77,12 +85,11 @@ const RestaurantDetail: React.FC = () => {
     checkFavoriteStatus();
   }, [user, restaurantId]);
 
-  const handleFavoritePress = async () => {
+  const handleFavoritePress = async (userId: string, restaurantId: string) => {
     try {
-      const response = await axios.post(`${API_URL}/addToFavorites`, {
-        userId,
-        restaurantId,
-      });
+      const response = await axios.post(`${API_URL}/favorite/${userId}`, {
+        restaurantId,  // Pass restaurantId in the body
+    });
 
       if (response.status === 200) {
         if (response.data.message === "Restaurant already in favorites") {
@@ -104,6 +111,31 @@ const RestaurantDetail: React.FC = () => {
       console.error("Error handling favorite:", error);
     }
   };
+
+  const handleRemoveFavoritePress = async (userId: string, restaurantId: string) => {
+    try {
+      const response = await axios.post(`${API_URL}/remove-favorite/${userId}`, {
+        restaurantId,  // Pass restaurantId in the body
+      });
+  
+      if (response.status === 200) {
+        setIsFavorite(false);  // Update the local state to reflect the removal
+        updateUser((prevUser: any) => ({
+          ...prevUser,
+          favoriteRestaurants: prevUser.favoriteRestaurants.filter(
+            (id: string) => id !== restaurantId
+          ),
+        }));
+        Alert.alert("Thông báo", "Nhà hàng đã được loại bỏ khỏi danh sách yêu thích");
+      } else {
+        console.warn("Error removing from favorites");
+      }
+    } catch (error) {
+      console.error("Error handling remove favorite:", error);
+      Alert.alert("Lỗi", "Không thể loại bỏ nhà hàng khỏi danh sách yêu thích");
+    }
+  };
+    
 
   const toggleModal = () => {
     setIsModalVisible(!isModalVisible);

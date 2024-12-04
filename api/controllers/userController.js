@@ -230,18 +230,25 @@ module.exports = {
     // Add to favorite restaurants
     addToFavoriteRestaurants: async (req, res) => {
         try {
-            const { userId, restaurantId } = req.body;
+            const { userId } = req.params;  // Get userId from the URL parameters
+            const { restaurantId } = req.body;  // Get restaurantId from the request body
+    
+            // Find the user by userId
             const user = await User.findById(userId);
             if (!user) {
                 return res.status(404).json({ message: 'User not found' });
             }
-
+    
             // Check if the restaurant is already in the favorite list
             if (user.favoriteRestaurants.includes(restaurantId)) {
                 return res.status(400).json({ message: 'Restaurant already in favorite list' });
             }
+    
+            // Add the restaurantId to the favoriteRestaurants array
             user.favoriteRestaurants.push(restaurantId);
-            await user.save();
+            await user.save();  // Save the updated user
+    
+            // Respond with a success message
             res.status(200).json({ message: "Added to favorites successfully" });
         } catch (error) {
             console.error('Failed to add to favorite restaurants', error);
@@ -252,7 +259,8 @@ module.exports = {
     // Remove from favorite restaurants
     removeFromFavoriteRestaurants: async (req, res) => {
         try {
-            const { userId, restaurantId } = req.body;
+            const { userId } = req.params;  
+            const { restaurantId } = req.body;  
             const user = await User.findById(userId);
             if (!user) {
                 return res.status(404).json({ message: 'User not found' });

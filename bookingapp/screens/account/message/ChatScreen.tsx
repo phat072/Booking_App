@@ -169,20 +169,14 @@ const ChatScreen: React.FC = () => {
         {options.includes('Requests') && (
           <View style={styles.requestsContainer}>
             <Text style={styles.requestsTitle}>Checkout all the requests</Text>
-            {requests.map((item) => (
-              <Pressable key={item.from._id} style={styles.requestItem}>
-                <Image
-                  source={{ uri: item.from.image }}
-                  style={styles.requestImage}
-                />
+            {requests.map((item, index) => (
+              <Pressable key={`${item.from._id}-${index}`} style={styles.requestItem}>
+                <Image source={{ uri: item.from.image }} style={styles.requestImage} />
                 <View style={styles.requestDetails}>
                   <Text style={styles.requestName}>{item.from.name}</Text>
                   <Text style={styles.requestMessage}>{item.message}</Text>
                 </View>
-                <Pressable
-                  onPress={() => acceptRequest(item.from._id)}
-                  style={styles.acceptButton}
-                >
+                <Pressable onPress={() => acceptRequest(item.from._id)} style={styles.acceptButton}>
                   <Text style={styles.acceptButtonText}>Accept</Text>
                 </Pressable>
                 <AntDesign name="delete" size={26} color="red" />

@@ -8,7 +8,6 @@ const RestaurantController = require('../controllers/restaurantController');
 const FeatureController = require('../controllers/featureController');
 const CategoryController = require('../controllers/categoryController');
 const GeospatialController = require('../controllers/geospatialController');
-const ChatController = require('../controllers/chatController');
 const MessageController = require('../controllers/messageController');
 
 // User routes
@@ -47,7 +46,7 @@ router.get("/restaurants", RestaurantController.getAllRestaurants);
 router.get("/restaurants/:restaurantId", RestaurantController.getRestaurantsById);
 router.get("/restaurants/categories/:categoryId", RestaurantController.getRestaurantsByCategory);
 router.get("/restaurants/search/:keyword", RestaurantController.searchRestaurants);
-router.post("/restaurants/:restaurantId/suggestions", RestaurantController.addSuggestion); // New route for adding suggestions
+router.post("/restaurants/:restaurantId/suggestions", RestaurantController.addSuggestion); 
 router.post("/restaurants/:restaurantId/suggestions/:suggestionId/items", RestaurantController.addComboOrMeal);
 
 // Feature Routes
@@ -70,11 +69,6 @@ router.get('/restaurants-in-circle', GeospatialController.getRestaurantsInCircle
 // router.delete("/admin/:userId", AdminController.deleteUser);
 // router.put('/admin/:userId', AdminController.editUser); // Route cho editUser
 
-
-// chat routes 
-router.get('/api/chat', ChatController.getAllChats);
-router.post('/api/chat', ChatController.postChatMessage)
-router.get('/api/chat/:userId', ChatController.getUserChats)
 
 
 router.post('/request', MessageController.SendRequest);

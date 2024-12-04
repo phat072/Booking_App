@@ -8,13 +8,19 @@ module.exports = {
       console.log(senderId);
       console.log(receiverId);
       console.log(message);
+
+      const request = {
+        from: senderId, 
+        message,
+        requestId: new mongoose.Types.ObjectId()  // Add a unique requestId here if needed
+      };
     
       const receiver = await User.findById(receiverId);
       if (!receiver) {
         return res.status(404).json({message: 'Receiver not found'});
       }
     
-      receiver.requests.push({from: senderId, message});
+      receiver.requests.push(request);
       await receiver.save();
     
       res.status(200).json({message: 'Request sent succesfully'});
