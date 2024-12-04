@@ -43,11 +43,14 @@ const ChatScreen: React.FC = () => {
   const navigation = useNavigation<ChatNavigationProp>();
 
   const chooseOption = (option: string) => {
-    if (options.includes(option)) {
-      setOptions(options.filter(c => c !== option));
-    } else {
-      setOptions([...options, option]);
-    }
+    console.log("Clicked option:", option);
+    setOptions(prevOptions => {
+      if (prevOptions.includes(option)) {
+        return prevOptions.filter(c => c !== option);
+      } else {
+        return [...prevOptions, option];
+      }
+    });
   };
 
   const changetoaccount = () => {
@@ -143,19 +146,15 @@ const ChatScreen: React.FC = () => {
       </View>
 
       <View style={styles.content}>
-        <Pressable
-          onPress={() => chooseOption('Chats')}
-          style={styles.optionHeader}
-        >
+      <Pressable onPress={() => chooseOption('Chats')} style={styles.optionHeader}>
           <Text>Chats</Text>
           <Entypo name="chevron-small-down" size={26} color="black" />
-        </Pressable>
-
+      </Pressable>
         {options.includes('Chats') && chats.length > 0 ? (
           <View>
             {chats.map((item) => {
               console.log('item', item);
-              return <Chat key={item._id} item={item} />;
+              return <Chat key={item?._id} item={item} />;
             })}
           </View>
         ) : (

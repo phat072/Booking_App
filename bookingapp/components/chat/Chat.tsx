@@ -30,11 +30,12 @@ const Chat: React.FC<ChatProps> = ({ item }) => {
   const friendId = item?._id;
   const fetchMessages = async () => {
     try {
-      if (!userId || friendId) return; // Prevent fetch if no userId or item._id
+      const senderId = userId;
+      const receiverId = item?._id;
 
       setLoading(true);
       const response = await axios.get(`${API_URL}/messages`, {
-        params: { userId, friendId }, 
+        params: { senderId, receiverId }, 
       });
 
       setMessages(response.data);
@@ -46,10 +47,10 @@ const Chat: React.FC<ChatProps> = ({ item }) => {
       setLoading(false);
     }
   };
-
+  console.log("messages",messages)
   useEffect(() => {
     fetchMessages();
-  }, [userId, friendId]); // Ensure it only triggers when these change
+  }, []);
 
   const getLastMessage = (): Message | undefined => {
     const n = messages.length;

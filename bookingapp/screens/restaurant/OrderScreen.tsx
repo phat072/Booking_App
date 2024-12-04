@@ -110,7 +110,7 @@ const OrderScreen = ({ navigation }: { navigation: NavigationProp<any> }) => {
 
       // Make sure to pass userId and restaurantId correctly
       const orderData = {
-        userId: user.id, // Make sure `user.id` is properly set
+        userId: user._id, // Make sure `user.id` is properly set
         restaurantId: restaurant._id, // Ensure this is correctly passed
         adults: parseInt(adults),
         children: parseInt(children),

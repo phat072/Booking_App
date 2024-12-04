@@ -1,19 +1,21 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-const connectedDB = require('./configs/database');
+const connectedDB = require("./configs/database");
 const cors = require("cors");
 const routes = require("./routes/routes");
 const swaggerUi = require("swagger-ui-express");
 const swaggerJsdoc = require("swagger-jsdoc");
 const http = require("http");
-const socketSetup = require("./sockets/socketSetup"); // Import your socket setup
+const socketSetup = require("./sockets/socketSetup");
 
 const app = express();
-const server = http.createServer(app);    // This is your HTTP server for the Express app
-const socketServer = http.createServer(); // Separate socket server
-const port = 8000;
-const socketPort = 3000;
 
+// Create HTTP server for Express
+const server = http.createServer(app);
+
+const port = 8000;  // Express port
+
+// Middleware setup
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -31,7 +33,7 @@ const options = {
     },
     servers: [
       {
-        url: "https://booking-app.vercel.app",
+        url: "http://localhost:8000",  // Make sure this URL is correct for production
       },
     ],
   },
@@ -39,17 +41,22 @@ const options = {
 };
 
 const swaggerSpec = swaggerJsdoc(options);
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.use("/", routes);
 
-server.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
+// Socket.IO configuration for backend
+const io = require("socket.io")(server, {
+  cors: {
+    origin: "http://localhost:3001", // Frontend URL
+    methods: ["GET", "POST"],
+    allowedHeaders: ["Content-Type"],
+    credentials: true,
+  },
 });
 
-// Initialize Socket.IO with the socket server
-socketSetup(socketServer);
+socketSetup(io);  // Call socket setup function to initialize socket handling
 
-socketServer.listen(socketPort, () => {
-  console.log(`Socket.IO server is running on port ${socketPort}`);
+server.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
 });
