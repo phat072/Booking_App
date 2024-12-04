@@ -7,7 +7,6 @@ import { TextInput } from "react-native-paper";
 import { CheckBox } from "@rneui/themed";
 import { LinearGradient } from 'expo-linear-gradient';
 
-// Define User type
 interface User {
   _id: string;
   name: string;

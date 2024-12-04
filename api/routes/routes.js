@@ -24,9 +24,9 @@ router.get("/users/:userId", userController.getUserById);
 
 // Admin routes
 // router.get("/users/:userId", adminController.getUserById);
-router.get("/users", adminController.getUsers);
-router.delete("/users/:userId", adminController.deleteUserById);
-router.put("/users/:userId", adminController.updateUserById);
+router.get("/admin", adminController.getUsers);
+router.delete("/admin/:userId", adminController.deleteUserById);
+router.put("/admin/:userId", adminController.updateUserById);
 
 // Favorite routes
 router.post("/favorite/:userId", userController.addToFavoriteRestaurants);

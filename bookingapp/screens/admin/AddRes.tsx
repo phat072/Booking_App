@@ -6,6 +6,7 @@ import {
   Image 
 } from "react-native";
 import React, { useState, useRef, useCallback, useMemo, useEffect } from "react";
+import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import { TextInput } from "react-native-paper";
 import MapView, { Marker, Callout } from "react-native-maps";
 import axios from "axios";
@@ -17,7 +18,7 @@ import { API_URL } from "@env";
 import * as Location from "expo-location"; // Importing Expo Location API
 import RNPickerSelect from "react-native-picker-select"; // Import Picker
 
-// Define the param types for navigation
+
 type RootStackParamList = {
   AddRes: undefined;
   ResInfo: { longitude: number | null; latitude: number | null };
@@ -88,15 +89,19 @@ const AddRes: React.FC = () => {
         description,
         image,
         location: {
-          latitude,
-          longitude,
+          type: "Point",
+          coordinates: [longitude!, latitude!],
         },
         address,
         type,
       });
       navigation.goBack(); // Navigate back after success
     } catch (error) {
-      console.error("Error adding restaurant:", error);
+      if (axios.isAxiosError(error)) {
+        console.error("Error adding restaurant:", error.response ? error.response.data : error.message);
+      } else {
+        console.error("Error adding restaurant:", error);
+      }
     }
   };
 
@@ -148,8 +153,8 @@ const AddRes: React.FC = () => {
         ref={mapRef}
         style={styles.map}
         initialRegion={{
-          latitude: latitude || 21.0285,
-          longitude: longitude || 105.8542,
+          latitude: latitude || 10.869891, //10.869891, 106.803556: UIT 
+          longitude: longitude || 106.803556,
           latitudeDelta: 0.0922,
           longitudeDelta: 0.0421,
         }}
@@ -241,13 +246,13 @@ const pickerSelectStyles = StyleSheet.create({
 });
 
 const styles = StyleSheet.create({
-  container: {  // Add this style for container
+  container: { 
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#FFF",  // You can change this color
+    backgroundColor: "#FFF",  
   },
-  map: {  // Add this style for the map
+  map: {  
     width: "100%",
     height: "100%",
   },
@@ -271,7 +276,7 @@ const styles = StyleSheet.create({
     fontSize: 13,
     color: "#fff",
   },
-  myLocationIcon: {  // Add this style for location icon button
+  myLocationIcon: { 
     position: "absolute",
     right: 5,
     top: 10,
@@ -284,20 +289,20 @@ const styles = StyleSheet.create({
     shadowRadius: 3,
     elevation: 5,
   },
-  shadow: {  // Add this style for shadow
+  shadow: { 
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.3,
     shadowRadius: 3,
     elevation: 5,
   },
-  sheetContainer: {  // Add this style for bottom sheet container
+  sheetContainer: {  
     backgroundColor: "#fff",
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
     padding: 10,
   },
-  sheetHandleIndicator: {  // Add this style for bottom sheet handle indicator
+  sheetHandleIndicator: {  
     backgroundColor: "#ccc",
     width: 50,
     height: 3,

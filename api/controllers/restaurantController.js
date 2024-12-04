@@ -7,7 +7,7 @@ module.exports = {
       name,
       description,
       image,
-      location: { coordinates }, // Extract coordinates from the location object
+      location: { coordinates }, 
       address,
       rating,
       type,
@@ -31,8 +31,8 @@ module.exports = {
         description,
         image,
         location: {
-          type: "Point", // Set the location type as 'Point'
-          coordinates, // Use the extracted coordinates
+          type: "Point", 
+          coordinates, 
         },
         address,
         rating,

@@ -26,7 +26,7 @@ import NotificationScreen from "../screens/nofication/NotificationScreen";
 import FoodDetail from "../screens/ordrefood/FoodDetail";
 import ListMenuRes from "../screens/menu/ListMenuRes";
 import OrderScreen from "../screens/restaurant/OrderScreen";
-import AdminTabNavigator from "../navigation/AdminTabNavigator"
+import AdminTabNavigator from "../navigation/AdminTabNavigator";
 import FavouriteScreen from "../screens/favourite/FavouriteScreen";
 import { useNavigation } from '@react-navigation/native';
 import { Ionicons} from "@expo/vector-icons";
@@ -271,7 +271,7 @@ const styles = StyleSheet.create({
     width: "100%",          // Chiều rộng đầy đủ
     marginBottom: 0,        // Loại bỏ khoảng cách dưới tiêu đề
     flexDirection: "row",   // Sắp xếp ngang
-    paddingHorizontal: 10,  // Điều chỉnh khoảng cách ngang
+    paddingHorizontal: 10,  // Điều chỉnh khoảng cách ngang   
   },
   headerTitle: {
     fontSize: 20,

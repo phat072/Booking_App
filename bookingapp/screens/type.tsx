@@ -8,7 +8,7 @@ export type HomeAdminRootStackParamList = {
     Category : undefined;
 };
 
-export type HomeAdminNavigationProp = StackNavigationProp<HomeAdminRootStackParamList, "HomeAdmin">;
+export type HomeAdminNavigationProp = StackNavigationProp<AccountStackParamList, "HomeAdmin">;
 
 export type ChatRootStackParamList = {
   ChatScreen: undefined;
@@ -76,12 +76,17 @@ export type OrdersStackParamList = {
     Privacy: undefined;
     Login: undefined;
     Annotations: undefined;
+    HomeAdmin: undefined;
+    OrderTab: undefined;
+    Restaurants : undefined;
+    Customers : undefined;
+    Category : undefined;
+    Dashboard: undefined;
   };
 
   export type CityStackParamList = {
     City: {
       selectedCity: string | null;
-      // setSelectedCity: (city: string | null) => void;r
     };
     HomeScreen: { selectedCity: string | null };
   };

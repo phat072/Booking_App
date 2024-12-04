@@ -261,7 +261,7 @@ return (
             iconUri="https://cdn-icons-png.flaticon.com/512/5145/5145848.png"
             borderColor="#F9D860"
             bgColor="#FEF7DC"
-            onPress={() => navigation.navigate("OrderTab")}
+            onPress={() => navigation.navigate("HomeAdmin")}
             />
             <HomeAdminCard
               title="Restaurants"
@@ -314,7 +314,7 @@ header: {
     justifyContent: "space-between",
     paddingHorizontal: 20,
     alignItems: "center",
-    paddingTop: 50,
+    paddingTop: 0,
 },
 greetingText: {
     fontSize: 20,
