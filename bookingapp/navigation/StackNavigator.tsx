@@ -67,13 +67,15 @@ const StackNavigator: React.FC = () => {
           name="HistoryOrder"
           component={HistoryOrder}
           options={{
-            title: "Lịch sử giao dịch",
-            headerTitleAlign: "center",
-            headerStyle: { backgroundColor: Colors.primary },
-            headerTintColor: "#fff",
+            title: "Lịch sử giao dịch", // Tiêu đề màn hình
+            headerStyle: { backgroundColor: Colors.primary }, // Màu nền header
+            headerTintColor: "#fff", // Màu chữ
+            headerTitleAlign: "center", // Căn giữa tiêu đề
             headerTitleStyle: {
-              fontWeight: "bold",
+              fontWeight: "bold", // Đặt font chữ đậm
             },
+            headerShown: true, // Hiển thị header
+            header: () => <CustomHeader />, // Sử dụng CustomHeader để tạo header tùy chỉnh
           }}
         />
         <Stack.Screen
@@ -92,15 +94,7 @@ const StackNavigator: React.FC = () => {
         <Stack.Screen
           name="BottomSheet"
           component={BottomSheetTest}
-          options={{
-            title: "",
-            // headerTitleAlign: "center",
-            // headerStyle: { backgroundColor: Colors.primary },
-            // headerTintColor: "#fff",
-            // headerTitleStyle: {
-            //   fontWeight: "bold",
-            // },
-          }}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="City"
@@ -260,7 +254,7 @@ const CustomHeader = () => {
     <View style={styles.customHeader}>
       {/* Back button */}
       <TouchableOpacity onPress={() => navigation.goBack()}>
-      <Ionicons name="arrow-back" size={30}/>
+      <Ionicons name="arrow-back" color={'#fff'} size={30}/>
       </TouchableOpacity>
       <Text style={styles.headerTitle}>Thông tin người dùng</Text>
     </View>
