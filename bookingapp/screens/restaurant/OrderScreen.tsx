@@ -25,7 +25,6 @@ const OrderScreen = ({ navigation }: { navigation: NavigationProp<any> }) => {
   const route = useRoute<{ key: string; name: string; params: { restaurant: any; selectedItem: any } }>();
   const { restaurant, selectedItem } = route.params;
   const { user } = useContext(UserType);  // Assuming user is fetched from context
-
   const [adults, setAdults] = useState("0");
   const [children, setChildren] = useState("0");
   const [selectedTime, setSelectedTime] = useState("");

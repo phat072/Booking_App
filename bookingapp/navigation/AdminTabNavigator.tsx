@@ -23,7 +23,6 @@ const AdminTabNavigator: React.FC = () => {
       Alert.alert("Logged out", "You have been logged out successfully.");
       navigation.replace("Login");
     } catch (error) {
-      console.error("Error logging out:", error);
       Alert.alert("Logout Error", "An error occurred while logging out.");
     }
   };
@@ -87,6 +86,7 @@ const AdminTabNavigator: React.FC = () => {
         name="Restaurants"
         component={ResAdminStackNavigator}
         options={{
+          headerShown: false,
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="restaurant" size={size} color={color} />
           ),
