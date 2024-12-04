@@ -108,20 +108,26 @@ module.exports = {
         console.log('ERROR', error);
       }
     },
-    GetMessages : async (req, res) => {
+    GetMessages: async (req, res) => {
       try {
-        const {userId, friendId} = req.query;
+        const { userId, friendId } = req.query;
+        console.log('userId', userId);
+        console.log('friendId', friendId);
+        if (!userId || !friendId) {
+          return res.status(400).json({ error: "Missing userId or friendId" });
+        }
     
         const messages = await Message.find({
           $or: [
-            {senderId: userId, receiverId: friendId},
-            {senderId: friendId, receiverId: userId},
+            { senderId: userId, receiverId: friendId },
+            { senderId: friendId, receiverId: userId },
           ],
         });
     
         res.json(messages);
       } catch (error) {
         console.log('ERROR', error);
+        res.status(500).json({ error: 'Failed to fetch messages' });
       }
-    },
+    },    
   };

@@ -28,7 +28,7 @@ const HistoryOrder: React.FC = () => {
   const [selectedStatus, setSelectedStatus] = useState<string>("Tất cả");
   const [selectedContentType, setSelectedContentType] = useState<string>("status");
   const [isModalVisible, setIsModalVisible] = useState(false);
-
+  const userId = user?._id;
   const status = [
     "Tất cả",
     "Chờ xác nhận",
@@ -37,31 +37,33 @@ const HistoryOrder: React.FC = () => {
     "Đã hủy",
   ];
 
-  // Fetch orders only
   useEffect(() => {
-    const fetchUserOrders = async () => {
-      try {
-        const response = await fetch(`${API_URL}/order/${user.id}`);
-        const data = await response.json();
-        if (response.ok) {
-          const formattedOrders = data.orders.map((order: any) => ({
-            ...order,
-            restaurant:
-              typeof order.restaurant === "object"
-                ? order.restaurant
-                : { name: "Unknown" },
-          }));
-          setOrders(formattedOrders);
-        } else {
-          console.error("Error fetching user orders:", data.message);
+    // Only fetch orders if userId is available
+    if (userId) {
+      const fetchUserOrders = async (userId: string) => {
+        try {
+          const response = await fetch(`${API_URL}/order/${userId}`);
+          const data = await response.json();
+          if (response.ok) {
+            const formattedOrders = data.orders.map((order: any) => ({
+              ...order,
+              restaurant:
+                typeof order.restaurant === "object"
+                  ? order.restaurant
+                  : { name: "Unknown" },
+            }));
+            setOrders(formattedOrders);
+          } else {
+            console.error("Error fetching user orders:", data.message);
+          }
+        } catch (error: any) {
+          console.error("Error fetching data:", error.message);
         }
-      } catch (error: any) {
-        console.error("Error fetching data:", error.message);
-      }
-    };
+      };
   
-    fetchUserOrders();
-  }, [user.id]); // Sử dụng user.id
+      fetchUserOrders(userId); // Now passing userId
+    }
+  }, [userId]); // Dependency on userId  
   
   const formatDate = (dateString: string) => {
     const options: Intl.DateTimeFormatOptions = {

@@ -81,6 +81,7 @@ export type OrdersStackParamList = {
     Customers : undefined;
     Category : undefined;
     Dashboard: undefined;
+    Chat: undefined;
   };
 
   export type CityStackParamList = {

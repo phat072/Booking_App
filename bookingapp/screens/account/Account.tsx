@@ -189,7 +189,12 @@ const AccountScreen: React.FC = () => {
               </TouchableOpacity>
             </View>
             <View style={styles.section}>
-              <ProfileTile title="ID khách hàng" icon="user" font={3} />
+              <ProfileTile 
+                title="ID khách hàng" 
+                icon="user" 
+                font={3}
+                onPress={() => navigation.navigate("EditAccount")}
+                 />
               <ProfileTile title="Tình trạng" icon="bar-chart" font={3} />
               <ProfileTile
                 title="Thay đổi mật khẩu"
@@ -218,7 +223,7 @@ const AccountScreen: React.FC = () => {
                 title="Chat"
                 icon="chatbox-outline"
                 font={1}
-                onPress={() => navigation.navigate('Chat', { currentUser: user })}
+                onPress={() => navigation.navigate("Chat")}
 
               />
               <ProfileTile
