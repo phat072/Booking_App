@@ -27,7 +27,7 @@ const Chat: React.FC<ChatProps> = ({ item }) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const userId = user?._id;
-  const friendId = user?.friends[0]?._id;
+  const friendId = item?._id;
   const fetchMessages = async () => {
     try {
       if (!userId || friendId) return; // Prevent fetch if no userId or item._id

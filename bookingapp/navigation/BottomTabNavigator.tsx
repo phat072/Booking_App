@@ -26,7 +26,7 @@ function BottomTabs() {
   return (
     <Tab.Navigator>
       <Tab.Screen
-        name="Chat"
+        name="Chats"
         component={ChatScreen}
         options={{
           tabBarStyle: { backgroundColor: 'white'},
@@ -65,7 +65,7 @@ function BottomTabs() {
   );
 }
 
-export function Chat() {
+export function Chats() {
   return (
     <Stack.Navigator>
       <Stack.Screen

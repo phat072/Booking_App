@@ -88,6 +88,7 @@ const ChatScreen: React.FC = () => {
   };
 
   const acceptRequest = async (requestId: string) => {
+    console.log('Accepting request for:', requestId); 
     try {
       const response = await axios.post(`${API_URL}/request/accept`, {
         userId: userId,
@@ -152,9 +153,10 @@ const ChatScreen: React.FC = () => {
 
         {options.includes('Chats') && chats.length > 0 ? (
           <View>
-            {chats.map((item) => (
-              <Chat key={item._id} item={item} />
-            ))}
+            {chats.map((item) => {
+              console.log('item', item);
+              return <Chat key={item._id} item={item} />;
+            })}
           </View>
         ) : (
           <View style={styles.noChats}>

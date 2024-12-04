@@ -32,7 +32,7 @@ import { useNavigation } from '@react-navigation/native';
 import { Ionicons} from "@expo/vector-icons";
 const Stack = createNativeStackNavigator<StackStackParamList>();
 import Colors from "@/constants/Colors";
-import { Chat } from "./BottomTabNavigator";
+import { Chats } from "./BottomTabNavigator";
 
 const StackNavigator: React.FC = () => {
   return (
@@ -208,8 +208,8 @@ const StackNavigator: React.FC = () => {
           }}
         />
         <Stack.Screen
-          name="Chat"
-          component={Chat}
+          name="Chats"
+          component={Chats}
           options={{ headerShown: false }} 
         />
         <Stack.Screen

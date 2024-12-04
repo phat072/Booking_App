@@ -81,7 +81,7 @@ export type OrdersStackParamList = {
     Customers : undefined;
     Category : undefined;
     Dashboard: undefined;
-    Chat: undefined;
+    Chats: undefined;
   };
 
   export type CityStackParamList = {
@@ -128,7 +128,7 @@ export type OrdersStackParamList = {
     ListMenuRes : undefined;
     Order : undefined;
     Favourite : undefined;
-    Chat: undefined;
+    Chats: undefined;
   };
 
 export type AdminStackParamList = {
