@@ -4,7 +4,7 @@ import MapView, { Marker, Callout, PROVIDER_GOOGLE } from "react-native-maps";
 import * as Location from "expo-location";
 import axios from "axios";
 import { API_URL } from "@env";
-import ZoomControls from "../../components/zoom/Zoom"; // Import component ZoomControls
+import ZoomControls from "../../components/zoom/Zoom";
 
 const haversineDistance = (coords1: any, coords2: any) => {
   const toRad = (value: number) => (value * Math.PI) / 180;
@@ -29,7 +29,7 @@ const MapScreen: React.FC = () => {
   const [restaurants, setRestaurants] = useState<any[]>([]);
   const [mapType, setMapType] = useState<'satellite' | 'terrain'>('satellite'); // State for map type
   const mapRef = useRef<MapView>(null);
-
+  console.log(userLocation);
   useEffect(() => {
     const fetchUserLocation = async () => {
       try {
@@ -108,7 +108,7 @@ const MapScreen: React.FC = () => {
     <View style={{ flex: 1 }}>
       <MapView
         ref={mapRef}
-        provider={PROVIDER_GOOGLE} // Sử dụng Google Maps cho chế độ 3D
+        provider={PROVIDER_GOOGLE} 
         style={{ flex: 1 }}
         initialRegion={{
           latitude: userLocation?.latitude || 10.75,

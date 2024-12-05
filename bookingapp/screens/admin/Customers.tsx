@@ -79,9 +79,15 @@ const Customers = () => {
 
   const confirmEditUser = async () => {
     try {
+      const updatedData = {
+        ...editData,
+        admin: selectedIndex === 1,  // If selectedIndex is 1, set admin to true
+        role: selectedIndex === 1 ? "admin" : "user",  // If selectedIndex is 1, set role to "admin", else "user"
+      };
+      
       const response = await axios.put(
         `${API_URL}/admin/${selectedUserId}`,
-        editData
+        updatedData
       );
       if (response.status === 200) {
         fetchUsers();

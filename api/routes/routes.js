@@ -27,6 +27,7 @@ router.get("/admin", adminController.getUsers);
 router.delete("/admin/:userId", adminController.deleteUserById);
 router.put("/admin/:userId", adminController.updateUserById);
 
+
 // Favorite routes
 router.post("/favorite/:userId", userController.addToFavoriteRestaurants);
 router.post('/remove-favorite/:userId', userController.removeFromFavoriteRestaurants);

@@ -24,7 +24,6 @@ interface Order {
 const Orders = () => {
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
-  const navigation = useNavigation();
 
   const fetchOrders = async () => {
     try {
@@ -32,6 +31,7 @@ const Orders = () => {
       const data = await response.json();
       if (response.ok) {
         setOrders(data.orders);
+        console.log("Orders fetched successfully", data.orders.length);
       }
     } catch (error) {
       console.error("Error fetching orders", error);
