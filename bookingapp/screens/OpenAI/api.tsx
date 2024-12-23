@@ -1,4 +1,5 @@
 import OpenAI from "openai";
+import { OPENAI_KEY } from "@env";
 
 // Tạo cấu hình cho OpenAI API
 const openai = new OpenAI({});
