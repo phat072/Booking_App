@@ -1,8 +1,7 @@
 import OpenAI from "openai";
 
 // Tạo cấu hình cho OpenAI API
-const openai = new OpenAI({
-});
+const openai = new OpenAI({});
 
 // Hàm để gọi API và nhận phản hồi từ GPT-4
 export const getGPT4Response = async (query: string) => {

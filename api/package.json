@@ -22,10 +22,7 @@
     "mongoose": "^8.8.2",
     "nodemailer": "^6.9.7",
     "nodemon": "^3.0.2",
-<<<<<<< HEAD
-=======
     "openai": "^4.77.0",
->>>>>>> ee53205 (Mô tả thay đổi)
     "passport": "^0.7.0",
     "socket.io": "^4.8.1",
     "swagger-jsdoc": "^6.2.8",

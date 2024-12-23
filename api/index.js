@@ -9,16 +9,13 @@ const swaggerJsdoc = require("swagger-jsdoc");
 const http = require("http");
 
 const socketSetup = require("./sockets/socketSetup");
-const app = express();
-
-const socketSetup = require("./sockets/socketSetup");
 
 const app = express();
 
 // Create HTTP server for Express
 const server = http.createServer(app);
 
-const port = 8000;  // Express port
+const port = 8000; // Express port
 
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -37,40 +34,21 @@ const options = {
     },
     servers: [
       {
-        url: "https://booking-app.vercel.app",
-
-        url: "http://localhost:8000",  // Make sure this URL is correct for production
+        url: "https://booking-app.vercel.app", // Production URL
+      },
+      {
+        url: "http://localhost:8000", // Local development URL
       },
     ],
   },
-  apis: ['./routes/routes.js'],
+  apis: ["./routes/routes.js"],
 };
 
 const swaggerSpec = swaggerJsdoc(options);
 
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
-
-
-app.use("/", routes);
-
-// Socket.IO configuration for backend
-const io = require("socket.io")(server, {
-  cors: {
-    origin: "http://localhost:3001", // Frontend URL
-    methods: ["GET", "POST"],
-    allowedHeaders: ["Content-Type"],
-    credentials: true,
-  },
-});
-
-socketSetup(io);  // Call socket setup function to initialize socket handling
-
-server.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
-});
-
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
+// Attach routes
 app.use("/", routes);
 
 // Socket.IO configuration for backend
@@ -83,9 +61,9 @@ const io = require("socket.io")(server, {
   },
 });
 
-socketSetup(io);  // Call socket setup function to initialize socket handling
+socketSetup(io); // Call socket setup function to initialize socket handling
 
+// Start the server (only once)
 server.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
-
