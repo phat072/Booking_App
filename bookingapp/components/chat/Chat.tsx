@@ -27,16 +27,6 @@ const Chat: React.FC<ChatProps> = ({ item }) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const userId = user?._id;
-<<<<<<< HEAD
-  const friendId = user?.friends[0]?._id;
-  const fetchMessages = async () => {
-    try {
-      if (!userId || friendId) return; // Prevent fetch if no userId or item._id
-
-      setLoading(true);
-      const response = await axios.get(`${API_URL}/messages`, {
-        params: { userId, friendId }, 
-=======
   const friendId = item?._id;
   const fetchMessages = async () => {
     try {
@@ -46,7 +36,6 @@ const Chat: React.FC<ChatProps> = ({ item }) => {
       setLoading(true);
       const response = await axios.get(`${API_URL}/messages`, {
         params: { senderId, receiverId }, 
->>>>>>> ee53205 (Mô tả thay đổi)
       });
 
       setMessages(response.data);
@@ -58,17 +47,10 @@ const Chat: React.FC<ChatProps> = ({ item }) => {
       setLoading(false);
     }
   };
-<<<<<<< HEAD
-
-  useEffect(() => {
-    fetchMessages();
-  }, [userId, friendId]); // Ensure it only triggers when these change
-=======
   console.log("messages",messages)
   useEffect(() => {
     fetchMessages();
   }, []);
->>>>>>> ee53205 (Mô tả thay đổi)
 
   const getLastMessage = (): Message | undefined => {
     const n = messages.length;

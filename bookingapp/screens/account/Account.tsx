@@ -223,12 +223,7 @@ const AccountScreen: React.FC = () => {
                 title="Chat"
                 icon="chatbox-outline"
                 font={1}
-<<<<<<< HEAD
-                onPress={() => navigation.navigate("Chat")}
-=======
                 onPress={() => navigation.navigate("Chats")}
->>>>>>> ee53205 (Mô tả thay đổi)
-
               />
               <ProfileTile
                 title="Mời bạn bè"

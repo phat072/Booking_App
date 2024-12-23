@@ -81,11 +81,7 @@ export type OrdersStackParamList = {
     Customers : undefined;
     Category : undefined;
     Dashboard: undefined;
-<<<<<<< HEAD
-    Chat: undefined;
-=======
     Chats: undefined;
->>>>>>> ee53205 (Mô tả thay đổi)
   };
 
   export type CityStackParamList = {
@@ -132,11 +128,7 @@ export type OrdersStackParamList = {
     ListMenuRes : undefined;
     Order : undefined;
     Favourite : undefined;
-<<<<<<< HEAD
-    Chat: undefined;
-=======
     Chats: undefined;
->>>>>>> ee53205 (Mô tả thay đổi)
   };
 
 export type AdminStackParamList = {

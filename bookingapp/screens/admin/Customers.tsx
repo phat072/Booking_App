@@ -79,11 +79,6 @@ const Customers = () => {
 
   const confirmEditUser = async () => {
     try {
-<<<<<<< HEAD
-      const response = await axios.put(
-        `${API_URL}/admin/${selectedUserId}`,
-        editData
-=======
       const updatedData = {
         ...editData,
         admin: selectedIndex === 1,  // If selectedIndex is 1, set admin to true
@@ -93,7 +88,6 @@ const Customers = () => {
       const response = await axios.put(
         `${API_URL}/admin/${selectedUserId}`,
         updatedData
->>>>>>> ee53205 (Mô tả thay đổi)
       );
       if (response.status === 200) {
         fetchUsers();
@@ -374,8 +368,4 @@ const styles = StyleSheet.create({
   },
 });
 
-<<<<<<< HEAD
 export default Customers;
-=======
-export default Customers;
->>>>>>> ee53205 (Mô tả thay đổi)

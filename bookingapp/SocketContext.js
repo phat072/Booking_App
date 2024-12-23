@@ -38,9 +38,6 @@ export const SocketContextProvider = ({children}) => {
       {children}
     </SocketContext.Provider>
   );
-<<<<<<< HEAD
-};
-=======
 };
 
 
@@ -100,4 +97,3 @@ export const SocketContextProvider = ({children}) => {
 //     </SocketContext.Provider>
 //   );
 // };
->>>>>>> ee53205 (Mô tả thay đổi)

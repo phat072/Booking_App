@@ -24,21 +24,14 @@ interface Order {
 const Orders = () => {
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
-<<<<<<< HEAD
   const navigation = useNavigation();
-=======
->>>>>>> ee53205 (Mô tả thay đổi)
-
   const fetchOrders = async () => {
     try {
       const response = await fetch(`${API_URL}/orders`);
       const data = await response.json();
       if (response.ok) {
         setOrders(data.orders);
-<<<<<<< HEAD
-=======
         console.log("Orders fetched successfully", data.orders.length);
->>>>>>> ee53205 (Mô tả thay đổi)
       }
     } catch (error) {
       console.error("Error fetching orders", error);

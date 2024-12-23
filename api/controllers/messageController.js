@@ -1,9 +1,7 @@
 const User = require("../models/user");
 const Message = require("../models/message");
-<<<<<<< HEAD
-=======
+
 const userSocketMap = require("../sockets/socketSetup");
->>>>>>> ee53205 (Mô tả thay đổi)
 
 module.exports = {
     SendRequest : async (req, res) => {
@@ -12,26 +10,19 @@ module.exports = {
       console.log(senderId);
       console.log(receiverId);
       console.log(message);
-
-<<<<<<< HEAD
       const request = {
         from: senderId, 
         message,
         requestId: new mongoose.Types.ObjectId()  // Add a unique requestId here if needed
       };
-    
-=======
->>>>>>> ee53205 (Mô tả thay đổi)
       const receiver = await User.findById(receiverId);
       if (!receiver) {
         return res.status(404).json({message: 'Receiver not found'});
       }
     
-<<<<<<< HEAD
+
       receiver.requests.push(request);
-=======
       receiver.requests.push({from: senderId, message});
->>>>>>> ee53205 (Mô tả thay đổi)
       await receiver.save();
     
       res.status(200).json({message: 'Request sent succesfully'});
@@ -57,11 +48,8 @@ module.exports = {
     AcceptRequest : async (req, res) => {
       try {
         const {userId, requestId} = req.body;
-<<<<<<< HEAD
-    
-=======
+
         console.log('userId', userId);
->>>>>>> ee53205 (Mô tả thay đổi)
         const user = await User.findById(userId);
         if (!user) {
           return res.status(404).json({message: 'User not found'});
@@ -125,11 +113,7 @@ module.exports = {
     },
     GetMessages: async (req, res) => {
       try {
-<<<<<<< HEAD
-        const { userId, friendId } = req.query;
-=======
         const { userId, friendId } = req.params;
->>>>>>> ee53205 (Mô tả thay đổi)
         console.log('userId', userId);
         console.log('friendId', friendId);
         if (!userId || !friendId) {
