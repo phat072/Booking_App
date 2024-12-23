@@ -43,11 +43,22 @@ const ChatScreen: React.FC = () => {
   const navigation = useNavigation<ChatNavigationProp>();
 
   const chooseOption = (option: string) => {
+<<<<<<< HEAD
     if (options.includes(option)) {
       setOptions(options.filter(c => c !== option));
     } else {
       setOptions([...options, option]);
     }
+=======
+    console.log("Clicked option:", option);
+    setOptions(prevOptions => {
+      if (prevOptions.includes(option)) {
+        return prevOptions.filter(c => c !== option);
+      } else {
+        return [...prevOptions, option];
+      }
+    });
+>>>>>>> ee53205 (Mô tả thay đổi)
   };
 
   const changetoaccount = () => {
@@ -88,6 +99,10 @@ const ChatScreen: React.FC = () => {
   };
 
   const acceptRequest = async (requestId: string) => {
+<<<<<<< HEAD
+=======
+    console.log('Accepting request for:', requestId); 
+>>>>>>> ee53205 (Mô tả thay đổi)
     try {
       const response = await axios.post(`${API_URL}/request/accept`, {
         userId: userId,
@@ -142,6 +157,7 @@ const ChatScreen: React.FC = () => {
       </View>
 
       <View style={styles.content}>
+<<<<<<< HEAD
         <Pressable
           onPress={() => chooseOption('Chats')}
           style={styles.optionHeader}
@@ -155,6 +171,18 @@ const ChatScreen: React.FC = () => {
             {chats.map((item) => (
               <Chat key={item._id} item={item} />
             ))}
+=======
+      <Pressable onPress={() => chooseOption('Chats')} style={styles.optionHeader}>
+          <Text>Chats</Text>
+          <Entypo name="chevron-small-down" size={26} color="black" />
+      </Pressable>
+        {options.includes('Chats') && chats.length > 0 ? (
+          <View>
+            {chats.map((item) => {
+              console.log('item', item);
+              return <Chat key={item?._id} item={item} />;
+            })}
+>>>>>>> ee53205 (Mô tả thay đổi)
           </View>
         ) : (
           <View style={styles.noChats}>

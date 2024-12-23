@@ -56,9 +56,15 @@ const FeatureScreen: React.FC = () => {
           <TouchableOpacity style={styles.roundButton}>
             <Ionicons name="share-outline" size={22} color={"#ffffff"} />
           </TouchableOpacity>
+<<<<<<< HEAD
           <TouchableOpacity style={styles.roundButton}>
             <Ionicons name="heart-outline" size={22} color={"#ffffff"} />
           </TouchableOpacity>
+=======
+          {/* <TouchableOpacity style={styles.roundButton}>
+            <Ionicons name="heart-outline" size={22} color={"#ffffff"} />
+          </TouchableOpacity> */}
+>>>>>>> ee53205 (Mô tả thay đổi)
         </View>
       ),
       headerLeft: () => (

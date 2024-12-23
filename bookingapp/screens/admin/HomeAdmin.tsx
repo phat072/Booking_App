@@ -100,6 +100,7 @@ return (
 };
 
 const HomeAdmin: React.FC = () => {
+<<<<<<< HEAD
 const { userId, setUserId, user, updateUser } = useContext(UserType);
 const [address, setAddress] = useState<AddressData[]>([]);
 const navigation = useNavigation<HomeAdminNavigationProp>();
@@ -107,6 +108,30 @@ const [error, setError] = useState<string | null>(null);
 const [selectedWeek, setSelectedWeek] = useState<SelectedWeek | null>(null);
 const [resetTrigger, setResetTrigger] = useState(false);
 const [isSheetVisible, setSheetVisible] = useState(false);
+=======
+const { setUserId, user, updateUser } = useContext(UserType);
+const navigation = useNavigation<HomeAdminNavigationProp>();
+const [selectedWeek, setSelectedWeek] = useState<SelectedWeek | null>(null);
+const [resetTrigger, setResetTrigger] = useState(false);
+const [isSheetVisible, setSheetVisible] = useState(false);
+const [totalOrder, setTotalOrder] = useState(0);    
+
+const fetchOrders = async () => {
+    try {
+      const response = await fetch(`${API_URL}/orders`);
+      const data = await response.json();
+      if (response.ok) {
+        setTotalOrder(data.orders.length);
+      }
+    } catch (error) {
+      console.error("Error fetching orders", error);
+    }
+  };
+
+useEffect(() => {
+    fetchOrders();
+}, []); 
+>>>>>>> ee53205 (Mô tả thay đổi)
 
 const fetchAddress = useCallback(async () => {
     try {
@@ -125,10 +150,17 @@ const fetchAddressData = async (userId: string) => {
     const response = await axios.get<AddressData[]>(`${API_URL}/address/${userId}`);
     const addressData = response.data;
     updateUser(addressData);
+<<<<<<< HEAD
     console.log(addressData, "user fetch");
     } catch (error) {
     console.log(`${API_URL}/address/${userId}`);
     console.log("Error fetching address data", error);
+=======
+    // console.log(addressData, "user fetch");
+    } catch (error) {
+    // console.log(`${API_URL}/address/${userId}`);
+    // console.log("Error fetching address data", error);
+>>>>>>> ee53205 (Mô tả thay đổi)
     }
 };
 
@@ -216,7 +248,11 @@ return (
             <View style={styles.totalOrderContainer}>
                 <Text style={styles.totalOrderText}>Total Order</Text>
                 <View style={styles.totalOrderValueContainer}>
+<<<<<<< HEAD
                 <Text style={styles.totalOrderValue}>5</Text>
+=======
+                <Text style={styles.totalOrderValue}>{totalOrder}</Text>
+>>>>>>> ee53205 (Mô tả thay đổi)
                 <Ionicons name="restaurant-sharp" size={20} color="#0B36A6" />
                 </View>
             </View>

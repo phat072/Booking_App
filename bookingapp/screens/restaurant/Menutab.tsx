@@ -42,7 +42,11 @@ const MenuTab: React.FC<{ item: Item }> = ({ item }) => {
   const hoursSectionRef = useRef<View>(null);
   const detailsSectionRef = useRef<View>(null);
 
+<<<<<<< HEAD
   const handleTabSelect = (tab: string) => {
+=======
+  const   handleTabSelect = (tab: string) => {
+>>>>>>> ee53205 (Mô tả thay đổi)
     setSelectedTab(tab);
     // Scroll to the appropriate section
     switch (tab) {

@@ -8,6 +8,10 @@ interface HomeAdminCardProps {
   borderColor: string;
   bgColor: string;
   onPress: () => void;
+<<<<<<< HEAD
+=======
+  children?: React.ReactNode;
+>>>>>>> ee53205 (Mô tả thay đổi)
 }
 
 const HomeAdminCard: React.FC<HomeAdminCardProps> = ({ title, iconUri, borderColor, bgColor, onPress }) => {

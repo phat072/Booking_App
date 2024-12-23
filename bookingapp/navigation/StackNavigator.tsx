@@ -32,7 +32,11 @@ import { useNavigation } from '@react-navigation/native';
 import { Ionicons} from "@expo/vector-icons";
 const Stack = createNativeStackNavigator<StackStackParamList>();
 import Colors from "@/constants/Colors";
+<<<<<<< HEAD
 import { Chat } from "./BottomTabNavigator";
+=======
+import { Chats } from "./BottomTabNavigator";
+>>>>>>> ee53205 (Mô tả thay đổi)
 
 const StackNavigator: React.FC = () => {
   return (
@@ -202,8 +206,13 @@ const StackNavigator: React.FC = () => {
           }}
         />
         <Stack.Screen
+<<<<<<< HEAD
           name="Chat"
           component={Chat}
+=======
+          name="Chats"
+          component={Chats}
+>>>>>>> ee53205 (Mô tả thay đổi)
           options={{ headerShown: false }} 
         />
         <Stack.Screen
