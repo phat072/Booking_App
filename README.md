@@ -96,4 +96,3 @@ Account admin
 Account user
   "email": "chico123@gmail.com",
   "password": "Chico1234@",
-```

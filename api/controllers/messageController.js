@@ -1,5 +1,6 @@
 const User = require("../models/user");
 const Message = require("../models/message");
+
 const userSocketMap = require("../sockets/socketSetup");
 
 module.exports = {
@@ -9,12 +10,18 @@ module.exports = {
       console.log(senderId);
       console.log(receiverId);
       console.log(message);
-
+      const request = {
+        from: senderId, 
+        message,
+        requestId: new mongoose.Types.ObjectId()  // Add a unique requestId here if needed
+      };
       const receiver = await User.findById(receiverId);
       if (!receiver) {
         return res.status(404).json({message: 'Receiver not found'});
       }
     
+
+      receiver.requests.push(request);
       receiver.requests.push({from: senderId, message});
       await receiver.save();
     
@@ -41,6 +48,7 @@ module.exports = {
     AcceptRequest : async (req, res) => {
       try {
         const {userId, requestId} = req.body;
+
         console.log('userId', userId);
         const user = await User.findById(userId);
         if (!user) {

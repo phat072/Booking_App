@@ -224,7 +224,6 @@ const AccountScreen: React.FC = () => {
                 icon="chatbox-outline"
                 font={1}
                 onPress={() => navigation.navigate("Chats")}
-
               />
               <ProfileTile
                 title="Mời bạn bè"

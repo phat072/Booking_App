@@ -100,6 +100,8 @@ return (
 };
 
 const HomeAdmin: React.FC = () => {
+const { userId, setUserId, user, updateUser } = useContext(UserType);
+const [address, setAddress] = useState<AddressData[]>([]);
 const { setUserId, user, updateUser } = useContext(UserType);
 const navigation = useNavigation<HomeAdminNavigationProp>();
 const [selectedWeek, setSelectedWeek] = useState<SelectedWeek | null>(null);
@@ -122,7 +124,6 @@ const fetchOrders = async () => {
 useEffect(() => {
     fetchOrders();
 }, []); 
-
 const fetchAddress = useCallback(async () => {
     try {
     const token = await AsyncStorage.getItem("authToken");

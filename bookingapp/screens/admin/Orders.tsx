@@ -24,7 +24,7 @@ interface Order {
 const Orders = () => {
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
-
+  const navigation = useNavigation();
   const fetchOrders = async () => {
     try {
       const response = await fetch(`${API_URL}/orders`);
