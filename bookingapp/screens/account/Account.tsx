@@ -137,11 +137,17 @@ const AccountScreen: React.FC = () => {
 
   const fetchAddressData = async (userId: string) => {
     try {
-      const response = await axios.get(`${API_URL}/address/${userId}`);
+      const response = await axios.get(`${API_URL}/address/${userId}`, {
+        timeout: 5000, // Thêm timeout để kiểm tra phản hồi
+      });
       const addressData = response.data;
       updateUser(addressData);
-    } catch (error) {
-      console.error("Error fetching address data", error);
+    } catch (error: any) {
+      if (axios.isAxiosError(error)) {
+        console.error("Axios Error:", error.response?.status, error.message);
+      } else {
+        console.error("Unexpected Error:", error);
+      }
     }
   };
 

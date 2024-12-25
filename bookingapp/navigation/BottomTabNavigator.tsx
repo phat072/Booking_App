@@ -18,6 +18,7 @@ import ProfileScreen from '@/screens/account/message/ProfileScreen';
 import RequestChatRoom from '@/screens/account/message/RequestChatRoom';
 import ChatRoom from '@/screens/account/message/ChatRoom';
 import PeopleScreen from '@/screens/account/message/PeopleScreen';
+import ChatBot from "@/screens/OpenAI/Chatbot";
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -159,6 +160,21 @@ const BottomTabNavigator: React.FC = () => {
               <Entypo name="home" size={24} color="#D71537" />
             ) : (
               <AntDesign name="home" size={24} color="#7E7E80" />
+            ),
+        }}
+      />
+      <Tab.Screen
+        name="ChatBot"
+        component={ChatBot}
+        options={{
+          tabBarLabel: "Map",
+          tabBarLabelStyle: { color: "#008E97" } as TextStyle,
+          headerShown: false,
+          tabBarIcon: ({ focused }) =>
+            focused ? (
+              <Entypo name="map" size={24} color="#D71537" />
+            ) : (
+              <Entypo name="map" size={24} color="#7E7E80" />
             ),
         }}
       />

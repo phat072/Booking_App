@@ -1,15 +1,19 @@
 import React, { useState, useEffect } from "react";
-import { TextInput, Button, Text, View, ScrollView } from "react-native";
+import { TextInput, Button, Text, View, ScrollView, Alert } from "react-native";
 import { getGPT4Response } from "./api"; // Thay đổi đường dẫn nếu cần
-import { API_URL } from "@env";
-// Giả sử API của bạn trả về danh sách nhà hàng
-const getRestaurants = async () => {
+import { API_URL } from "@env"; // Đảm bảo biến môi trường được thiết lập đúng
+import * as Location from "expo-location";
+
+// Hàm gọi API để lấy danh sách nhà hàng gần đó
+const getNearbyRestaurants = async (latitude: number, longitude: number) => {
   try {
-    const response = await fetch(`${API_URL}/restaurants`);
+    const response = await fetch(
+      `${API_URL}/restaurants/nearby?lat=${latitude}&lng=${longitude}`
+    );
     const data = await response.json();
-    return data; // Trả về danh sách các nhà hàng
+    return data;
   } catch (error) {
-    console.error("Error fetching restaurants:", error);
+    console.error("Error fetching nearby restaurants:", error);
     return [];
   }
 };
@@ -17,15 +21,41 @@ const getRestaurants = async () => {
 const Chatbot: React.FC = () => {
   const [messages, setMessages] = useState<any[]>([]);
   const [userInput, setUserInput] = useState("");
-  const [restaurants, setRestaurants] = useState<any[]>([]);
+  const [userLocation, setUserLocation] = useState<any>(null);
 
-  // Lấy danh sách nhà hàng khi component được mount
   useEffect(() => {
-    const fetchRestaurants = async () => {
-      const data = await getRestaurants();
-      setRestaurants(data);
+    let locationSubscription: any;
+
+    const startLocationTracking = async () => {
+      try {
+        const { status } = await Location.requestForegroundPermissionsAsync();
+        if (status !== "granted") {
+          Alert.alert("Permission Denied", "Cannot access location services.");
+          return;
+        }
+
+        locationSubscription = await Location.watchPositionAsync(
+          {
+            accuracy: Location.Accuracy.High,
+            timeInterval: 5000, // Cập nhật mỗi 5 giây
+            distanceInterval: 10, // Hoặc mỗi khi người dùng di chuyển 10 mét
+          },
+          (location) => {
+            setUserLocation(location.coords);
+          }
+        );
+      } catch (error) {
+        Alert.alert("Error", "Could not fetch location.");
+      }
     };
-    fetchRestaurants();
+
+    startLocationTracking();
+
+    return () => {
+      if (locationSubscription) {
+        locationSubscription.remove();
+      }
+    };
   }, []);
 
   const handleSendMessage = async () => {
@@ -36,12 +66,36 @@ const Chatbot: React.FC = () => {
       ...prevMessages,
       { type: "text", text: userMessage, sender: "user" },
     ]);
-    setUserInput(""); // Xóa input field
+    setUserInput("");
 
     try {
-      if (userMessage.toLowerCase().includes("giới thiệu nhà hàng")) {
-        // Hiển thị danh sách các nhà hàng khi người dùng yêu cầu
-        const restaurantList = restaurants
+      if (userMessage.toLowerCase().includes("nhà hàng gần đây")) {
+        if (!userLocation) {
+          setMessages((prevMessages) => [
+            ...prevMessages,
+            { type: "text", text: "Không thể lấy vị trí của bạn.", sender: "bot" },
+          ]);
+          return;
+        }
+
+        const nearbyRestaurants = await getNearbyRestaurants(
+          userLocation.latitude,
+          userLocation.longitude
+        );
+
+        if (nearbyRestaurants.length === 0) {
+          setMessages((prevMessages) => [
+            ...prevMessages,
+            {
+              type: "text",
+              text: "Không tìm thấy nhà hàng nào gần bạn.",
+              sender: "bot",
+            },
+          ]);
+          return;
+        }
+
+        const restaurantList = nearbyRestaurants
           .map((restaurant: any) => `${restaurant.name} - ${restaurant.address}`)
           .join("\n");
 
@@ -49,13 +103,13 @@ const Chatbot: React.FC = () => {
           ...prevMessages,
           {
             type: "text",
-            text: `Dưới đây là danh sách nhà hàng bạn có thể tham khảo:\n\n${restaurantList}`,
+            text: `Dưới đây là danh sách nhà hàng gần bạn:\n\n${restaurantList}`,
             sender: "bot",
           },
         ]);
       } else {
-        // Trường hợp khác xử lý qua GPT-4
-        const response = await getGPT4Response(userMessage);
+        const prompt = `Vị trí hiện tại của người dùng: (${userLocation?.latitude}, ${userLocation?.longitude}). Câu hỏi: ${userMessage}`;
+        const response = await getGPT4Response(prompt);
         setMessages((prevMessages) => [
           ...prevMessages,
           { type: "text", text: response, sender: "bot" },

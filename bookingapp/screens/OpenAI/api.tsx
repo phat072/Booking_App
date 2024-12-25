@@ -1,13 +1,14 @@
 import OpenAI from "openai";
-import { OPENAI_KEY } from "@env";
 
 // Tạo cấu hình cho OpenAI API
-const openai = new OpenAI({});
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
+});
+
 
 // Hàm để gọi API và nhận phản hồi từ GPT-4
 export const getGPT4Response = async (query: string) => {
   try {
-    // Gọi API chat completion
     const response = await openai.chat.completions.create({
       model: "gpt-4o-mini",
       messages: [
